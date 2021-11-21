@@ -18,7 +18,7 @@ class CreateSalaryBillDetailsTable extends Migration
             $table->decimal('salary', 15, 2);
             $table->decimal('da', 15, 2);
             $table->decimal('hra', 15, 2);
-            $table->integer('other');
+             $table->decimal('other', 15, 2);
             $table->decimal('ota', 15, 2)->nullable();
             $table->timestamps();
         });

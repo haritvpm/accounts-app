@@ -14,16 +14,28 @@
             @endcan
             <div class="card">
                 <div class="card-header">
-                    {{ trans('cruds.salaryBillDetail.title_singular') }} {{ trans('global.list') }}
+                    {{ trans('cruds.salaryBillDetail.title_singular') }} {{ trans('global.list') }} ( FY: {{ $curyear }} )
                 </div>
 
+
+                    <?php
+
+                    setlocale(LC_MONETARY, 'en_IN');
+                    $amount = money_format('%!i', $allocation['pay']);
+
+                    ?>
+
+                   
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class=" table table-bordered table-striped table-hover datatable datatable-SalaryBillDetail">
                             <thead>
                                 <tr>
-                                    <th>
+                                     <th>
                                         {{ trans('cruds.salaryBillDetail.fields.id') }}
+                                    </th>
+                                    <th>
+                                        Seat
                                     </th>
                                     <th>
                                         {{ trans('cruds.salaryBillDetail.fields.salary') }}
@@ -41,7 +53,7 @@
                                         {{ trans('cruds.salaryBillDetail.fields.ota') }}
                                     </th>
                                     <th>
-                                        {{ trans('cruds.salaryBillDetail.fields.year') }}
+                                        Date
                                     </th>
                                     <th>
                                         &nbsp;
@@ -51,26 +63,30 @@
                             <tbody>
                                 @foreach($salaryBillDetails as $key => $salaryBillDetail)
                                     <tr data-entry-id="{{ $salaryBillDetail->id }}">
-                                        <td>
+                                         <td>
                                             {{ $salaryBillDetail->id ?? '' }}
                                         </td>
                                         <td>
-                                            {{ $salaryBillDetail->salary ?? '' }}
+                                            {{ $salaryBillDetail->created_by->name ?? '' }}
                                         </td>
                                         <td>
-                                            {{ $salaryBillDetail->da ?? '' }}
+                                            {{ money_format('%!i',  $salaryBillDetail->salary) ?? '' }}
+
                                         </td>
                                         <td>
-                                            {{ $salaryBillDetail->hra ?? '' }}
+                                            {{ money_format('%!i',  $salaryBillDetail->da) ?? '' }}
                                         </td>
                                         <td>
-                                            {{ $salaryBillDetail->other ?? '' }}
+                                            {{ money_format('%!i',  $salaryBillDetail->hra) ?? '' }}
                                         </td>
                                         <td>
-                                            {{ $salaryBillDetail->ota ?? '' }}
+                                            {{ money_format('%!i', $salaryBillDetail->other) ?? '' }}
                                         </td>
                                         <td>
-                                            {{ $salaryBillDetail->year->financial_year ?? '' }}
+                                            {{ money_format('%!i', $salaryBillDetail->ota) ?? '' }}
+                                        </td>
+                                        <td>
+                                            {{ $salaryBillDetail->created_at->format('d/m/Y') ?? '' }}
                                         </td>
                                         <td>
                                             @can('salary_bill_detail_show')
@@ -78,6 +94,8 @@
                                                     {{ trans('global.view') }}
                                                 </a>
                                             @endcan
+
+                                            @if( auth()->user()->id == $salaryBillDetail->created_by->id)
 
                                             @can('salary_bill_detail_edit')
                                                 <a class="btn btn-xs btn-info" href="{{ route('frontend.salary-bill-details.edit', $salaryBillDetail->id) }}">
@@ -92,6 +110,7 @@
                                                     <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                                 </form>
                                             @endcan
+                                            @endif
 
                                         </td>
 
@@ -101,6 +120,88 @@
                         </table>
                     </div>
                 </div>
+
+
+  <div class="card-body">
+                    <div class="table-responsive">
+                        <table   class=" table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                     <th>
+                                        
+                                    </th>
+                                   
+                                    <th>
+                                        {{ trans('cruds.salaryBillDetail.fields.salary') }}
+                                    </th>
+                                    <th>
+                                        {{ trans('cruds.salaryBillDetail.fields.da') }}
+                                    </th>
+                                    <th>
+                                        {{ trans('cruds.salaryBillDetail.fields.hra') }}
+                                    </th>
+                                    <th>
+                                        {{ trans('cruds.salaryBillDetail.fields.other') }}
+                                    </th>
+                                    <th>
+                                        {{ trans('cruds.salaryBillDetail.fields.ota') }}
+                                    </th>
+                                   
+                                  
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                
+                                    <tr>
+                                         <td>
+                                            Allocation
+                                        </td>
+                                       
+                                        @foreach($allocation as $key => $item)
+                                        <td>
+                                            {{ money_format('%!i',  $item) ?? '' }}
+
+                                        </td>
+                                       
+                                     @endforeach
+
+                                    </tr>
+                                
+
+                                    <tr>
+                                         <td>
+                                            Total Used
+                                        </td>
+                                      @foreach($total as $key => $item)
+                                        <td>
+                                            {{ money_format('%!i',  $item) ?? '' }}
+
+                                        </td>
+                                       
+                                     @endforeach
+
+                                    </tr>
+
+                                      <tr>
+                                         <td>
+                                            Balance
+                                        </td>
+                                      @foreach($balance as $key => $item)
+                                        <td>
+                                            {{ money_format('%!i',  $item) ?? '' }}
+
+                                        </td>
+                                       
+                                     @endforeach
+
+                                    </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
 
         </div>
@@ -110,9 +211,12 @@
 @section('scripts')
 @parent
 <script>
+
+
+
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-@can('salary_bill_detail_delete')
+/*@can('salary_bill_detail_delete')
   let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
   let deleteButton = {
     text: deleteButtonTrans,
@@ -140,7 +244,7 @@
     }
   }
   dtButtons.push(deleteButton)
-@endcan
+@endcan*/
 
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,

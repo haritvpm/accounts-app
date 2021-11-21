@@ -1,14 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-@can('salary_bill_detail_create')
-    <div style="margin-bottom: 10px;" class="row">
-        <div class="col-lg-12">
-            <a class="btn btn-success" href="{{ route('admin.salary-bill-details.create') }}">
-                {{ trans('global.add') }} {{ trans('cruds.salaryBillDetail.title_singular') }}
-            </a>
-        </div>
-    </div>
-@endcan
+
 <div class="card">
     <div class="card-header">
         {{ trans('cruds.salaryBillDetail.title_singular') }} {{ trans('global.list') }}
@@ -82,7 +74,7 @@
                                     </a>
                                 @endcan
 
-                                @can('salary_bill_detail_edit')
+                              <!--   @can('salary_bill_detail_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.salary-bill-details.edit', $salaryBillDetail->id) }}">
                                         {{ trans('global.edit') }}
                                     </a>
@@ -94,7 +86,7 @@
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                     </form>
-                                @endcan
+                                @endcan -->
 
                             </td>
 

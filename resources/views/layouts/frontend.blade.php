@@ -49,6 +49,13 @@
                 </ul>
             @endif
 
+             <ul class="navbar-nav ml-auto">
+                  <li class="nav-item">
+                    <i class="fa fa-user"></i> ({{ auth()->user()->name }})
+                </li>
+                </ul>
+           
+
         </nav>
 
         @include('partials.frontendmenu')
@@ -126,25 +133,13 @@
     language: {
       url: languages['{{ app()->getLocale() }}']
     },
-    columnDefs: [{
-        orderable: false,
-        className: 'select-checkbox',
-        targets: 0
-    }, {
-        orderable: false,
-        searchable: false,
-        targets: -1
-    }],
-    select: {
-      style:    'multi+shift',
-      selector: 'td:first-child'
-    },
+    columnDefs: 
     order: [],
     scrollX: true,
     pageLength: 100,
     dom: 'lBfrtip<"actions">',
     buttons: [
-      {
+      /*{
         extend: 'selectAll',
         className: 'btn-primary',
         text: selectAllButtonTrans,
@@ -164,7 +159,7 @@
         exportOptions: {
           columns: ':visible'
         }
-      },
+      },*/
       {
         extend: 'copy',
         className: 'btn-default',
