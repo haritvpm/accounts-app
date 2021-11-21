@@ -1,11 +1,14 @@
 <?php
 
+
+
+$DATABASE_URL=parse_url('postgres://jdhwpghjqcwldu:dc904762f8d8db5b0e2582c9086c1035e4eac4a5a84ea77a259cf665c1c64150@ec2-3-221-225-131.compute-1.amazonaws.com:5432/dff89dk1c2fnph');
+
+    
+
 return [
 
 
-    $DATABASE_URL=parse_url('postgres://jdhwpghjqcwldu:dc904762f8d8db5b0e2582c9086c1035e4eac4a5a84ea77a259cf665c1c64150@ec2-3-221-225-131.compute-1.amazonaws.com:5432/dff89dk1c2fnph');
-
-    
 
 
     /*
