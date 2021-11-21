@@ -38,7 +38,7 @@
                                         Seat
                                     </th>
                                     <th>
-                                        {{ trans('cruds.salaryBillDetail.fields.salary') }}
+                                        {{ trans('cruds.salaryBillDetail.fields.pay') }}
                                     </th>
                                     <th>
                                         {{ trans('cruds.salaryBillDetail.fields.da') }}
@@ -70,7 +70,7 @@
                                             {{ $salaryBillDetail->created_by->name ?? '' }}
                                         </td>
                                         <td>
-                                            {{ money_format('%!i',  $salaryBillDetail->salary) ?? '' }}
+                                            {{ money_format('%!i',  $salaryBillDetail->pay) ?? '' }}
 
                                         </td>
                                         <td>
@@ -132,7 +132,7 @@
                                     </th>
                                    
                                     <th>
-                                        {{ trans('cruds.salaryBillDetail.fields.salary') }}
+                                        {{ trans('cruds.salaryBillDetail.fields.pay') }}
                                     </th>
                                     <th>
                                         {{ trans('cruds.salaryBillDetail.fields.da') }}

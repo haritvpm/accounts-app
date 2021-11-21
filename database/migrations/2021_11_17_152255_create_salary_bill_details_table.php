@@ -15,7 +15,7 @@ class CreateSalaryBillDetailsTable extends Migration
     {
         Schema::create('salary_bill_details', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->decimal('salary', 15, 2);
+            $table->decimal('pay', 15, 2);
             $table->decimal('da', 15, 2);
             $table->decimal('hra', 15, 2);
              $table->decimal('other', 15, 2);

@@ -34,11 +34,12 @@
                         <th>
                             {{ trans('cruds.allocation.fields.hra') }}
                         </th>
-                        <th>
-                            {{ trans('cruds.allocation.fields.ota') }}
-                        </th>
+                       
                         <th>
                             {{ trans('cruds.allocation.fields.other') }}
+                        </th>
+                         <th>
+                            {{ trans('cruds.allocation.fields.ota') }}
                         </th>
                         <th>
                             {{ trans('cruds.allocation.fields.year') }}
@@ -66,11 +67,12 @@
                             <td>
                                 {{ $allocation->hra ?? '' }}
                             </td>
-                            <td>
-                                {{ $allocation->ota ?? '' }}
-                            </td>
+                            
                             <td>
                                 {{ $allocation->other ?? '' }}
+                            </td>
+                            <td>
+                                {{ $allocation->ota ?? '' }}
                             </td>
                             <td>
                                 {{ $allocation->year->financial_year ?? '' }}

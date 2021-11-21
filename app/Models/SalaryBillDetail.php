@@ -18,7 +18,7 @@ class SalaryBillDetail extends Model
     ];
 
     protected $fillable = [
-        'salary',
+        'pay',
         'da',
         'hra',
         'other',

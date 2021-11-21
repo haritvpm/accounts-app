@@ -18,7 +18,7 @@
                             {{ trans('cruds.salaryBillDetail.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.salaryBillDetail.fields.salary') }}
+                            {{ trans('cruds.salaryBillDetail.fields.pay') }}
                         </th>
                         <th>
                             {{ trans('cruds.salaryBillDetail.fields.da') }}
@@ -50,7 +50,7 @@
                                 {{ $salaryBillDetail->id ?? '' }}
                             </td>
                             <td>
-                                {{ $salaryBillDetail->salary ?? '' }}
+                                {{ $salaryBillDetail->pay ?? '' }}
                             </td>
                             <td>
                                 {{ $salaryBillDetail->da ?? '' }}

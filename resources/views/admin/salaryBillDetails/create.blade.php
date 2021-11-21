@@ -11,9 +11,9 @@
             {{csrf_field()}}
             <div class="form-group">
                 <label class="required" for="salary">{{ trans('cruds.salaryBillDetail.fields.salary') }}</label>
-                <input class="form-control {{ $errors->has('salary') ? 'is-invalid' : '' }}" type="number" name="salary" id="salary" value="{{ old('salary', '0') }}" step="0.01" required>
-                @if($errors->has('salary'))
-                    <span class="text-danger">{{ $errors->first('salary') }}</span>
+                <input class="form-control {{ $errors->has('pay') ? 'is-invalid' : '' }}" type="number" name="salary" id="salary" value="{{ old('pay', '0') }}" step="0.01" required>
+                @if($errors->has('pay'))
+                    <span class="text-danger">{{ $errors->first('pay') }}</span>
                 @endif
                 <span class="help-block">{{ trans('cruds.salaryBillDetail.fields.salary_helper') }}</span>
             </div>

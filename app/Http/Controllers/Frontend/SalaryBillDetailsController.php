@@ -32,32 +32,27 @@ class SalaryBillDetailsController extends Controller
                 $query->where('financial_year',  $curyear);
             });
 
-        $allocation['pay'] = $allocations->sum('pay');
-        $allocation['da'] = $allocations->sum('da');
-        $allocation['hra'] = $allocations->sum('hra');
-        $allocation['other'] = $allocations->sum('other');
-        $allocation['ota'] = $allocations->sum('ota');
-
-
-
-
-        $salaryBillDetails = SalaryBillDetail::latest()->with(['year', 'created_by']) 
+         $salaryBillDetails = SalaryBillDetail::latest()->with(['year', 'created_by']) 
                     ->whereHas('year', function ($query)   use($curyear) {
                          $query->where('financial_year',  $curyear);
                      })->get();
 
-        $total['pay'] = $salaryBillDetails->sum('salary');
-        $total['da'] = $salaryBillDetails->sum('da');
-        $total['hra'] = $salaryBillDetails->sum('hra');
-        $total['other'] = $salaryBillDetails->sum('other');
-        $total['ota'] = $salaryBillDetails->sum('ota');
 
+        $fields = array("pay", "da", "hra", "other", "ota");
 
-        $balance['pay'] = $allocation['pay'] - $total['pay'];
-        $balance['da'] = $allocation['da'] - $total['da'];
-        $balance['hra'] = $allocation['hra'] - $total['hra'];
-        $balance['other'] = $allocation['other'] - $total['other'];
-        $balance['ota'] = $allocation['ota'] - $total['ota'];
+        $allocation = [];
+        $total = [];
+        $balance = [];
+
+        foreach ($fields as $field) {
+
+            $allocation[$field] = $allocations->sum($field);
+            $total[$field] = $salaryBillDetails->sum($field);
+            $balance[$field] =  $allocation[$field] - $total[$field];
+          
+        }
+
+       
 
 
         return view('frontend.salaryBillDetails.index', compact('salaryBillDetails',  'curyear', 'allocation', 'total', 'balance'));
@@ -67,7 +62,7 @@ class SalaryBillDetailsController extends Controller
     {
         abort_if(Gate::denies('salary_bill_detail_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $years = Year::latest('id')->pluck('financial_year', 'id');//->prepend(trans('global.pleaseSelect'), '');
+        $years = Year::latest('id')->where('active', 1)->pluck('financial_year', 'id');//->prepend(trans('global.pleaseSelect'), '');
 
         return view('frontend.salaryBillDetails.create', compact('years'));
     }
@@ -83,7 +78,7 @@ class SalaryBillDetailsController extends Controller
     {
         abort_if(Gate::denies('salary_bill_detail_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $years = Year::latest('id')->pluck('financial_year', 'id');//->prepend(trans('global.pleaseSelect'), '');
+        $years = Year::latest('id')->where('active', 1)->pluck('financial_year', 'id');//->prepend(trans('global.pleaseSelect'), '');
 
         $salaryBillDetail->load('year', 'created_by');
 

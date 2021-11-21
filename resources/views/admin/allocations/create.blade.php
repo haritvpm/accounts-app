@@ -33,14 +33,7 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.allocation.fields.hra_helper') }}</span>
             </div>
-            <div class="form-group">
-                <label for="ota">{{ trans('cruds.allocation.fields.ota') }}</label>
-                <input class="form-control {{ $errors->has('ota') ? 'is-invalid' : '' }}" type="number" name="ota" id="ota" value="{{ old('ota', '') }}" step="0.01">
-                @if($errors->has('ota'))
-                    <span class="text-danger">{{ $errors->first('ota') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.allocation.fields.ota_helper') }}</span>
-            </div>
+           
             <div class="form-group">
                 <label class="required" for="other">{{ trans('cruds.allocation.fields.other') }}</label>
                 <input class="form-control {{ $errors->has('other') ? 'is-invalid' : '' }}" type="number" name="other" id="other" value="{{ old('other', '') }}" step="0.01" required>
@@ -49,6 +42,16 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.allocation.fields.other_helper') }}</span>
             </div>
+
+             <div class="form-group">
+                <label for="ota">{{ trans('cruds.allocation.fields.ota') }}</label>
+                <input class="form-control {{ $errors->has('ota') ? 'is-invalid' : '' }}" type="number" name="ota" id="ota" value="{{ old('ota', '') }}" step="0.01">
+                @if($errors->has('ota'))
+                    <span class="text-danger">{{ $errors->first('ota') }}</span>
+                @endif
+                <span class="help-block">{{ trans('cruds.allocation.fields.ota_helper') }}</span>
+            </div>
+
             <div class="form-group">
                 <label class="required" for="year_id">{{ trans('cruds.allocation.fields.year') }}</label>
                 <select class="form-control select2 {{ $errors->has('year') ? 'is-invalid' : '' }}" name="year_id" id="year_id" required>

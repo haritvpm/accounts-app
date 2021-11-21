@@ -17,7 +17,7 @@ class UpdateSalaryBillDetailRequest extends FormRequest
     public function rules()
     {
         return [
-            'salary' => [
+            'pay' => [
                 'required',
             ],
             'hra' => [
@@ -25,9 +25,7 @@ class UpdateSalaryBillDetailRequest extends FormRequest
             ],
             'other' => [
                 'required',
-                'integer',
-                'min:-2147483648',
-                'max:2147483647',
+                
             ],
             'year_id' => [
                 'required',

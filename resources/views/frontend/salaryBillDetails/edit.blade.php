@@ -14,11 +14,11 @@
                         {{ method_field('PUT') }}
                         {{csrf_field()}}
                         <div class="form-group">
-                            <label class="required" for="salary">{{ trans('cruds.salaryBillDetail.fields.salary') }}</label>
-                            <input class="form-control" type="number" name="salary" id="salary" value="{{ old('salary', $salaryBillDetail->salary) }}" step="0.01" required>
-                            @if($errors->has('salary'))
+                            <label class="required" for="pay">{{ trans('cruds.salaryBillDetail.fields.pay') }}</label>
+                            <input class="form-control" type="number" name="pay" id="pay" value="{{ old('pay', $salaryBillDetail->pay) }}" step="0.01" required>
+                            @if($errors->has('pay'))
                                 <div class="invalid-feedback">
-                                    {{ $errors->first('salary') }}
+                                    {{ $errors->first('pay') }}
                                 </div>
                             @endif
                             <span class="help-block">{{ trans('cruds.salaryBillDetail.fields.salary_helper') }}</span>

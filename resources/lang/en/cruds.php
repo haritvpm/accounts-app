@@ -113,7 +113,7 @@ return [
         'fields'         => [
             'id'                => 'ID',
             'id_helper'         => ' ',
-            'salary'            => 'Pay',
+            'pay'            => 'Pay',
             'salary_helper'     => ' ',
             'hra'               => 'HRA',
             'hra_helper'        => ' ',
