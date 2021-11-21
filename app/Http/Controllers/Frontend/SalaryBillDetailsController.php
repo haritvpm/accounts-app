@@ -27,15 +27,18 @@ class SalaryBillDetailsController extends Controller
        // $years = $years->pluck('financial_year', 'id');
       
 
-        $allocations = Allocation::with('year')
-           ->whereHas('year', function ($query)   use($curyear) {
-                $query->where('financial_year',  $curyear);
-            });
-
+       
          $salaryBillDetails = SalaryBillDetail::latest()->with(['year', 'created_by']) 
                     ->whereHas('year', function ($query)   use($curyear) {
                          $query->where('financial_year',  $curyear);
                      })->get();
+/*
+
+         $allocations = Allocation::with('year')
+           ->whereHas('year', function ($query)   use($curyear) {
+                $query->where('financial_year',  $curyear);
+            });
+
 
 
         $fields = array("pay", "da", "hra", "other", "ota");
@@ -51,11 +54,11 @@ class SalaryBillDetailsController extends Controller
             $balance[$field] =  $allocation[$field] - $total[$field];
           
         }
-
+*/
        
 
 
-        return view('frontend.salaryBillDetails.index', compact('salaryBillDetails',  'curyear', 'allocation', 'total', 'balance'));
+        return view('frontend.salaryBillDetails.index', compact('salaryBillDetails',  'curyear'/*, 'allocation', 'total', 'balance'*/));
     }
 
     public function create()

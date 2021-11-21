@@ -72,23 +72,18 @@
                         <a href="{{ url('/home') }}">Salary Bill Details</a>
                     @else
                         <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
+                        <!-- <a href="{{ route('register') }}">Register</a> -->
                     @endauth
                 </div>
             @endif
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    Salary Head Info
                 </div>
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documenfgftation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+                {{test}}
+
             </div>
         </div>
     </body>
