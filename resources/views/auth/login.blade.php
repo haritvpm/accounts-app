@@ -123,7 +123,7 @@
                                        
                                         @foreach($allocation as $key => $item)
                                         <td>
-                                            {{ money_format('%!i',  $item) ?? '' }}
+                                            {{ @money_format('%!i',  $item) ?? '' }}
 
                                         </td>
                                        
@@ -138,7 +138,7 @@
                                         </td>
                                       @foreach($total as $key => $item)
                                         <td>
-                                            {{ money_format('%!i',  $item) ?? '' }}
+                                            {{ @money_format('%!i',  $item) ?? '' }}
 
                                         </td>
                                        
@@ -152,7 +152,7 @@
                                         </td>
                                       @foreach($balance as $key => $item)
                                         <td>
-                                            {{ money_format('%!i',  $item) ?? '' }}
+                                            {{ @money_format('%!i',  $item) ?? '' }}
 
                                         </td>
                                        
