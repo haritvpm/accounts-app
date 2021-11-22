@@ -1,15 +1,16 @@
 @extends('layouts.app')
 @section('content')
+
+
+
 <div class="login-box">
     <div class="login-logo">
         <div class="login-logo">
             <a href="{{ route('admin.home') }}">
-                {{ trans('panel.site_title') }}
+                Salary Head Record
             </a>
         </div>
     </div>
-
-
     <div class="card">
         <div class="card-body login-card-body">
             <p class="login-box-msg">
@@ -26,7 +27,7 @@
                 {{ csrf_field() }}
 
                 <div class="form-group">
-                    <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" required autocomplete="email" autofocus placeholder="{{ trans('global.login_email') }}" name="name" value="{{ old('name', null) }}">
+                    <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" required autocomplete="email" autofocus placeholder="Seat" name="name" value="{{ old('name', null) }}">
 
                     @if($errors->has('name'))
                         <div class="invalid-feedback">
@@ -78,14 +79,18 @@
         <!-- /.login-card-body -->
     </div>
 
-
-
-
 </div>
 
 
+<div class="row">
+      <div class="col-md-12">
 
-                 <div class="card-body">
+                    <?php
+
+                    setlocale(LC_MONETARY, 'en_IN');
+                   
+                    ?>
+                
                     <div class="table-responsive">
                         <table   class=" table table-bordered table-striped">
                             <thead>
@@ -98,7 +103,7 @@
                                         {{ trans('cruds.salaryBillDetail.fields.pay') }}
                                     </th>
                                     <th>
-                                        {{ trans('cruds.salaryBillDetail.fields.da') }}
+                                        DA
                                     </th>
                                     <th>
                                         {{ trans('cruds.salaryBillDetail.fields.hra') }}
@@ -123,7 +128,7 @@
                                        
                                         @foreach($allocation as $key => $item)
                                         <td>
-                                            {{ @money_format('%!i',  $item) ?? '' }}
+                                            {{ money_format('%!.0n',  $item) ?? '' }}
 
                                         </td>
                                        
@@ -138,7 +143,7 @@
                                         </td>
                                       @foreach($total as $key => $item)
                                         <td>
-                                            {{ @money_format('%!i',  $item) ?? '' }}
+                                            {{ money_format('%!.0n',  $item) ?? '' }}
 
                                         </td>
                                        
@@ -152,7 +157,7 @@
                                         </td>
                                       @foreach($balance as $key => $item)
                                         <td>
-                                            {{ @money_format('%!i',  $item) ?? '' }}
+                                            {{ money_format('%!.0n',  $item) ?? '' }}
 
                                         </td>
                                        
@@ -163,7 +168,10 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+
+                
+    </div>
+</div>
 
 
 @endsection

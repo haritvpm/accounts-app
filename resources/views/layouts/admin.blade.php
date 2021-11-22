@@ -105,7 +105,7 @@
     <script src="{{ asset('js/cdnjs/ckeditor.js') }}"></script>
     <script src="{{ asset('js/cdnjs/bootstrap-datetimepicker.min.js') }}"></script>
     <script src="{{ asset('js/cdnjs/dropzone.min.js') }}"></script>
-    <script src="{{ asset('js/main.js') }}') }}"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
     <script>
         $(function() {
   let copyButtonTrans = '{{ trans('global.datatables.copy') }}'

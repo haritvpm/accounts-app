@@ -1,10 +1,19 @@
 @extends('layouts.admin')
 @section('content')
 
+
+    <?php
+
+    setlocale(LC_MONETARY, 'en_IN');
+   
+    ?>
+
+
 <div class="card">
     <div class="card-header">
         {{ trans('cruds.salaryBillDetail.title_singular') }} {{ trans('global.list') }}
     </div>
+
 
     <div class="card-body">
         <div class="table-responsive">
@@ -21,7 +30,7 @@
                             {{ trans('cruds.salaryBillDetail.fields.pay') }}
                         </th>
                         <th>
-                            {{ trans('cruds.salaryBillDetail.fields.da') }}
+                            DA
                         </th>
                         <th>
                             {{ trans('cruds.salaryBillDetail.fields.hra') }}

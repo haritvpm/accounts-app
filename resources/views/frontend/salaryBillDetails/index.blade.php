@@ -40,7 +40,7 @@
                                         {{ trans('cruds.salaryBillDetail.fields.pay') }}
                                     </th>
                                     <th>
-                                        {{ trans('cruds.salaryBillDetail.fields.da') }}
+                                        DA
                                     </th>
                                     <th>
                                         {{ trans('cruds.salaryBillDetail.fields.hra') }}
@@ -69,20 +69,19 @@
                                             {{ $salaryBillDetail->created_by->name ?? '' }}
                                         </td>
                                         <td>
-                                            {{ money_format('%!i',  $salaryBillDetail->pay) ?? '' }}
-
+                                            {{ money_format('%!.0n',  $salaryBillDetail->pay) ?? '' }}
                                         </td>
                                         <td>
-                                            {{ money_format('%!i',  $salaryBillDetail->da) ?? '' }}
+                                            {{ money_format('%!.0n',  $salaryBillDetail->da) ?? '' }}
                                         </td>
                                         <td>
-                                            {{ money_format('%!i',  $salaryBillDetail->hra) ?? '' }}
+                                            {{ money_format('%!.0n',  $salaryBillDetail->hra) ?? '' }}
                                         </td>
                                         <td>
-                                            {{ money_format('%!i', $salaryBillDetail->other) ?? '' }}
+                                            {{ money_format('%!.0n', $salaryBillDetail->other) ?? '' }}
                                         </td>
                                         <td>
-                                            {{ money_format('%!i', $salaryBillDetail->ota) ?? '' }}
+                                            {{ money_format('%!.0n', $salaryBillDetail->ota) ?? '' }}
                                         </td>
                                         <td>
                                             {{ $salaryBillDetail->created_at->format('d/m/Y') ?? '' }}

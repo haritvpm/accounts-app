@@ -9,6 +9,14 @@
         </div>
     </div>
 @endcan
+
+
+<?php
+
+setlocale(LC_MONETARY, 'en_IN');
+
+?>
+
 <div class="card">
     <div class="card-header">
         {{ trans('cruds.allocation.title_singular') }} {{ trans('global.list') }}
@@ -29,7 +37,7 @@
                             {{ trans('cruds.allocation.fields.pay') }}
                         </th>
                         <th>
-                            {{ trans('cruds.allocation.fields.da') }}
+                            DA
                         </th>
                         <th>
                             {{ trans('cruds.allocation.fields.hra') }}
@@ -56,23 +64,23 @@
 
                             </td>
                             <td>
-                                {{ $allocation->id ?? '' }}
+                                {{ money_format('%!.0n', $allocation->id )?? '' }}
                             </td>
                             <td>
-                                {{ $allocation->pay ?? '' }}
+                                {{ money_format('%!.0n',$allocation->pay )?? '' }}
                             </td>
                             <td>
-                                {{ $allocation->da ?? '' }}
+                                {{ money_format('%!.0n',$allocation->da )?? '' }}
                             </td>
                             <td>
-                                {{ $allocation->hra ?? '' }}
+                                {{ money_format('%!.0n',$allocation->hra )?? '' }}
                             </td>
                             
                             <td>
-                                {{ $allocation->other ?? '' }}
+                                {{ money_format('%!.0n',$allocation->other )?? '' }}
                             </td>
                             <td>
-                                {{ $allocation->ota ?? '' }}
+                                {{ money_format('%!.0n',$allocation->ota )?? '' }}
                             </td>
                             <td>
                                 {{ $allocation->year->financial_year ?? '' }}

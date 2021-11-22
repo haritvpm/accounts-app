@@ -133,7 +133,7 @@
     language: {
       url: languages['{{ app()->getLocale() }}']
     },
-    columnDefs: 
+    columnDefs: [],
     order: [],
     scrollX: true,
     pageLength: 100,
@@ -208,7 +208,7 @@
           columns: ':visible'
         }
       }
-    ]
+    ],
   });
 
   $.fn.dataTable.ext.classes.sPageButton = '';

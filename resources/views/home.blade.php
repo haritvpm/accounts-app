@@ -1,5 +1,13 @@
 @extends('layouts.admin')
 @section('content')
+
+<?php
+
+setlocale(LC_MONETARY, 'en_IN');
+
+?>
+
+
 <div class="content">
     <div class="row">
         <div class="col-lg-12">
@@ -34,7 +42,7 @@
                                         {{ trans('cruds.salaryBillDetail.fields.pay') }}
                                     </th>
                                     <th>
-                                        {{ trans('cruds.salaryBillDetail.fields.da') }}
+                                        DA
                                     </th>
                                     <th>
                                         {{ trans('cruds.salaryBillDetail.fields.hra') }}
@@ -59,7 +67,7 @@
                                        
                                         @foreach($allocation as $key => $item)
                                         <td>
-                                            {{ money_format('%!i',  $item) ?? '' }}
+                                            {{ money_format('%!.0n',  $item) ?? '' }}
 
                                         </td>
                                        
@@ -74,7 +82,7 @@
                                         </td>
                                       @foreach($total as $key => $item)
                                         <td>
-                                            {{ money_format('%!i',  $item) ?? '' }}
+                                            {{ money_format('%!.0n',  $item) ?? '' }}
 
                                         </td>
                                        
@@ -88,7 +96,7 @@
                                         </td>
                                       @foreach($balance as $key => $item)
                                         <td>
-                                            {{ money_format('%!i',  $item) ?? '' }}
+                                            {{ money_format('%!.0n',  $item) ?? '' }}
 
                                         </td>
                                        
