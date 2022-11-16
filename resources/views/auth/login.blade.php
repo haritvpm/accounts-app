@@ -2,105 +2,64 @@
 @section('content')
 
 
+<style type="text/css">
 
-<div class="login-box">
-    <div class="login-logo">
-        <div class="login-logo">
-            <a href="{{ route('admin.home') }}">
-                Salary Head Record
-            </a>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body login-card-body">
-            <p class="login-box-msg">
-                {{ trans('global.login') }}
-            </p>
+.login {
+  min-height: 100vh;
+}
 
-            @if(session()->has('message'))
-                <p class="alert alert-info">
-                    {{ session()->get('message') }}
-                </p>
-            @endif
+.bg-image {
+  background-image: url('images/endless-constellation.svg');
 
-            <form action="{{ route('login') }}" method="POST">
-                {{ csrf_field() }}
+  background-size: cover;
+  background-position: center;
+   z-index: 1000;
+  background-color: #fff;
+}
 
-                <div class="form-group">
-                    <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" required autocomplete="email" autofocus placeholder="Seat" name="name" value="{{ old('name', null) }}">
+.login-heading {
+  font-weight: 300;
+}
 
-                    @if($errors->has('name'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('name') }}
-                        </div>
-                    @endif
-                </div>
+.btn-login {
+  font-size: 0.9rem;
+  letter-spacing: 0.05rem;
+  padding: 0.75rem 1rem;
+}
 
-                <div class="form-group">
-                    <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required placeholder="{{ trans('global.login_password') }}">
+table tr td, table tr th{
+    background-color: rgba(210,130,240, 0.0) !important;
+       color: rgba(210,240,240, 0.8) ;
 
-                    @if($errors->has('password'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('password') }}
-                        </div>
-                    @endif
-                </div>
+}
+
+</style>
 
 
-                <div class="row">
-                    <div class="col-8">
-                        <div class="icheck-primary">
-                            <input type="checkbox" name="remember" id="remember">
-                            <label for="remember">{{ trans('global.remember_me') }}</label>
-                        </div>
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-4">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">
-                            {{ trans('global.login') }}
-                        </button>
-                    </div>
-                    <!-- /.col -->
-                </div>
-            </form>
+<?php
 
+setlocale(LC_MONETARY, 'en_IN');
 
-            @if(Route::has('password.request'))
-                <p class="mb-1">
-                    <a href="{{ route('password.request') }}">
-                        {{ trans('global.forgot_password') }}
-                    </a>
-                </p>
-            @endif
-            <p class="mb-1">
+?>
 
-            </p>
-        </div>
-        <!-- /.login-card-body -->
-    </div>
+<div class="container-fluid ps-md-0">
+  <div class="row g-0">
 
-</div>
+    <div class="d-none  d-md-flex col-md-8 col-lg-8 bg-image align-items-center justify-content-center">
+    
+    
+        <div class="table-responsive-md">
 
+                       <table class="table table-borderless">
 
-<div class="row">
-      <div class="col-md-12">
-
-                    <?php
-
-                    setlocale(LC_MONETARY, 'en_IN');
-                   
-                    ?>
-                
-                    <div class="table-responsive">
-                        <table   class=" table table-bordered table-striped">
                             <thead>
                                 <tr>
                                      <th>
-                                        
+                                      {{ $curyear ?? '' }}  
                                     </th>
                                    
                                     <th>
-                                        {{ trans('cruds.salaryBillDetail.fields.pay') }}
+                                       {{ trans('cruds.salaryBillDetail.fields.pay') }}
                                     </th>
                                     <th>
                                         DA
@@ -123,7 +82,7 @@
                                 
                                     <tr>
                                          <td>
-                                            Allocation
+                                           <i> Allocation
                                         </td>
                                        
                                         @foreach($allocation as $key => $item)
@@ -139,7 +98,7 @@
 
                                     <tr>
                                          <td>
-                                            Total Used
+                                            <i>Expenditure
                                         </td>
                                       @foreach($total as $key => $item)
                                         <td>
@@ -153,11 +112,11 @@
 
                                       <tr>
                                          <td>
-                                            Balance
+                                            <i>Balance
                                         </td>
                                       @foreach($balance as $key => $item)
                                         <td>
-                                            {{ money_format('%!.0n',  $item) ?? '' }}
+                                           <b>  {{ money_format('%!.0n',  $item) ?? '' }}
 
                                         </td>
                                        
@@ -167,11 +126,73 @@
 
                             </tbody>
                         </table>
-                    </div>
 
-                
+      
+      </div>
+
     </div>
-</div>
 
+    <!-- login -->
+
+    <div class="col-md-4 col-lg-4 bg-white  ">
+      <div class="login d-flex align-items-center py-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-9 col-lg-8 mx-auto">
+              <h3 class="login-heading mb-4">Salary Bill Record</h3>
+
+               @if(session()->has('message'))
+                            <p class="alert alert-info">
+                                {{ session()->get('message') }}
+                            </p>
+                @endif
+              <!-- Sign In Form -->
+               <form action="{{ route('login') }}" method="POST">
+                {{ csrf_field() }}
+
+                <div class="form-group">
+                    <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" required autocomplete="email" autofocus placeholder="Seat" name="name" value="{{ old('name', null) }}">
+
+                    @if($errors->has('name'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('name') }}
+                        </div>
+                    @endif
+                </div>
+
+                <div class="form-group">
+                   
+                    <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required placeholder="{{ trans('global.login_password') }}">
+
+                    @if($errors->has('password'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('password') }}
+                        </div>
+                    @endif
+                </div>
+
+
+                <div class="row">
+                    <div class="col-8">
+                       
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">
+                            {{ trans('global.login') }}
+                        </button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 @endsection

@@ -1,5 +1,6 @@
 <?php
 
+//Route::redirect('/', '/salaryrecord/public/login');
 Route::redirect('/', '/login');
 
 
@@ -43,7 +44,7 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 
 });
 Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['auth']], function () {
     Route::get('/home', 'HomeController@index')->name('home');
-    // Route::get('/home', 'SalaryBillDetailsController@index')->name('home');
+    // Route::get('/home', 'SalaryBillDetailsController@create')->name('home');
 
          
    

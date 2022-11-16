@@ -78,7 +78,7 @@ setlocale(LC_MONETARY, 'en_IN');
 
                                     <tr>
                                          <td>
-                                            Total Used
+                                            Expenditure
                                         </td>
                                       @foreach($total as $key => $item)
                                         <td>
@@ -107,6 +107,41 @@ setlocale(LC_MONETARY, 'en_IN');
                             </tbody>
                         </table>
                     </div>
+
+
+                    <!-- data about pending -->
+                    <div class="table-responsive">
+                        <table   class=" table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                     <th>
+                                        Month
+                                    </th>
+                                   
+                                    <th>
+                                        Users
+                                    </th>
+                                    
+                                  
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($months as $key => $item)
+                                    <tr>
+                                         <td>
+                                         {{$key}}
+                                        </td>
+                                                                              
+                                        <td>
+                                            {{ $item }}
+                                        </td>
+                                        </tr>
+                                     @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+
                 </div>
 
 

@@ -1,5 +1,10 @@
 @extends('layouts.frontend')
 @section('content')
+
+<style type="text/css">
+    
+</style>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -12,7 +17,7 @@
                     </div>
                 </div>
             @endcan
-            <div class="card">
+            <!-- <div class="card"> -->
                 <div class="card-header">
                     {{ trans('cruds.salaryBillDetail.title_singular') }} {{ trans('global.list') }} ( FY: {{ $curyear }} )
                 </div>
@@ -27,10 +32,10 @@
                    
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class=" table table-bordered table-striped table-hover datatable datatable-SalaryBillDetail">
+                        <table class=" table table-bordered table-striped datatable datatable-SalaryBillDetail">
                             <thead>
                                 <tr>
-                                     <th>
+                                     <th class="noExport">
                                         {{ trans('cruds.salaryBillDetail.fields.id') }}
                                     </th>
                                     <th>
@@ -54,7 +59,10 @@
                                     <th>
                                         Date
                                     </th>
-                                    <th>
+				     <th>
+                                        Bill Total
+                                    </th>
+                                    <th class="noExport">
                                         &nbsp;
                                     </th>
                                 </tr>
@@ -62,40 +70,44 @@
                             <tbody>
                                 @foreach($salaryBillDetails as $key => $salaryBillDetail)
                                     <tr data-entry-id="{{ $salaryBillDetail->id }}">
-                                         <td>
+                                         <td  class="text-center">
                                             {{ $salaryBillDetail->id ?? '' }}
                                         </td>
-                                        <td>
+                                        <td  class="text-center">
                                             {{ $salaryBillDetail->created_by->name ?? '' }}
                                         </td>
-                                        <td>
+                                        <td class="text-right" >
                                             {{ money_format('%!.0n',  $salaryBillDetail->pay) ?? '' }}
                                         </td>
-                                        <td>
+                                        <td class="text-right" >
                                             {{ money_format('%!.0n',  $salaryBillDetail->da) ?? '' }}
                                         </td>
-                                        <td>
+                                        <td class="text-right" >
                                             {{ money_format('%!.0n',  $salaryBillDetail->hra) ?? '' }}
                                         </td>
-                                        <td>
+                                        <td class="text-right" >
                                             {{ money_format('%!.0n', $salaryBillDetail->other) ?? '' }}
                                         </td>
-                                        <td>
+                                        <td class="text-right" >
                                             {{ money_format('%!.0n', $salaryBillDetail->ota) ?? '' }}
                                         </td>
                                         <td>
                                             {{ $salaryBillDetail->created_at->format('d/m/Y') ?? '' }}
                                         </td>
+					  <td>
+                                            {{ money_format('%!.0n', $salaryBillDetail->ota+$salaryBillDetail->hra+$salaryBillDetail->pay+$salaryBillDetail->da+$salaryBillDetail->other) ?? '' }}
+                                        </td>
                                         <td>
-                                            @can('salary_bill_detail_show')
+                                          <!--   @can('salary_bill_detail_show')
                                                 <a class="btn btn-xs btn-primary" href="{{ route('frontend.salary-bill-details.show', $salaryBillDetail->id) }}">
                                                     {{ trans('global.view') }}
                                                 </a>
-                                            @endcan
+                                            @endcan -->
 
                                             @if( auth()->user()->id == $salaryBillDetail->created_by->id)
 
                                             @can('salary_bill_detail_edit')
+
                                                 <a class="btn btn-xs btn-info" href="{{ route('frontend.salary-bill-details.edit', $salaryBillDetail->id) }}">
                                                     {{ trans('global.edit') }}
                                                 </a>
@@ -115,6 +127,22 @@
                                     </tr>
                                 @endforeach
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                  <td class="text-center">Total</td>
+                                  <td class="text-center"> </td>
+
+                                  <td class="text-right" >{{ money_format('%!.0n',  $totaluser['pay'])  ?? ''}}</td>
+                                  <td class="text-right" >{{ money_format('%!.0n',  $totaluser['da'])  ?? ''}}</td>
+                                  <td class="text-right" >{{ money_format('%!.0n', $totaluser['hra']) ?? '' }}</td>
+                                  <td class="text-right" >{{ money_format('%!.0n', $totaluser['other']) ?? '' }}</td>
+                                  <td class="text-right" >{{ money_format('%!.0n', $totaluser['ota']) ?? '' }}</td>
+                                  <td class="text-right" ></td>
+                                  <td class="text-right" ></td>
+                                  <td class="text-right" ></td>
+
+                                </tr>
+                              </tfoot>
                         </table>
                     </div>
                 </div>
@@ -122,7 +150,7 @@
 
  
 
-            </div>
+            <!-- </div> -->
 
         </div>
     </div>
@@ -176,6 +204,11 @@
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
   });
+
+
+
+ 
+   
   
 })
 

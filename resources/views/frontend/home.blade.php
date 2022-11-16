@@ -4,8 +4,8 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+            <!-- <div class="card"> -->
+                <!-- <div class="card-header">{{ __('Dashboard') }}</div> -->
 
                 <div class="card-body">
                     @if(session('status'))
@@ -22,7 +22,7 @@
                     ?>
                 
                     <div class="table-responsive">
-                        <table   class=" table table-bordered table-striped">
+                        <table   class=" table">
                             <thead>
                                 <tr>
                                      <th>
@@ -69,7 +69,7 @@
 
                                     <tr>
                                          <td>
-                                            Total Used
+                                           Expenditure
                                         </td>
                                       @foreach($total as $key => $item)
                                         <td>
@@ -105,7 +105,7 @@
 
 
                 </div>
-            </div>
+            <!-- </div> -->
         </div>
     </div>
 </div>

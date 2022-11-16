@@ -10,6 +10,14 @@
 
 
 <div class="card">
+<!-- <div style="margin-top: 10px;" >
+                    <div class="col-lg-12">
+                        <a class="btn btn-success" href="{{ route('admin.salary-bill-details.create') }}">
+                            {{ trans('global.add') }} {{ trans('cruds.salaryBillDetail.title_singular') }}
+                        </a>
+                    </div>
+                </div>
+ -->
     <div class="card-header">
         {{ trans('cruds.salaryBillDetail.title_singular') }} {{ trans('global.list') }}
     </div>
@@ -17,15 +25,18 @@
 
     <div class="card-body">
         <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-SalaryBillDetail">
+            <table class=" table   cell-border  table-hover datatable datatable-SalaryBillDetail">
                 <thead>
                     <tr>
                         <th width="10">
 
                         </th>
                         <th>
-                            {{ trans('cruds.salaryBillDetail.fields.id') }}
+                           Month
                         </th>
+                        <th>
+                                        Seat
+                                    </th>
                         <th>
                             {{ trans('cruds.salaryBillDetail.fields.pay') }}
                         </th>
@@ -56,8 +67,11 @@
 
                             </td>
                             <td>
-                                {{ $salaryBillDetail->id ?? '' }}
+                                {{ $salaryBillDetail->created_at->format('Y F') ?? '' }}
                             </td>
+                            <td  class="text-center">
+                                            {{ $salaryBillDetail->created_by->name ?? '' }}
+                                        </td>
                             <td>
                                 {{ $salaryBillDetail->pay ?? '' }}
                             </td>

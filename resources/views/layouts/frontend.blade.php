@@ -8,6 +8,14 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ trans('panel.site_title') }}</title>
+    <link href="{{ asset('css/cdncss/bootstrap.min.css') }}"  rel="stylesheet" />
+    <link href="{{ asset('css/adminltev3.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/select.dataTables.min.css') }}" rel="stylesheet" />
+
+
+    <!--
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
@@ -19,8 +27,10 @@
     <link href="https://cdn.datatables.net/select/1.3.0/css/select.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
+    -->
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
     @yield('styles')
+  
 </head>
 
 <body class="sidebar-mini layout-fixed" style="height: auto;">
@@ -85,7 +95,7 @@
 
         <footer class="main-footer">
             <div class="float-right d-none d-sm-block">
-                <b>Version</b> 0.0-alpha
+                <b>Version</b> 0.2
             </div>
             <strong> &copy;</strong> {{ trans('global.allRightsReserved') }}
         </footer>
@@ -165,7 +175,8 @@
         className: 'btn-default',
         text: copyButtonTrans,
         exportOptions: {
-          columns: ':visible'
+          //columns: ':visible',
+          columns: "thead th:not(.noExport)"
         }
       },
       {
@@ -173,7 +184,9 @@
         className: 'btn-default',
         text: csvButtonTrans,
         exportOptions: {
-          columns: ':visible'
+          //columns: ':visible', 
+           columns: "thead th:not(.noExport)"
+
         }
       },
       {
@@ -181,7 +194,8 @@
         className: 'btn-default',
         text: excelButtonTrans,
         exportOptions: {
-          columns: ':visible'
+          //columns: ':visible'
+           columns: "thead th:not(.noExport)"
         }
       },
       {
@@ -189,7 +203,8 @@
         className: 'btn-default',
         text: pdfButtonTrans,
         exportOptions: {
-          columns: ':visible'
+          //columns: ':visible'
+           columns: "thead th:not(.noExport)"
         }
       },
       {
@@ -226,6 +241,7 @@
 
     </script>
     @yield('scripts')
+    @stack('scripts')
 </body>
 
 </html>

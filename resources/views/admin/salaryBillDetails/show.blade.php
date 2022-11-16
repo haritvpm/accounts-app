@@ -25,10 +25,10 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.salaryBillDetail.fields.salary') }}
+                            {{ trans('cruds.salaryBillDetail.fields.pay') }}
                         </th>
                         <td>
-                            {{ $salaryBillDetail->salary }}
+                            {{ $salaryBillDetail->pay }}
                         </td>
                     </tr>
                     <tr>

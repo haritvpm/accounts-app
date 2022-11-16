@@ -28,37 +28,43 @@ class SalaryBillDetailsController extends Controller
       
 
        
-         $salaryBillDetails = SalaryBillDetail::latest()->with(['year', 'created_by']) 
+        $salaryBillDetails = SalaryBillDetail::latest()->with(['year', 'created_by']) 
                     ->whereHas('year', function ($query)   use($curyear) {
                          $query->where('financial_year',  $curyear);
-                     })->get();
-/*
+                     })
+                    ->where('created_by_id', auth()->id() )
+                                        
+                    ->get();
 
-         $allocations = Allocation::with('year')
+
+
+
+        /*$allocations = Allocation::with('year')
            ->whereHas('year', function ($query)   use($curyear) {
                 $query->where('financial_year',  $curyear);
             });
+        */
 
 
 
         $fields = array("pay", "da", "hra", "other", "ota");
 
-        $allocation = [];
-        $total = [];
-        $balance = [];
+        //$allocation = [];
+        $totaluser = [];
+        //$balance = [];
 
         foreach ($fields as $field) {
 
-            $allocation[$field] = $allocations->sum($field);
-            $total[$field] = $salaryBillDetails->sum($field);
-            $balance[$field] =  $allocation[$field] - $total[$field];
+          //  $allocation[$field] = $allocations->sum($field);
+            $totaluser[$field] = $salaryBillDetails->sum($field);
+            //$balance[$field] =  $allocation[$field] - $total[$field];
           
         }
-*/
+
+
+
        
-
-
-        return view('frontend.salaryBillDetails.index', compact('salaryBillDetails',  'curyear'/*, 'allocation', 'total', 'balance'*/));
+        return view('frontend.salaryBillDetails.index', compact('salaryBillDetails',  'curyear', /*'allocation',*/ 'totaluser'/*, 'balance'*/));
     }
 
     public function create()

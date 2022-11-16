@@ -11,8 +11,8 @@
             {{ method_field('PUT') }}
             {{csrf_field()}}
             <div class="form-group">
-                <label class="required" for="salary">{{ trans('cruds.salaryBillDetail.fields.salary') }}</label>
-                <input class="form-control {{ $errors->has('pay') ? 'is-invalid' : '' }}" type="number" name="salary" id="salary" value="{{ old('pay', $salaryBillDetail->salary) }}" step="0.01" required>
+                <label class="required" for="pay">{{ trans('cruds.salaryBillDetail.fields.pay') }}</label>
+                <input class="form-control {{ $errors->has('pay') ? 'is-invalid' : '' }}" type="number" name="pay" id="pay" value="{{ old('pay', $salaryBillDetail->pay) }}" step="0.01" required>
                 @if($errors->has('pay'))
                     <span class="text-danger">{{ $errors->first('pay') }}</span>
                 @endif

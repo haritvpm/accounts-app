@@ -52,6 +52,10 @@ setlocale(LC_MONETARY, 'en_IN');
                         <th>
                             {{ trans('cruds.allocation.fields.year') }}
                         </th>
+                         <th>
+                           Date
+                        </th>
+                        
                         <th>
                             &nbsp;
                         </th>
@@ -84,6 +88,9 @@ setlocale(LC_MONETARY, 'en_IN');
                             </td>
                             <td>
                                 {{ $allocation->year->financial_year ?? '' }}
+                            </td>
+                             <td>
+                                {{ $allocation->created_at->format('d/m/Y') ?? '' }}
                             </td>
                             <td>
                                 @can('allocation_show')
