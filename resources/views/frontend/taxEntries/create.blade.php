@@ -28,7 +28,8 @@
                                 <option value disabled {{ old('status', null)===null ? 'selected' : '' }}>{{
                                     trans('global.pleaseSelect') }}</option>
                                 @foreach(App\Models\TaxEntry::STATUS_SELECT as $key => $label)
-                                <option value="{{ $key }}" {{ old('status', '' )===(string) $key ? 'selected' : '' }}>{{
+                                <option value="{{ $key }}" {{ old('status', 'draft' )===(string) $key ? 'selected' : ''
+                                    }}>{{
                                     $label }}</option>
                                 @endforeach
                             </select>
@@ -59,7 +60,7 @@
                         </div>
                         <div class="form-group">
                             <button class="btn btn-danger" type="submit">
-                                Generate
+                                Submit
                             </button>
                         </div>
                     </form>
