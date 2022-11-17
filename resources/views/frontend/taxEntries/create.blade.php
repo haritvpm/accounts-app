@@ -13,6 +13,7 @@
                         enctype="multipart/form-data">
                         {{ method_field('POST') }}
                         {{csrf_field()}}
+                     
                         <div class="form-group {{ $errors->has('date') ? 'has-error' : '' }}">
                             <label class="required" for="date">{{ trans('cruds.taxEntry.fields.date') }}</label>
                             <input class="form-control date" type="text" name="date" id="date" value="{{ old('date') }}"

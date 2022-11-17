@@ -9,14 +9,14 @@
                     {{ trans('global.edit') }} {{ trans('cruds.taxEntry.title_singular') }}
                 </div>
                 <div class="panel-body">
-                    <form method="POST" action="{{ route(" admin.tax-entries.update", [$taxEntry->id]) }}"
-                        enctype="multipart/form-data">
-                        @method('PUT')
-                        @csrf
+                    <form method="POST" action="{{ route('frontend.tax-entries.update', [$taxEntry->id]) }}"
+                      enctype="multipart/form-data">
+                      {{ method_field('PUT') }}
+                        {{csrf_field()}}
                         <div class="form-group {{ $errors->has('date') ? 'has-error' : '' }}">
                             <label class="required" for="date">{{ trans('cruds.taxEntry.fields.date') }}</label>
                             <input class="form-control date" type="text" name="date" id="date"
-                                value="{{ old('date', $taxEntry->date) }}" required>
+                                value="{{ old('date', $taxEntry->date) }}" readonly required>
                             @if($errors->has('date'))
                             <span class="help-block" role="alert">{{ $errors->first('date') }}</span>
                             @endif

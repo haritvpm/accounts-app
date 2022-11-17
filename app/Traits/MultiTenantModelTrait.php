@@ -20,9 +20,9 @@ trait MultiTenantModelTrait
             });
             if (!$isAdmin) {
                 static::addGlobalScope('created_by_id', function (Builder $builder) {
-                    //$field = sprintf('%s.%s', $builder->getQuery()->from, 'created_by_id');
+                    $field = sprintf('%s.%s', $builder->getQuery()->from, 'created_by_id');
 
-                    //$builder->where($field, auth()->id())->orWhereNull($field);
+                    $builder->where($field, auth()->id())->orWhereNull($field);
                 });
             }
         }

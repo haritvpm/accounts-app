@@ -10,7 +10,7 @@ class AddRelationshipFieldsToTdsTable extends Migration
     {
         Schema::table('tds', function (Blueprint $table) {
             $table->unsignedBigInteger('date_id')->nullable();
-            $table->foreign('date_id', 'date_fk_7631779')->references('id')->on('tax_entries');
+            $table->foreign('date_id', 'date_fk_7631779')->references('id')->on('tax_entries')->onDelete('cascade');
             $table->unsignedBigInteger('created_by_id')->nullable();
             $table->foreign('created_by_id', 'created_by_fk_7631783')->references('id')->on('users');
         });

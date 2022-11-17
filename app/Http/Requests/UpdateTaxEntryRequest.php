@@ -21,12 +21,7 @@ class UpdateTaxEntryRequest extends FormRequest
                 'required',
                 'date_format:' . config('panel.date_format'),
             ],
-            'innerfile' => [
-                'required',
-            ],
-            'deductionfile' => [
-                'required',
-            ],
+            
         ];
     }
 }

@@ -7,11 +7,13 @@ use App\Http\Requests\MassDestroyTaxEntryRequest;
 use App\Http\Requests\StoreTaxEntryRequest;
 use App\Http\Requests\UpdateTaxEntryRequest;
 use App\Models\TaxEntry;
+use App\Models\Td;
 //use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Tabula\Tabula;
 use Illuminate\Support\Facades\File;
+use Carbon\Carbon;
 
 class TaxEntryController extends Controller
 {
@@ -34,17 +36,7 @@ class TaxEntryController extends Controller
 
     public function store(StoreTaxEntryRequest $request)
     {
-        $taxEntry = TaxEntry::create($request->except(['file1', 'file2']));
-
-        if ($request->input('file1', false)) {
-
-        }
-
-        if ($request->input('file2', false)) {
-
-        }
-
-
+       
         $time = time();
 
         $fileName1 = $time . '1.' . $request->file1->extension();
@@ -80,29 +72,41 @@ class TaxEntryController extends Controller
                 'pages' => 'all',
                 'lattice' => true,
                 'stream' => false,
+               // 'outfile' => storage_path("app/public/out4.csv"),
             ])
             ->convert();
 
 
-        /* TEST output
-        $tabula3 = new Tabula('/usr/bin/');
-        $tabula3->setPdf($fileName2)
-        ->setOptions([
-        'format' => 'csv',
-        'pages' => 'all',
-        'lattice' => true,
-        'stream' => false,
-        'outfile' => storage_path("app/public/out4.csv"),
-        ])
-        ->convert();*/
-
         //handle conversion
-        $data = $this->process($result1, $result2);
+        $pens = array();
+        $errors = array();
+
+   
+        $date = Carbon::createFromFormat('d/m/Y',$request->date )->format('Y-m-d');
+        $taxEntry = TaxEntry::where('date',$date)->first(); 
+        
+        if(!$taxEntry)
+        {
+            $taxEntry = TaxEntry::create($request->except(['file1', 'file2']));
+        } 
+
+        $data = $this->process($result1, $result2, $taxEntry->id, $pens, $errors);
 
         File::delete($fileName1, $fileName2);
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        //$out->writeln($result2);
+        
+        if( count($errors) > 0 ){
+           // $taxEntry->delete();
+            return redirect()->back()->withErrors($errors);
+        }
+
+       
         //$this->array_to_csv_download($data);
+        if( count($data) > 0 ){
+            //remove all existing items if we have similar pen
+
+            Td::where('date_id', $taxEntry->id)->whereIn( 'pen', $pens )->delete();
+            Td::insert($data);
+        }
 
         return redirect()->route('frontend.tax-entries.index');
     }
@@ -118,19 +122,10 @@ class TaxEntryController extends Controller
 
     public function update(UpdateTaxEntryRequest $request, TaxEntry $taxEntry)
     {
-        $taxEntry->update($request->all());
+        //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
+       //     $out->writeln($request->all());
 
-        if ($request->input('innerfile', false)) {
-
-        } elseif ($taxEntry->innerfile) {
-
-        }
-
-        if ($request->input('deductionfile', false)) {
-
-        } elseif ($taxEntry->deductionfile) {
-
-        }
+        $taxEntry->update($request->only(['status']));
 
         return redirect()->route('frontend.tax-entries.index');
     }
@@ -148,6 +143,8 @@ class TaxEntryController extends Controller
     {
         //  abort_if(Gate::denies('tax_entry_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        //delete Tds first
+        Td::where('id', $taxEntry->id)->delete();
         $taxEntry->delete();
 
         return back();
@@ -161,9 +158,10 @@ class TaxEntryController extends Controller
 
 
 
-    public function process($inner, $ded)
+    public function process($inner, $ded, $taxentry_id, &$pens, &$errors)
     {
         //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $data = array();
 
         $innerlines = explode("\r\n", $inner);
 
@@ -174,7 +172,7 @@ class TaxEntryController extends Controller
 
         for (; $i < count($innerlines); $i++) {
 
-            //$data[] = str_getcsv($line);
+          
             $l = $innerlines[$i];
             //$out->writeln(($l));
 
@@ -204,7 +202,8 @@ class TaxEntryController extends Controller
         }
 
         if (-1 == $grosscol) {
-            return ["InnerBill could not be parsed"];
+            $errors[] = "InnerBill could not be parsed";
+            return $data;
         }
 
         // $out->writeln($grosscol);
@@ -232,7 +231,8 @@ class TaxEntryController extends Controller
         $dedlines = explode("\r\n", $ded);
 
         if (count($dedlines) < 8 || 0 != strncmp($dedlines[3], "INCOME TAX(311)", strlen("INCOME TAX(311)"))) {
-            return ["Deduction document could not be parsed"];
+            $errors[] = "Deduction document could not be parsed";
+            return $data;
         }
 
         $slno = 1;
@@ -244,10 +244,13 @@ class TaxEntryController extends Controller
 
 
         if (0 !== strcasecmp($dedmonth, $innermonth)) {
-            return ["Document months not the same"];
+         
+            $errors[]= "Document months not the same";
+            return $data;
         }
 
-        $data = [implode(',', ['Sl.No', 'PAN of the deductee', 'PEN of the deductee', 'Name of the deductee', 'Amount paid/credited', 'TDS', 'Date of credit'])];
+        //$data = [implode(',', ['Sl.No', 'PAN of the deductee', 'PEN of the deductee', 'Name of the deductee', 'Amount paid/credited', 'TDS', 'Date of credit'])];
+       
         for ($i = 0; $i < count($dedlines); $i++) {
             $l = $dedlines[$i];
             $slnotxt = sprintf("%u,", $slno);
@@ -257,16 +260,21 @@ class TaxEntryController extends Controller
             if (0 == strncmp($l, $slnotxt, strlen($slnotxt))) {
                 $slno++;
                 $cols = str_getcsv($l);
-                $items = [];
-                array_push($items, $cols[0]);
-                array_push($items, $cols[3]); //PAN
-                array_push($items, $cols[1]); //PEN
-                array_push($items, $cols[2]);
-                array_push($items, $pentogross[$cols[1]]);
-                array_push($items, $cols[4]);
-                array_push($items, 'dsfsdfds');
+                $items = array(
+                    'slno'=> $cols[0],
+                    'pan'=>$cols[3],
+                    'pen'=>$cols[1] ,
+                    'name'=> $cols[2],
+                    'gross'=> $pentogross[$cols[1]],
+                    'tds'=> $cols[4],
+                    'date_id' => $taxentry_id,
+                    'created_by_id' =>auth()->id()
+                );
 
-                array_push($data, implode(',', $items));
+                $pens[] = $cols[1];
+
+                //array_push($data, implode(',', $items));
+                $data[] = $items;
             }
         }
 
