@@ -20,7 +20,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
     Route::resource('users', 'UsersController');
 
-   
+
     // Year
     Route::delete('years/destroy', 'YearController@massDestroy')->name('years.massDestroy');
     Route::resource('years', 'YearController');
@@ -46,8 +46,8 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     Route::get('/home', 'HomeController@index')->name('home');
     // Route::get('/home', 'SalaryBillDetailsController@create')->name('home');
 
-         
-   
+
+
     // Year
     Route::delete('years/destroy', 'YearController@massDestroy')->name('years.massDestroy');
     Route::resource('years', 'YearController');
@@ -59,6 +59,12 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     // Salary Bill Details
     Route::delete('salary-bill-details/destroy', 'SalaryBillDetailsController@massDestroy')->name('salary-bill-details.massDestroy');
     Route::resource('salary-bill-details', 'SalaryBillDetailsController');
+
+
+    // Tax Entry
+    //Route::delete('tax-entries/destroy', 'TaxEntryController@massDestroy')->name('tax-entries.massDestroy');
+    Route::resource('tax-entries', 'TaxEntryController');
+
 
     Route::get('frontend/profile', 'ProfileController@index')->name('profile.index');
     Route::post('frontend/profile', 'ProfileController@update')->name('profile.update');
