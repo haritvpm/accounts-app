@@ -64,7 +64,7 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     // Tax Entry
     //Route::delete('tax-entries/destroy', 'TaxEntryController@massDestroy')->name('tax-entries.massDestroy');
     Route::resource('tax-entries', 'TaxEntryController');
-
+    Route::resource('tds', 'TdsController');
 
     Route::get('frontend/profile', 'ProfileController@index')->name('profile.index');
     Route::post('frontend/profile', 'ProfileController@update')->name('profile.update');
