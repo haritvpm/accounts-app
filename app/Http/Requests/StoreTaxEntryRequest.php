@@ -21,10 +21,10 @@ class StoreTaxEntryRequest extends FormRequest
                 'required',
                 'date_format:' . config('panel.date_format'),
             ],
-            'innerfile' => [
+            'file1' => [
                 'required',
             ],
-            'deductionfile' => [
+            'file2' => [
                 'required',
             ],
         ];

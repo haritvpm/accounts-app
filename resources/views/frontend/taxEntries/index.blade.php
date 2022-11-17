@@ -56,20 +56,20 @@
                                     <td>
 
                                         <a class="btn btn-xs btn-primary"
-                                            href="{{ route('admin.tax-entries.show', $taxEntry->id) }}">
+                                            href="{{ route('frontend.tax-entries.show', $taxEntry->id) }}">
                                             {{ trans('global.view') }}
                                         </a>
 
 
 
                                         <a class="btn btn-xs btn-info"
-                                            href="{{ route('admin.tax-entries.edit', $taxEntry->id) }}">
+                                            href="{{ route('frontend.tax-entries.edit', $taxEntry->id) }}">
                                             {{ trans('global.edit') }}
                                         </a>
 
 
 
-                                        <form action="{{ route('admin.tax-entries.destroy', $taxEntry->id) }}"
+                                        <form action="{{ route('frontend.tax-entries.destroy', $taxEntry->id) }}"
                                             method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');"
                                             style="display: inline-block;">
                                             <input type="hidden" name="_method" value="DELETE">
