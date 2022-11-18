@@ -96,28 +96,17 @@ class TdsController extends Controller
       //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
       //$out->writeln($request->period);
 
-
-      //$startDate = Carbon::createFromFormat('Y-m-d', trim($request->year).'-11-01');
-      //$endDate = Carbon::createFromFormat('Y-m-d', trim($request->year).'-11-31');
-        $taxEntries = TaxEntry::with('dateTds')->whereMonth('date', '11')->get();
-        //$taxEntries = TaxEntry::whereMonth('date', '11')->get()->pluck('id');
-        //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        //$out->writeln($taxEntries->count());
-
-        //$tds = Td::with('date')->whereIn( 'date_id', $taxEntries )->get();
+        $taxEntries = TaxEntry::with('dateTds')
+        ->whereYear('date', trim($request->year))
+        ->whereMonth('date', '11')->get();
         
-        //$out->writeln(count($tds));
-
         $this->array_to_csv_download($taxEntries);
         return back();
     }
 
     function array_to_csv_download($array, $filename = "export.csv", $delimiter = ",")
     {
-   //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
-   //$out->writeln('fgdfgf');
-    
-
+ 
         header('Content-Type: application/csv');
 
         header('Content-Disposition: attachment; filename="' . $filename . '";');
