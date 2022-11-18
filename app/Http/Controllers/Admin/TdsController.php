@@ -99,21 +99,23 @@ class TdsController extends Controller
 
       //$startDate = Carbon::createFromFormat('Y-m-d', trim($request->year).'-11-01');
       //$endDate = Carbon::createFromFormat('Y-m-d', trim($request->year).'-11-31');
-        $taxEntries = TaxEntry::whereMonth('date', '11')->get()->pluck('id');
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln($taxEntries->count());
+        $taxEntries = TaxEntry::with('dateTds')->whereMonth('date', '11')->get();
+        //$taxEntries = TaxEntry::whereMonth('date', '11')->get()->pluck('id');
+        //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        //$out->writeln($taxEntries->count());
 
-        $tds = Td::whereIn( 'date_id', $taxEntries )->get();
-        $out->writeln($tds->count());
+        //$tds = Td::with('date')->whereIn( 'date_id', $taxEntries )->get();
+        
+        //$out->writeln(count($tds));
 
-        $this->array_to_csv_download($tds);
+        $this->array_to_csv_download($taxEntries);
         return back();
     }
 
     function array_to_csv_download($array, $filename = "export.csv", $delimiter = ",")
     {
-   $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-   $out->writeln('fgdfgf');
+   //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
+   //$out->writeln('fgdfgf');
     
 
         header('Content-Type: application/csv');
@@ -124,12 +126,14 @@ class TdsController extends Controller
         // open the "output" stream
         // see http://www.php.net/manual/en/wrappers.php.php#refsect2-wrappers.php-unknown-unknown-unknown-descriptioq
         $f = fopen('php://output', 'w');
+        
+        foreach ($array as $taxentry) {
 
-        foreach ($array as $line) {
-           // $out->writeln($line);
-           // $out->writeln($line[0]);
-
-            fputcsv($f, $line[0]);
+            $tds = $taxentry->dateTds()->get();
+            foreach ($tds as $line) {
+            
+                fputcsv($f, array_merge($line->toArray(), [ $taxentry->date ]));
+            }
         }
         fclose($f);
 
