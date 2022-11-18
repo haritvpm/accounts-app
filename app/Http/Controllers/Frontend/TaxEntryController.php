@@ -89,8 +89,8 @@ class TaxEntryController extends Controller
         {
             $taxEntry = TaxEntry::create($request->except(['file1', 'file2']));
         } 
-
-        $data = $this->process($result1, $result2, $taxEntry->id, $pens, $errors);
+        $month = Carbon::createFromFormat('d/m/Y',$request->date )->format('F');
+        $data = $this->process($result1, $result2, $taxEntry->id, $pens, $errors, $month);
 
         File::delete($fileName1, $fileName2);
         
@@ -158,7 +158,7 @@ class TaxEntryController extends Controller
 
 
 
-    public function process($inner, $ded, $taxentry_id, &$pens, &$errors)
+    public function process($inner, $ded, $taxentry_id, &$pens, &$errors, $month)
     {
         //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
         $data = array();
@@ -249,6 +249,15 @@ class TaxEntryController extends Controller
             return $data;
         }
 
+        /* this is wrong at the moment. check if deduction is always one month after
+        if (0 !== strcasecmp($month, $innermonth) || (0 !== strcasecmp($month, $dedmonth) ) {
+         
+            $errors[]= "Date of dedudction and Document month not the same";
+            return $data;
+        }
+        */
+      
+
         //$data = [implode(',', ['Sl.No', 'PAN of the deductee', 'PEN of the deductee', 'Name of the deductee', 'Amount paid/credited', 'TDS', 'Date of credit'])];
        
         for ($i = 0; $i < count($dedlines); $i++) {
@@ -283,30 +292,6 @@ class TaxEntryController extends Controller
 
     }
 
-    function array_to_csv_download($array, $filename = "export.csv", $delimiter = ",")
-    {
-
-
-        header('Content-Type: application/csv');
-
-        header('Content-Disposition: attachment; filename="' . $filename . '";');
-
-
-        // open the "output" stream
-        // see http://www.php.net/manual/en/wrappers.php.php#refsect2-wrappers.php-unknown-unknown-unknown-descriptioq
-        $f = fopen('php://output', 'w');
-
-        foreach ($array as $line) {
-            fputcsv($f, explode(',', $line), $delimiter);
-        }
-        fclose($f);
-
-        // flush buffer
-        ob_flush();
-
-        // use exit to get rid of unexpected output afterward
-        exit();
-
-    }
+   
 
 }

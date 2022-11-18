@@ -107,6 +107,19 @@
                         </a>
                     </li>
                 @endcan
+
+                <li class="nav-item">
+                    <a href="{{ route("admin.tds.index") }}"
+                     class="nav-link {{ request()->is("tds") || request()->is("tds/*") ? "active" : "" }}">
+                        <i class="fa-fw nav-icon fas fa-table">
+
+                        </i>
+                        <p>
+                        <span>{{ trans('cruds.td.title') }}</span>
+                        </p>
+                    </a>
+                </li>
+
                 @if(file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php')))
                     @can('profile_password_edit')
                         <li class="nav-item">

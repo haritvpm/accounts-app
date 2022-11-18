@@ -1,4 +1,4 @@
-@extends('layouts.frontend')
+@extends('layouts.admin')
 @section('content')
 <div class="content">
 
@@ -9,7 +9,7 @@
                     {{ trans('global.edit') }} {{ trans('cruds.td.title_singular') }}
                 </div>
                 <div class="panel-body">
-                    <form method="POST" action="{{ route("frontend.tds.update", [$td->id]) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route("admin.tds.update", [$td->id]) }}" enctype="multipart/form-data">
                     {{ method_field('PUT') }}
                         {{csrf_field()}}
                         <div class="form-group {{ $errors->has('pan') ? 'has-error' : '' }}">
@@ -52,18 +52,17 @@
                             @endif
                             <span class="help-block">{{ trans('cruds.td.fields.tds_helper') }}</span>
                         </div>
+                       
                         <div class="form-group {{ $errors->has('date') ? 'has-error' : '' }}">
-                            <label class="required" for="date_id">{{ trans('cruds.td.fields.date') }}</label>
-                            <select class="form-control select2 " name="date_id" id="date_id" disabled  required>
-                                @foreach($dates as $id => $entry)
-                                    <option value="{{ $id }}" {{ (old('date_id') ? old('date_id') : $td->date->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                                @endforeach
-                            </select>
+                            <label class="required" for="date">{{ trans('cruds.taxEntry.fields.date') }}</label>
+                            <input class="form-control date" type="text" name="date" id="date"
+                                value="{{ old('date', $td->date->date) }}" required>
                             @if($errors->has('date'))
-                                <span class="help-block" role="alert">{{ $errors->first('date') }}</span>
+                            <span class="help-block" role="alert">{{ $errors->first('date') }}</span>
                             @endif
-                            <span class="help-block">{{ trans('cruds.td.fields.date_helper') }}</span>
+                            <span class="help-block">{{ trans('cruds.taxEntry.fields.date_helper') }}</span>
                         </div>
+
                         <div class="form-group">
                             <button class="btn btn-danger" type="submit">
                                 {{ trans('global.save') }}

@@ -9,8 +9,9 @@
                     {{ trans('global.create') }} {{ trans('cruds.td.title_singular') }}
                 </div>
                 <div class="panel-body">
-                    <form method="POST" action="{{ route("admin.tds.store") }}" enctype="multipart/form-data">
-                        @csrf
+                    <form method="POST" action="{{ route("frontend.tds.store") }}" enctype="multipart/form-data">
+                    {{ method_field('POST') }}
+                        {{csrf_field()}}
                         <div class="form-group {{ $errors->has('pan') ? 'has-error' : '' }}">
                             <label class="required" for="pan">{{ trans('cruds.td.fields.pan') }}</label>
                             <input class="form-control" type="text" name="pan" id="pan" value="{{ old('pan', '') }}" required>

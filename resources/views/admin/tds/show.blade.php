@@ -1,4 +1,4 @@
-@extends('layouts.frontend')
+@extends('layouts.admin')
 @section('content')
 <div class="content">
 
@@ -11,7 +11,7 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <div class="form-group">
-                            <a class="btn btn-default" href="{{ route('frontend.tds.index') }}">
+                            <a class="btn btn-default" href="{{ route('admin.tds.index') }}">
                                 {{ trans('global.back_to_list') }}
                             </a>
                         </div>

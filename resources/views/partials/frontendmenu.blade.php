@@ -38,7 +38,7 @@
                 <li class="nav-item">
                     <a href="{{ route("frontend.tds.index") }}"
                      class="nav-link {{ request()->is("tds") || request()->is("tds/*") ? "active" : "" }}">
-                        <i class="fa-fw nav-icon fas fa-plus">
+                        <i class="fa-fw nav-icon fas fa-table">
 
                         </i>
                         <p>

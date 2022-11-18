@@ -32,6 +32,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Salary Bill Details
     Route::delete('salary-bill-details/destroy', 'SalaryBillDetailsController@massDestroy')->name('salary-bill-details.massDestroy');
     Route::resource('salary-bill-details', 'SalaryBillDetailsController');
+
+    // Tds Report
+    Route::resource('tds', 'TdsController');
+    Route::post('tds/download', 'TdsController@download')->name('tds.download');
+
+    //Route::resource('tds-reports', 'TdsReportController', ['except' => ['edit', 'update', 'show', 'destroy']]);
+    
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password

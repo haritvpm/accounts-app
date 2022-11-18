@@ -5,7 +5,7 @@
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <a class="btn btn-success" href="{{ route('frontend.tax-entries.create') }}">
-                {{ trans('global.add') }} {{ trans('cruds.taxEntry.title_singular') }}
+                Upload 
             </a>
         </div>
     </div>
@@ -34,7 +34,7 @@
                                         {{ trans('cruds.taxEntry.fields.status') }}
                                     </th>
                                     <th>
-                                        &nbsp;
+                                        &nbsp;&nbsp;
                                     </th>
                                 </tr>
                             </thead>
@@ -94,4 +94,27 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+@parent
+<script>
+    $(function () {
+  let dtButtons = $.extend(true, [], [])
+  //let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+
+  $.extend(true, $.fn.dataTable.defaults, {
+    orderCellsTop: true,
+    order: [[ 1, 'desc' ]],
+    pageLength: 25,
+  });
+  let table = $('.datatable-TaxEntry:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+  $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
+      $($.fn.dataTable.tables(true)).DataTable()
+          .columns.adjust();
+  });
+  
+})
+
+</script>
 @endsection

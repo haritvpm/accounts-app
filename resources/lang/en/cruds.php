@@ -136,8 +136,8 @@ return [
         ],
     ],
     'taxEntry' => [
-        'title' => 'Tax Entry',
-        'title_singular' => 'Tax Entry',
+        'title' => 'TDS Upload',
+        'title_singular' => 'TDS Entry',
         'fields' => [
             'id' => 'ID',
             'id_helper' => ' ',
@@ -160,8 +160,8 @@ return [
         ],
     ],
     'td' => [
-        'title' => 'TDS',
-        'title_singular' => 'TDS',
+        'title' => 'TDS Details',
+        'title_singular' => 'TDS Detail',
         'fields' => [
             'id' => 'ID',
             'id_helper' => ' ',
