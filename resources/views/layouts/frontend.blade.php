@@ -74,6 +74,7 @@
     @include('partials.frontendmenu')
     <div class="content-wrapper" style="min-height: 917px;">
       <!-- Main content -->
+      
       <section class="content" style="padding-top: 20px">
         @if(session('message'))
         <div class="row mb-2">

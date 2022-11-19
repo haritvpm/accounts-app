@@ -22,7 +22,8 @@ trait MultiTenantModelTrait
                 static::addGlobalScope('created_by_id', function (Builder $builder) {
                     $field = sprintf('%s.%s', $builder->getQuery()->from, 'created_by_id');
 
-                    $builder->where($field, auth()->id())->orWhereNull($field);
+                    //commented orWhereNull. NULL is admin 
+                    $builder->where($field, auth()->id())/*->orWhereNull($field)*/;
                 });
             }
         }

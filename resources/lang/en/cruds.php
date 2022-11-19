@@ -187,4 +187,23 @@ return [
             'created_by_helper' => ' ',
         ],
     ],
+    'tdsReport' => [
+        'title'          => 'Tds Report',
+        'title_singular' => 'Tds Report',
+        'fields'         => [
+            'id'                => 'ID',
+            'id_helper'         => ' ',
+            'year'              => 'Year',
+            'year_helper'       => ' ',
+            'period'            => 'Period',
+            'period_helper'     => ' ',
+            'created_at'        => 'Created at',
+            'created_at_helper' => ' ',
+            'updated_at'        => 'Updated at',
+            'updated_at_helper' => ' ',
+            'deleted_at'        => 'Deleted at',
+            'deleted_at_helper' => ' ',
+            'period_helper'   => 'Select the months for generating report',
+        ],
+    ],
 ];

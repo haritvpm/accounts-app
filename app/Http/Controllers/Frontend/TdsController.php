@@ -18,7 +18,9 @@ class TdsController extends Controller
     {
        // abort_if(Gate::denies('td_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $tds = Td::with(['date', 'created_by'])->get();
+        $tds = Td::with(['date', 'created_by'])
+        ->orderBy('id', 'DESC')
+        ->get();
 
         return view('frontend.tds.index', compact('tds'));
     }
@@ -27,7 +29,7 @@ class TdsController extends Controller
     {
         //abort_if(Gate::denies('td_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $dates = TaxEntry::pluck('date', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $dates = TaxEntry::pluck('date', 'id')/* ->prepend(trans('global.pleaseSelect') , '')*/;
 
         return view('frontend.tds.create', compact('dates'));
     }
@@ -43,7 +45,7 @@ class TdsController extends Controller
     {
         //abort_if(Gate::denies('td_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $dates = TaxEntry::pluck('date', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $dates = TaxEntry::pluck('date', 'id')/* ->prepend(trans('global.pleaseSelect') , '')*/;
 
         $td->load('date', 'created_by');
 

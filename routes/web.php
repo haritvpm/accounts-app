@@ -36,6 +36,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Tds Report
     Route::resource('tds', 'TdsController');
     Route::post('tds/download', 'TdsController@download')->name('tds.download');
+    Route::resource('tax-entries', 'TaxEntryController');
 
     //Route::resource('tds-reports', 'TdsReportController', ['except' => ['edit', 'update', 'show', 'destroy']]);
     

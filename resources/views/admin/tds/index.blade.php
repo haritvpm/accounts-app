@@ -2,45 +2,6 @@
 @section('content')
 <div class="content">
   
-        <div style="margin-bottom: 10px;" class="row">
-            <div class="col-lg-12">
-                <a class="btn btn-success" href="{{ route('admin.tds.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.td.title_singular') }}
-                </a>
-            </div>
-            <div class="panel-body">
-                    <form method="POST" action="{{ route("admin.tds.download") }}" enctype="multipart/form-data">
-                    {{ method_field('POST') }}
-                        {{csrf_field()}}
-                        <div class="form-group {{ $errors->has('year') ? 'has-error' : '' }}">
-                            <label class="required" for="year">{{ trans('cruds.tdsReport.fields.year') }}</label>
-                            <input class="form-control" type="number" name="year" id="year" value="{{ old('year', '2022') }}" step="1" required>
-                            @if($errors->has('year'))
-                                <span class="help-block" role="alert">{{ $errors->first('year') }}</span>
-                            @endif
-                            <span class="help-block">{{ trans('cruds.tdsReport.fields.year_helper') }}</span>
-                        </div>
-                        <div class="form-group {{ $errors->has('period') ? 'has-error' : '' }}">
-                            <label class="required">{{ trans('cruds.tdsReport.fields.period') }}</label>
-                            @foreach(App\Models\TdsReport::PERIOD_RADIO as $key => $label)
-                                <div>
-                                    <input type="radio" id="period_{{ $key }}" name="period" value="{{ $key }}" {{ old('period', '0') === (string) $key ? 'checked' : '' }} required>
-                                    <label for="period_{{ $key }}" style="font-weight: 400">{{ $label }}</label>
-                                </div>
-                            @endforeach
-                            @if($errors->has('period'))
-                                <span class="help-block" role="alert">{{ $errors->first('period') }}</span>
-                            @endif
-                            <span class="help-block">{{ trans('cruds.tdsReport.fields.period_helper') }}</span>
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-danger" type="submit">
-                                {{ trans('global.save') }}
-                            </button>
-                        </div>
-                    </form>
-                </div>
-        </div>
    
     <div class="row">
         <div class="col-lg-12">
@@ -117,11 +78,11 @@
                                         </td>
                                         <td>
                                         @if( empty($td->created_by_id))
-                                                <a class="btn btn-xs btn-primary" href="{{ route('admin.tds.show', $td->id) }}">
+                                                <a class="btn btn-xs btn-light" href="{{ route('admin.tds.show', $td->id) }}">
                                                     {{ trans('global.view') }}
                                                 </a>
                                           
-                                                <a class="btn btn-xs btn-info" href="{{ route('admin.tds.edit', $td->id) }}">
+                                                <a class="btn btn-xs btn-secondary" href="{{ route('admin.tds.edit', $td->id) }}">
                                                     {{ trans('global.edit') }}
                                                 </a>
                                           

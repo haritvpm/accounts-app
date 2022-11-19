@@ -1,20 +1,22 @@
 <div class="content">
-    @can('td_create')
-        <div style="margin-bottom: 10px;" class="row">
+    
+       <!-- This is OK, but then we need to provide edit,delete option as well. there is edit route, but too lazy to paste that to each row
+       Let them add only through pdf
+          <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
-                <a class="btn btn-success" href="{{ route('admin.tds.create') }}">
+                <a class="btn btn-success" href="{{ route('frontend.tds.create') }}">
                     {{ trans('global.add') }} {{ trans('cruds.td.title_singular') }}
                 </a>
             </div>
-        </div>
-    @endcan
+        </div> -->
+    
     <div class="row">
         <div class="col-lg-12">
 
             <div class="panel panel-default">
-                <div class="panel-heading">
+               <!--  <div class="panel-heading">
                     {{ trans('cruds.td.title_singular') }} {{ trans('global.list') }}
-                </div>
+                </div> -->
                 <div class="panel-body">
 
                     <div class="table-responsive">
@@ -25,7 +27,7 @@
 
                                     </th>
                                     <th>
-                                        {{ trans('cruds.td.fields.id') }}
+                                        Sl.No.
                                     </th>
                                     <th>
                                         {{ trans('cruds.td.fields.pan') }}
@@ -45,9 +47,9 @@
                                     <th>
                                         {{ trans('cruds.td.fields.date') }}
                                     </th>
-                                    <th>
+                                    <!-- <th>
                                         &nbsp;
-                                    </th>
+                                    </th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -57,7 +59,7 @@
 
                                         </td>
                                         <td>
-                                            {{ $td->id ?? '' }}
+                                            {{ $td->slno ?? '' }}
                                         </td>
                                         <td>
                                             {{ $td->pan ?? '' }}
@@ -77,28 +79,23 @@
                                         <td>
                                             {{ $td->date->date ?? '' }}
                                         </td>
-                                        <td>
-                                            @can('td_show')
-                                                <a class="btn btn-xs btn-primary" href="{{ route('admin.tds.show', $td->id) }}">
+                                        <!-- <td>
+                                          
+                                                <a class="btn btn-xs btn-primary" href="{{ route('frontend.tds.show', $td->id) }}">
                                                     {{ trans('global.view') }}
                                                 </a>
-                                            @endcan
-
-                                            @can('td_edit')
-                                                <a class="btn btn-xs btn-info" href="{{ route('admin.tds.edit', $td->id) }}">
+                                      
+                                                <a class="btn btn-xs btn-info" href="{{ route('frontend.tds.edit', $td->id) }}">
                                                     {{ trans('global.edit') }}
                                                 </a>
-                                            @endcan
-
-                                            @can('td_delete')
-                                                <form action="{{ route('admin.tds.destroy', $td->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                      
+                                                <form action="{{ route('frontend.tds.destroy', $td->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                                     <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                                 </form>
-                                            @endcan
-
-                                        </td>
+                                   
+                                        </td> -->
 
                                     </tr>
                                 @endforeach
@@ -116,8 +113,10 @@
 @parent
 <script>
     $(function () {
-  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-@can('td_delete')
+  //let dtButtons = $.extend(true, [],[ $.fn.dataTable.defaults.buttons])
+  
+   let dtButtons = $.extend(true, [], [{"extend":"copy","className":"btn-default","text":"Copy","exportOptions":{"columns":"thead th:not(.noExport)"}},{"extend":"csv","className":"btn-default","text":"CSV","exportOptions":{"columns":"thead th:not(.noExport)"}},{"extend":"excel","className":"btn-default","text":"Excel","exportOptions":{"columns":"thead th:not(.noExport)"}}/*,{"extend":"pdf","className":"btn-default","text":"PDF","exportOptions":{"columns":"thead th:not(.noExport)"}},{"extend":"print","className":"btn-default","text":"Print","exportOptions":{"columns":":visible"}},{"extend":"colvis","className":"btn-default","text":"Columns","exportOptions":{"columns":":visible"}}*/ ])
+/* @can('td_delete')
   let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
   let deleteButton = {
     text: deleteButtonTrans,
@@ -145,13 +144,17 @@
     }
   }
   dtButtons.push(deleteButton)
-@endcan
+@endcan */
 
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,
-    order: [[ 1, 'desc' ]],
+    order: [[ 1, 'asc' ]],
     pageLength: 100,
   });
+
+ 
+
+
   let table = $('.datatable-dateTds:not(.ajaxTable)').DataTable({ buttons: dtButtons })
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
       $($.fn.dataTable.tables(true)).DataTable()

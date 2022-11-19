@@ -108,9 +108,21 @@
                     </li>
                 @endcan
 
+                
+                <li class="nav-item">
+                    <a href="{{ route("admin.tax-entries.index") }}"
+                     class="nav-link {{ request()->is("admin/tax-entries") || request()->is("admin/tax-entries/*") ? "active" : "" }}">
+                        <i class="fa-fw nav-icon fas fa-table">
+
+                        </i>
+                        <p>
+                           <span>TDS Entry List</span>
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route("admin.tds.index") }}"
-                     class="nav-link {{ request()->is("tds") || request()->is("tds/*") ? "active" : "" }}">
+                     class="nav-link {{ request()->is("admin/tds") || request()->is("admin/tds/*") ? "active" : "" }}">
                         <i class="fa-fw nav-icon fas fa-table">
 
                         </i>

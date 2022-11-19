@@ -1,4 +1,4 @@
-@extends('layouts.frontend')
+@extends('layouts.admin')
 @section('content')
 <div class="content">
 
@@ -9,7 +9,7 @@
                     {{ trans('global.create') }} {{ trans('cruds.taxEntry.title_singular') }}
                 </div>
                 <div class="panel-body">
-                    <form method="POST" action="{{ route( 'frontend.tax-entries.store') }}"
+                    <form method="POST" action="{{ route( 'admin.tax-entries.store') }}"
                         enctype="multipart/form-data">
                         {{ method_field('POST') }}
                         {{csrf_field()}}

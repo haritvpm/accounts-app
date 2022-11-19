@@ -11,6 +11,8 @@ use App\Models\Td;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Excel;
+use Carbon\Carbon;
 
 class TdsController extends Controller
 {
@@ -93,16 +95,188 @@ class TdsController extends Controller
     public function download(Request $request)
     {
       //  abort_if(Gate::denies('td_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-      //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
-      //$out->writeln($request->period);
+      $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+      $out->writeln($request->period);
 
-        $taxEntries = TaxEntry::with('dateTds')
-        ->whereYear('date', trim($request->year))
-        ->whereMonth('date', '11')->get();
+      $months = array (
+       
+        array('4','5','6'),
+        array('7','8','9'),
+        array('10','11','12'),
+        array('1','2','3'),
+      );
+
+      $period = (int)$request->period;
+      $year = trim($request->year);
+
+      $taxEntries = [];
+    
+      $taxEntries[] = TaxEntry::with('dateTds')
+        ->whereNotNull('created_by_id')
+        ->whereYear('date', $year)
+        ->whereMonth('date',  $months[$period][0] )->get();
+
+      $taxEntries[] = TaxEntry::with('dateTds')
+        ->whereNotNull('created_by_id')
+        ->whereYear('date', $year)
+        ->whereMonth('date', $months[$period][1] )->get();
+
+      $taxEntries[] = TaxEntry::with('dateTds')
+        ->whereNotNull('created_by_id')
+        ->whereYear('date', $year)
+        ->whereMonth('date', $months[$period][2] )->get();
+
+
+        //ADMIN entries
+
+      $adminEntries = [];
+    
+      $adminEntries[] = TaxEntry::with('dateTds')
+        ->whereNull('created_by_id')
+        ->whereYear('date', $year)
+        ->whereMonth('date',  $months[$period][0] )->get();
+
+      $adminEntries[] = TaxEntry::with('dateTds')
+        ->whereNull('created_by_id')
+        ->whereYear('date', $year)
+        ->whereMonth('date', $months[$period][1] )->get();
+
+      $adminEntries[] = TaxEntry::with('dateTds')
+        ->whereNull('created_by_id')
+        ->whereYear('date', $year)
+        ->whereMonth('date', $months[$period][2] )->get();
+
         
-        $this->array_to_csv_download($taxEntries);
+        //$this->array_to_csv_download($taxEntries);
+        $this->downloadExcel($taxEntries, $adminEntries, 'xls',  $months[$period], $year);
+
         return back();
     }
+
+    function downloadExcel( $data,$adminEntriesArray, $type, $months, $year)
+	{
+		$monthnames = [];
+        foreach( $months as $month ){
+            $monthname = Carbon::createFromDate(2019,  (int)$month, 1 )->format('F');
+            
+            $monthnames[] = $monthname;
+        }
+        
+      
+      //
+		return Excel::create( $year . '-'. implode( '-', $monthnames ) , function($excel) 
+                use ($data, $adminEntriesArray, $months, $monthnames) {
+			
+            for ($index=0, $month = (int)$months[0] ; $month <=  (int)$months[2] ; $month++, $index++) {
+
+                $taxentries = $data[$index];
+                $adminEntries = $adminEntriesArray[$index];
+                
+                $excel->sheet($monthnames[$index], function($sheet) use ($taxentries, $adminEntries)
+                {                      
+                    $sheet->appendRow( array(
+                        'Sl.No', 'PAN of the deductee', 'PEN of the deductee', 
+                        'Name of the deductee', 'Amount paid/credited', 'TDS', 'Date of credit'
+                    ));
+
+                    $slno = 1;
+                    $tdstotal = 0;
+                    foreach ($taxentries as $taxentry) {
+
+                        $tds = $taxentry->dateTds()->get();
+                        
+                        foreach ($tds as $cols){
+                                                      
+                            $items = [];
+                            array_push($items, $slno++);
+                            array_push($items, $cols->pan);
+                            array_push($items, $cols->pen);
+                            array_push($items, $cols->name);
+                            array_push($items, $cols->gross);
+                            array_push($items, $cols->tds);
+                            array_push($items, $taxentry->date );
+                            $sheet->appendRow( $items );
+                            $tdstotal += $cols->tds;
+                        }
+                                              
+                    }
+
+                    if( $slno > 1 ) { //has entries
+                        $sheet->appendRow( [ '', '', '','', 'Total', $tdstotal, ''] );
+                        $slno++;
+                    }
+
+
+                    $sheet->appendRow( ['26Q'] );
+                    $adminstartrow = ++$slno;
+
+                    $sheet->mergeCells( 'A' . $slno . ':G' . $slno); 
+                    $style = array(
+                        'alignment' => array(
+                            'horizontal' =>'center',
+                        )
+                    );
+                    
+                    $sheet->getStyle('A' . $slno . ':G' . $slno)->applyFromArray($style);
+                        
+                    $slno = 1;
+                    $tdstotal = 0;
+
+                    foreach ($adminEntries as $taxentry) {
+
+                        $tds = $taxentry->dateTds()->get();
+                        
+                        foreach ($tds as $cols){
+                                                      
+                            $items = [];
+                            array_push($items, $slno++);
+                            array_push($items, $cols->pan);
+                            array_push($items, $cols->pen);
+                            array_push($items, $cols->name);
+                            array_push($items, $cols->gross);
+                            array_push($items, $cols->tds);
+                            array_push($items, $taxentry->date );
+                            $sheet->appendRow( $items );
+                            $tdstotal += $cols->tds;
+                        }
+                                              
+                    }
+
+                    if( $slno > 1 ){
+                        $sheet->appendRow( [ '', '', '','', 'Total', $tdstotal, ''] );
+                    } else {
+                        //remove '26Q
+                        $sheet->removeRow($adminstartrow);
+                    }
+
+                    $sheet->setAutoSize(true);
+
+                });
+                    
+                
+            }
+
+		})->download($type);
+
+        
+/*
+        $data = array(
+            array('data1', 'data2'),
+            array('data3', 'data4')
+        );
+        
+        Excel::create('Filename', function($excel) use($data) {
+        
+            $excel->sheet('Sheetname', function($sheet) use($data) {
+        
+                $sheet->fromArray($data);
+        
+            });
+        
+        })->export('xls');
+  */      
+
+	}
 
     function array_to_csv_download($array, $filename = "export.csv", $delimiter = ",")
     {

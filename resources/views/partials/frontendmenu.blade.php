@@ -35,7 +35,7 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
+              <!--   <li class="nav-item">
                     <a href="{{ route("frontend.tds.index") }}"
                      class="nav-link {{ request()->is("tds") || request()->is("tds/*") ? "active" : "" }}">
                         <i class="fa-fw nav-icon fas fa-table">
@@ -46,7 +46,7 @@
                         </p>
                     </a>
                 </li>
-
+ -->
                 @can('salary_bill_detail_create')
                 <li class="nav-item">
                     <a href="{{ route("frontend.salary-bill-details.create") }}"
