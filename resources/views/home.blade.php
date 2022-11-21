@@ -62,7 +62,7 @@ setlocale(LC_MONETARY, 'en_IN');
                                 
                                     <tr>
                                          <td>
-                                            Allocation
+                                            Allocation {{$curyear}}
                                         </td>
                                        
                                         @foreach($allocation as $key => $item)
@@ -115,13 +115,15 @@ setlocale(LC_MONETARY, 'en_IN');
                             <thead>
                                 <tr>
                                      <th>
-                                        Month
+                                    
                                     </th>
                                    
                                     <th>
-                                        Users
+                                        SalaryBillEntered
                                     </th>
-                                    
+                                    <th>
+                                        TDS Uploaded
+                                    </th>
                                   
                                 </tr>
                             </thead>
@@ -135,6 +137,10 @@ setlocale(LC_MONETARY, 'en_IN');
                                         <td>
                                             {{ $item }}
                                         </td>
+                                        <td>
+                                            {{ $monthsTDS[$key] }}
+                                        </td>
+                                        
                                         </tr>
                                      @endforeach
                             </tbody>

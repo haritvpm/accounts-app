@@ -38,6 +38,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('tds/download', 'TdsController@download')->name('tds.download');
     Route::resource('tax-entries', 'TaxEntryController');
 
+     // Backup routes
+     Route::resource('backups',  'BackupController');
+     Route::get('backup/create', 'BackupController@create');
+     Route::get('backup/download/{file_name}', 'BackupController@download');
+     Route::get('backup/delete/{file_name}', 'BackupController@delete');
+
     //Route::resource('tds-reports', 'TdsReportController', ['except' => ['edit', 'update', 'show', 'destroy']]);
     
 });

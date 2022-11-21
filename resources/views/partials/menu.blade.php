@@ -132,6 +132,19 @@
                     </a>
                 </li>
 
+               
+                <li class="nav-item">
+                    <a href="{{ route("admin.backups.index") }}"
+                     class="nav-link {{ request()->is("admin/backups") || request()->is("admin/backups/*") ? "active" : "" }}">
+                        <i class="fa-fw nav-icon fas fa-box-archive">
+
+                        </i>
+                        <p>
+                        <span>Backups</span>
+                        </p>
+                    </a>
+                </li>
+
                 @if(file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php')))
                     @can('profile_password_edit')
                         <li class="nav-item">
