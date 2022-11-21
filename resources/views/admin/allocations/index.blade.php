@@ -68,23 +68,23 @@ setlocale(LC_MONETARY, 'en_IN');
 
                             </td>
                             <td>
-                                {{ money_format('%!.0n', $allocation->id )?? '' }}
+                                {{ number_format( $allocation->id )?? '' }}
                             </td>
                             <td>
-                                {{ money_format('%!.0n',$allocation->pay )?? '' }}
+                                {{ number_format($allocation->pay )?? '' }}
                             </td>
                             <td>
-                                {{ money_format('%!.0n',$allocation->da )?? '' }}
+                                {{ number_format($allocation->da )?? '' }}
                             </td>
                             <td>
-                                {{ money_format('%!.0n',$allocation->hra )?? '' }}
+                                {{ number_format($allocation->hra )?? '' }}
                             </td>
                             
                             <td>
-                                {{ money_format('%!.0n',$allocation->other )?? '' }}
+                                {{ number_format($allocation->other )?? '' }}
                             </td>
                             <td>
-                                {{ money_format('%!.0n',$allocation->ota )?? '' }}
+                                {{ number_format($allocation->ota )?? '' }}
                             </td>
                             <td>
                                 {{ $allocation->year->financial_year ?? '' }}

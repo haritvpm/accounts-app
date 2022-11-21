@@ -5,15 +5,15 @@
 <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <div class="panel-body">
-                        <form  method="POST" action="{{ route("admin.tds.download") }}" enctype="multipart/form-data">
+                        <form  class="form-inline" method="POST" action="{{ route("admin.tds.download") }}" enctype="multipart/form-data">
                         {{ method_field('POST') }}
                             {{csrf_field()}}
                                                     
-                            <div style="margin-bottom: 10px;margin-top: 10px;" class="row">
+                            <div class="input-group">
 
                                 <div class="form-group {{ $errors->has('year') ? 'has-error' : '' }}" style="margin: 5px;" >
                                     <!-- <label class="required" for="year">{{ trans('cruds.tdsReport.fields.year') }}</label> -->
-                                    <input class="form-control" type="number" name="year" id="year" value="{{ old('year', now()->year ) }}" step="1" required>
+                                    <input class="form-control" type="number" name="year" id="year" value="{{ old('year', now()->year ) }}" step="1" required >
                                     @if($errors->has('year'))
                                         <span class="help-block" role="alert">{{ $errors->first('year') }}</span>
                                     @endif
@@ -53,7 +53,7 @@
 
     <div class="col-lg-12">
     
-        <a class="btn btn-link" href="{{ route('admin.tds.create') }}">
+        <a class="btn btn-secondary" href="{{ route('admin.tds.create') }}">
             {{ trans('global.add') }} {{ trans('cruds.td.title_singular') }}
         </a>
     </div>

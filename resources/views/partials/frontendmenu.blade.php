@@ -27,7 +27,7 @@
                 <li class="nav-item">
                     <a href="{{ route("frontend.tax-entries.index") }}"
                      class="nav-link {{ request()->is("tax-entries") || request()->is("tax-entries/*") ? "active" : "" }}">
-                        <i class="fa-fw nav-icon fas fa-plus">
+                        <i class="fa-fw nav-icon fas fa-sack-dollar">
 
                         </i>
                         <p>
@@ -51,7 +51,7 @@
                 <li class="nav-item">
                     <a href="{{ route("frontend.salary-bill-details.create") }}"
                     class="nav-link {{ request()->is("salary-bill-details/create") ? "active" : "" }}">
-                        <i class="fa-fw nav-icon fas fa-plus">
+                        <i class="fa-fw nav-icon fas fa-dollar-sign">
 
                         </i>
                         <p>

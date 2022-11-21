@@ -98,7 +98,7 @@
                 @can('salary_bill_detail_access')
                     <li class="nav-item">
                         <a href="{{ route("admin.salary-bill-details.index") }}" class="nav-link {{ request()->is("admin/salary-bill-details") || request()->is("admin/salary-bill-details/*") ? "active" : "" }}">
-                            <i class="fa-fw nav-icon fas fa-table ">
+                            <i class="fa-fw nav-icon fas fa-dollar-sign">
 
                             </i>
                             <p>
@@ -112,7 +112,7 @@
                 <li class="nav-item">
                     <a href="{{ route("admin.tax-entries.index") }}"
                      class="nav-link {{ request()->is("admin/tax-entries") || request()->is("admin/tax-entries/*") ? "active" : "" }}">
-                        <i class="fa-fw nav-icon fas fa-table">
+                        <i class="fa-fw nav-icon fas fa-sack-dollar">
 
                         </i>
                         <p>

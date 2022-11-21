@@ -87,5 +87,8 @@ class LoginController extends Controller
 
        return view('auth.login', compact('curyear', 'allocation', 'total', 'balance'));
     }
-
+    public function username()
+    {
+        return 'name';
+    }
 }

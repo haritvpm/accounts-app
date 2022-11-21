@@ -9,14 +9,16 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <title>{{ trans('panel.site_title') }}</title>
-  <link href="{{ asset('css/cdncss/bootstrap.min.css') }}" rel="stylesheet" />
+  <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
+
+
   <link href="{{ asset('css/adminltev3.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/select.dataTables.min.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" />
-
-
+  <link href="{{ asset('css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
+  
   <!--
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" rel="stylesheet" />
@@ -107,6 +109,7 @@
       {{ csrf_field() }}
     </form>
   </div>
+  
   <script src="{{ asset('js/cdnjs/jquery.min.js') }}"></script>
   <script src="{{ asset('js/cdnjs/bootstrap.min.js') }}"></script>
   <script src="{{ asset('js/cdnjs/popper.min.js') }}"></script>
@@ -123,7 +126,7 @@
   <script src="{{ asset('js/cdnjs/pdfmake.min.js') }}"></script>
   <script src="{{ asset('js/cdnjs/vfs_fonts.js') }}"></script>
   <script src="{{ asset('js/cdnjs/jszip.min.js') }}"></script>
-  <script src="{{ asset('js/cdnjs/ckeditor.js') }}"></script>
+  <!-- <script src="{{ asset('js/cdnjs/ckeditor.js') }}"></script> -->
   <script src="{{ asset('js/cdnjs/bootstrap-datetimepicker.min.js') }}"></script>
   <script src="{{ asset('js/cdnjs/dropzone.min.js') }}"></script>
   <script src="{{ asset('js/main.js') }}"></script>

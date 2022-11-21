@@ -77,25 +77,25 @@
                                             {{ $salaryBillDetail->created_by->name ?? '' }}
                                         </td>
                                         <td class="text-right" >
-                                            {{ money_format('%!.0n',  $salaryBillDetail->pay) ?? '' }}
+                                            {{ number_format( $salaryBillDetail->pay) ?? '' }}
                                         </td>
                                         <td class="text-right" >
-                                            {{ money_format('%!.0n',  $salaryBillDetail->da) ?? '' }}
+                                            {{ number_format( $salaryBillDetail->da) ?? '' }}
                                         </td>
                                         <td class="text-right" >
-                                            {{ money_format('%!.0n',  $salaryBillDetail->hra) ?? '' }}
+                                            {{ number_format( $salaryBillDetail->hra) ?? '' }}
                                         </td>
                                         <td class="text-right" >
-                                            {{ money_format('%!.0n', $salaryBillDetail->other) ?? '' }}
+                                            {{ number_format($salaryBillDetail->other) ?? '' }}
                                         </td>
                                         <td class="text-right" >
-                                            {{ money_format('%!.0n', $salaryBillDetail->ota) ?? '' }}
+                                            {{ number_format($salaryBillDetail->ota) ?? '' }}
                                         </td>
                                         <td>
                                             {{ $salaryBillDetail->created_at->format('d/m/Y') ?? '' }}
                                         </td>
 					  <td>
-                                            {{ money_format('%!.0n', $salaryBillDetail->ota+$salaryBillDetail->hra+$salaryBillDetail->pay+$salaryBillDetail->da+$salaryBillDetail->other) ?? '' }}
+                                            {{ number_format($salaryBillDetail->ota+$salaryBillDetail->hra+$salaryBillDetail->pay+$salaryBillDetail->da+$salaryBillDetail->other) ?? '' }}
                                         </td>
                                         <td>
                                           <!--   @can('salary_bill_detail_show')
@@ -132,11 +132,11 @@
                                   <td class="text-center">Total</td>
                                   <td class="text-center"> </td>
 
-                                  <td class="text-right" >{{ money_format('%!.0n',  $totaluser['pay'])  ?? ''}}</td>
-                                  <td class="text-right" >{{ money_format('%!.0n',  $totaluser['da'])  ?? ''}}</td>
-                                  <td class="text-right" >{{ money_format('%!.0n', $totaluser['hra']) ?? '' }}</td>
-                                  <td class="text-right" >{{ money_format('%!.0n', $totaluser['other']) ?? '' }}</td>
-                                  <td class="text-right" >{{ money_format('%!.0n', $totaluser['ota']) ?? '' }}</td>
+                                  <td class="text-right" >{{ number_format( $totaluser['pay'])  ?? ''}}</td>
+                                  <td class="text-right" >{{ number_format( $totaluser['da'])  ?? ''}}</td>
+                                  <td class="text-right" >{{ number_format( $totaluser['hra']) ?? '' }}</td>
+                                  <td class="text-right" >{{ number_format( $totaluser['other']) ?? '' }}</td>
+                                  <td class="text-right" >{{ number_format( $totaluser['ota']) ?? '' }}</td>
                                   <td class="text-right" ></td>
                                   <td class="text-right" ></td>
                                   <td class="text-right" ></td>

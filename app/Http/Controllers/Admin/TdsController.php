@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Excel;
 use Carbon\Carbon;
+use App\Exports\ExportExcelReport;
 
 class TdsController extends Controller
 {
@@ -95,8 +96,8 @@ class TdsController extends Controller
     public function download(Request $request)
     {
       //  abort_if(Gate::denies('td_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-      $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-      $out->writeln($request->period);
+      //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
+     // $out->writeln($request->period);
 
       $months = array (
        
@@ -110,49 +111,34 @@ class TdsController extends Controller
       $year = trim($request->year);
 
       $taxEntries = [];
-    
-      $taxEntries[] = TaxEntry::with('dateTds')
-        ->whereNotNull('created_by_id')
-        ->whereYear('date', $year)
-        ->whereMonth('date',  $months[$period][0] )->get();
-
-      $taxEntries[] = TaxEntry::with('dateTds')
-        ->whereNotNull('created_by_id')
-        ->whereYear('date', $year)
-        ->whereMonth('date', $months[$period][1] )->get();
-
-      $taxEntries[] = TaxEntry::with('dateTds')
-        ->whereNotNull('created_by_id')
-        ->whereYear('date', $year)
-        ->whereMonth('date', $months[$period][2] )->get();
-
-
-        //ADMIN entries
-
       $adminEntries = [];
+	  $monthnames = [];
     
-      $adminEntries[] = TaxEntry::with('dateTds')
+      for ($i=0; $i < 3 ; $i++) { 
+      
+        $taxEntries[] = TaxEntry::with('dateTds')
+        ->has('dateTds')
+        ->whereNotNull('created_by_id')
+        ->whereYear('date', $year)
+        ->whereMonth('date',  $months[$period][$i] )->get();
+
+        $adminEntries[] = TaxEntry::with('dateTds')
+        ->has('dateTds')
         ->whereNull('created_by_id')
         ->whereYear('date', $year)
-        ->whereMonth('date',  $months[$period][0] )->get();
-
-      $adminEntries[] = TaxEntry::with('dateTds')
-        ->whereNull('created_by_id')
-        ->whereYear('date', $year)
-        ->whereMonth('date', $months[$period][1] )->get();
-
-      $adminEntries[] = TaxEntry::with('dateTds')
-        ->whereNull('created_by_id')
-        ->whereYear('date', $year)
-        ->whereMonth('date', $months[$period][2] )->get();
-
+        ->whereMonth('date',  $months[$period][$i] )->get();
         
-        //$this->array_to_csv_download($taxEntries);
-        $this->downloadExcel($taxEntries, $adminEntries, 'xls',  $months[$period], $year);
+        $monthnames[] = Carbon::createFromDate(2019,  (int)$months[$period][$i] , 1 )->format('F');
+      }
+        
+       
+
+        return Excel::download(new ExportExcelReport($taxEntries, $adminEntries, $months[$period]),  
+                    $year . '-'. implode( '-', $monthnames).'.xlsx');
 
         return back();
     }
-
+/* maatexcel 2.1.0. old excel format. works ok
     function downloadExcel( $data,$adminEntriesArray, $type, $months, $year)
 	{
 		$monthnames = [];
@@ -257,54 +243,7 @@ class TdsController extends Controller
             }
 
 		})->download($type);
-
-        
-/*
-        $data = array(
-            array('data1', 'data2'),
-            array('data3', 'data4')
-        );
-        
-        Excel::create('Filename', function($excel) use($data) {
-        
-            $excel->sheet('Sheetname', function($sheet) use($data) {
-        
-                $sheet->fromArray($data);
-        
-            });
-        
-        })->export('xls');
-  */      
-
+   
 	}
-
-    function array_to_csv_download($array, $filename = "export.csv", $delimiter = ",")
-    {
- 
-        header('Content-Type: application/csv');
-
-        header('Content-Disposition: attachment; filename="' . $filename . '";');
-
-
-        // open the "output" stream
-        // see http://www.php.net/manual/en/wrappers.php.php#refsect2-wrappers.php-unknown-unknown-unknown-descriptioq
-        $f = fopen('php://output', 'w');
-        
-        foreach ($array as $taxentry) {
-
-            $tds = $taxentry->dateTds()->get();
-            foreach ($tds as $line) {
-            
-                fputcsv($f, array_merge($line->toArray(), [ $taxentry->date ]));
-            }
-        }
-        fclose($f);
-
-        // flush buffer
-        ob_flush();
-
-        // use exit to get rid of unexpected output afterward
-        exit();
-
-    }
+*/
 }

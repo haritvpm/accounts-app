@@ -67,7 +67,7 @@ setlocale(LC_MONETARY, 'en_IN');
                                        
                                         @foreach($allocation as $key => $item)
                                         <td>
-                                            {{ money_format('%!.0n',  $item) ?? '' }}
+                                            {{ number_format($item) ?? '' }}
 
                                         </td>
                                        
@@ -82,7 +82,7 @@ setlocale(LC_MONETARY, 'en_IN');
                                         </td>
                                       @foreach($total as $key => $item)
                                         <td>
-                                            {{ money_format('%!.0n',  $item) ?? '' }}
+                                            {{ number_format( $item) ?? '' }}
 
                                         </td>
                                        
@@ -96,7 +96,7 @@ setlocale(LC_MONETARY, 'en_IN');
                                         </td>
                                       @foreach($balance as $key => $item)
                                         <td>
-                                            {{ money_format('%!.0n',  $item) ?? '' }}
+                                            {{ number_format( $item) ?? '' }}
 
                                         </td>
                                        
