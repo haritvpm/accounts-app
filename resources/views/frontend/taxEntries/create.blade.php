@@ -70,6 +70,14 @@
                             </button>
                         </div>
                     </form>
+
+	<div class="alert alert-warning" id="alert" style="display:none;">
+          <ul class="list-unstyled"  id="myerror">
+            
+          </ul>
+        </div>
+
+
                 </div>
             </div>
 
@@ -100,14 +108,15 @@
 
                         // return false to cancel submit
                         //alert( JSON.stringify( arr));
+			$('#myerror').empty()
                         let valid = true;
                         for (const item of arr) {
                           if( item?.name == 'file1' || item?.name == 'file2' ) {
                             if( ! item?.value ){
-                               // alert('Error: Pdf not selected')
-                               //$(".alert.alert-danger > ul").append('<li>Message Center</li>');
 
-                               $form.append(" <div class='alert alert-danger'> <ul class='list-unstyled'><li>fghfghfg</li></ul></div>");
+			        $('#myerror').append('<li>Choose PDF Files</li>');
+							
+
                                 valid = false;
                                 break;
                             }
@@ -115,7 +124,7 @@
                           } 
                           else if( item?.name == 'date' ) {
                             if( ! item?.value ){
-                                alert('Fill all fields like date')
+				 $('#myerror').append('<li>Fill all fields</li>');
                                 valid = false;
                                 break;
                             }
@@ -123,6 +132,10 @@
                           }  
                         }
 
+			if(!valid){
+                               $('#alert').show();
+
+			}
                         return valid;
 
                         },
