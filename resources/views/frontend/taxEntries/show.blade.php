@@ -14,6 +14,16 @@
                             <a class="btn btn-default" href="{{ route('frontend.tax-entries.index') }}">
                                 {{ trans('global.back_to_list') }}
                             </a>
+
+                            
+                            <a class="btn btn-secondary"
+                                href="{{ route('frontend.tax-entries.edit', $taxEntry->id) }}">
+                                {{ trans('global.edit') }}
+                            </a>
+
+
+
+
                         </div>
                         <table class="table table-bordered table-striped">
                             <tbody>

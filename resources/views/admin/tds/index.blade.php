@@ -9,9 +9,9 @@
                 <div class="panel-heading">
                     {{ trans('cruds.td.title_singular') }} {{ trans('global.list') }}
                 </div>
-                <div class="panel-body">
-                    <div class="table-responsive">
-                        <table class=" table table-bordered table-striped table-hover datatable datatable-Td">
+                <div class="panel-body ">
+                    <div >
+                        <table class=" table table-bordered table-hover datatable datatable-Td">
                             <thead>
                                 <tr>
                                     <th width="10">
@@ -111,19 +111,52 @@
     </div>
 </div>
 @endsection
-
 @section('scripts')
 @parent
 <script>
     $(function () {
-  //let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-  let dtButtons = $.extend(true, [], [])
+  //let dtButtons = $.extend(true, [],[ $.fn.dataTable.defaults.buttons])
+  
+   let dtButtons = $.extend(true, [], [{"extend":"copy","className":"btn-default","text":"Copy","exportOptions":{"columns":"thead th:not(.noExport)"}},{"extend":"csv","className":"btn-default","text":"CSV","exportOptions":{"columns":"thead th:not(.noExport)"}},{"extend":"excel","className":"btn-default","text":"Excel","exportOptions":{"columns":"thead th:not(.noExport)"}}/*,{"extend":"pdf","className":"btn-default","text":"PDF","exportOptions":{"columns":"thead th:not(.noExport)"}},{"extend":"print","className":"btn-default","text":"Print","exportOptions":{"columns":":visible"}},{"extend":"colvis","className":"btn-default","text":"Columns","exportOptions":{"columns":":visible"}}*/ ])
+/* @can('td_delete')
+  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
+  let deleteButton = {
+    text: deleteButtonTrans,
+    url: "{{ route('admin.tds.massDestroy') }}",
+    className: 'btn-danger',
+    action: function (e, dt, node, config) {
+      var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {
+          return $(entry).data('entry-id')
+      });
+
+      if (ids.length === 0) {
+        alert('{{ trans('global.datatables.zero_selected') }}')
+
+        return
+      }
+
+      if (confirm('{{ trans('global.areYouSure') }}')) {
+        $.ajax({
+          headers: {'x-csrf-token': _token},
+          method: 'POST',
+          url: config.url,
+          data: { ids: ids, _method: 'DELETE' }})
+          .done(function () { location.reload() })
+      }
+    }
+  }
+  dtButtons.push(deleteButton)
+@endcan */
 
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,
-    order: [[ 2, 'desc' ]],
-    pageLength: 25,
+    order: [[ 1, 'asc' ]],
+    pageLength: 100,
   });
+
+ 
+
+
   let table = $('.datatable-Td:not(.ajaxTable)').DataTable({ buttons: dtButtons })
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
       $($.fn.dataTable.tables(true)).DataTable()

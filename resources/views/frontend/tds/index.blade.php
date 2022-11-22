@@ -18,7 +18,7 @@
                 </div>
                 <div class="panel-body">
                     <div class="table-responsive">
-                        <table class=" table table-bordered table-striped table-hover datatable datatable-Td">
+                        <table class=" table table-bordered table-hover datatable datatable-Td">
                             <thead>
                                 <tr>
                                     <th width="10">

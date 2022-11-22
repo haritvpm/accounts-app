@@ -99,7 +99,8 @@ class TaxEntryController extends Controller
         
         if( count($errors) > 0 ){
            // $taxEntry->delete();
-            return redirect()->back()->withErrors($errors);
+           // return redirect()->back()->withErrors($errors);
+            return response()->json(['error'=> $errors[0] ]);
         }
 
        
@@ -110,8 +111,9 @@ class TaxEntryController extends Controller
             Td::where('date_id', $taxEntry->id)->whereIn( 'pen', $pens )->delete();
             Td::insert($data);
         }
-
-        return redirect()->route('frontend.tax-entries.index');
+       
+        return response()->json(['success'=>'You have successfully upload file.']);
+       // return redirect()->route('frontend.tax-entries.index');
     }
 
     public function edit(TaxEntry $taxEntry)

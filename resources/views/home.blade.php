@@ -122,7 +122,7 @@ setlocale(LC_MONETARY, 'en_IN');
                                         SalaryBillEntered
                                     </th>
                                     <th>
-                                        TDS Uploaded
+                                        TDSUploaded
                                     </th>
                                   
                                 </tr>

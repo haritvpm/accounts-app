@@ -9,11 +9,16 @@
                     {{ trans('global.create') }} {{ trans('cruds.taxEntry.title_singular') }}
                 </div>
                 <div class="panel-body">
-                    <form method="POST" action="{{ route( 'frontend.tax-entries.store') }}"
+                    <form id="fileUploadForm" method="POST" action="{{ route( 'frontend.tax-entries.store') }}"
                         enctype="multipart/form-data">
                         {{ method_field('POST') }}
                         {{csrf_field()}}
                      
+                        <div class="form-group">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                            </div>
+                        </div>
                         <div class="form-group {{ $errors->has('date') ? 'has-error' : '' }}">
                             <label class="required" for="date">{{ trans('cruds.taxEntry.fields.date') }}</label>
                             <input class="form-control date" type="text" name="date" id="date" value="{{ old('date') }}"
@@ -79,9 +84,66 @@
 
 @section('scripts')
 @parent
-<script>
-   
+    
+    <script src="{{ asset('js/cdnjs/jquery.form.min.js') }}"></script>
+    <script>
+        $(function () {
+            $(document).ready(function () {
 
-</script>
+                $('#fileUploadForm').ajaxForm({
+                    beforeSend: function () {
+                        var percentage = '0';
+                    },
+                    beforeSubmit: function(arr, $form, options) {
+                        // The array of form data takes the following form:
+                        // [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ]
+
+                        // return false to cancel submit
+                        //alert( JSON.stringify( arr));
+                        let valid = true;
+                        for (const item of arr) {
+                          if( item?.name == 'file1' || item?.name == 'file2' ) {
+                            if( ! item?.value ){
+                                alert('Error: Pdf not selected')
+                                valid = false;
+                                break;
+                            }
+                            
+                          } 
+                          else if( item?.name == 'date' ) {
+                            if( ! item?.value ){
+                                alert('Fill all fields like date')
+                                valid = false;
+                                break;
+                            }
+                            
+                          }  
+                        }
+
+                        return valid;
+
+                        },
+                    uploadProgress: function (event, position, total, percentComplete) {
+                        var percentage = percentComplete;
+                        $('.progress .progress-bar').css("width", percentage+'%', function() {
+                          return $(this).attr("aria-valuenow", percentage) + "%";
+                        })
+                    },
+                    complete: function (xhr) {
+                        
+                        let jsonResponse = JSON.parse(xhr.responseText);
+                        //console.log('File has uploaded');
+                        if( jsonResponse?.error ){
+                            alert(jsonResponse.error);
+                        }
+  
+                        window.location.href = "/tax-entries"
+                    }
+                });
+
+
+            });
+        });
+    </script>
 @endsection
 

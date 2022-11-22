@@ -67,8 +67,8 @@
                     {{ trans('cruds.taxEntry.title_singular') }} {{ trans('global.list') }}
                 </div> -->
                 <div class="panel-body">
-                    <div class="table-responsive">
-                        <table class=" table table-bordered table-striped table-hover datatable datatable-TaxEntry">
+                    <div >
+                        <table class=" table table-bordered table-hover datatable datatable-TaxEntry">
                             <thead>
                                 <tr>
                                     <th width="10">

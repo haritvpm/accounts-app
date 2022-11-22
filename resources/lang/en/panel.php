@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'site_title' => 'SalaryHead',
+    'site_title' => 'AccountsApp',
 ];

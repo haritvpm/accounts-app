@@ -139,7 +139,7 @@ setlocale(LC_MONETARY, 'en_IN');
         <div class="container">
           <div class="row">
             <div class="col-md-9 col-lg-8 mx-auto">
-              <h3 class="login-heading mb-4">Salary Bill Record</h3>
+              <h3 class="login-heading mb-4">AccountsApp</h3>
 
                @if(session()->has('message'))
                             <p class="alert alert-info">
