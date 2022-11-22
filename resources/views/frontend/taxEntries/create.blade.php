@@ -16,7 +16,7 @@
                      
                         <div class="form-group">
                             <div class="progress">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
                             </div>
                         </div>
                         <div class="form-group {{ $errors->has('date') ? 'has-error' : '' }}">
@@ -104,7 +104,10 @@
                         for (const item of arr) {
                           if( item?.name == 'file1' || item?.name == 'file2' ) {
                             if( ! item?.value ){
-                                alert('Error: Pdf not selected')
+                               // alert('Error: Pdf not selected')
+                               //$(".alert.alert-danger > ul").append('<li>Message Center</li>');
+
+                               $form.append(" <div class='alert alert-danger'> <ul class='list-unstyled'><li>fghfghfg</li></ul></div>");
                                 valid = false;
                                 break;
                             }
@@ -125,6 +128,9 @@
                         },
                     uploadProgress: function (event, position, total, percentComplete) {
                         var percentage = percentComplete;
+                        if(  percentage > 90 ){
+                            percentage = 90
+                        }
                         $('.progress .progress-bar').css("width", percentage+'%', function() {
                           return $(this).attr("aria-valuenow", percentage) + "%";
                         })
