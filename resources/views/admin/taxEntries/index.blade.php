@@ -84,6 +84,9 @@
                                         {{ trans('cruds.taxEntry.fields.date') }}
                                     </th>
                                     <th>
+                                        Acquittance
+                                    </th>
+                                    <th>
                                         Items
                                     </th>
                                     <th>
@@ -108,6 +111,9 @@
                                     </td>
                                     <td>
                                         {{ $taxEntry->date ?? '' }}
+                                    </td>
+                                    <td>
+                                        {{ $taxEntry->acquittance ?? '' }}
                                     </td>
                                     <td>
                                         {{ $taxEntry->dateTds()->count() }}

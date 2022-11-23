@@ -34,10 +34,12 @@ class TaxEntry extends Model
     protected $fillable = [
         'date',
         'status',
+        'acquittance',
         'created_at',
         'updated_at',
         'deleted_at',
         'created_by_id',
+       
     ];
 
     public function dateTds()

@@ -12,6 +12,7 @@ class CreateTaxEntriesTable extends Migration
             $table->bigIncrements('id');
             $table->date('date');
             $table->string('status')->nullable();
+            $table->string('acquittance')->nullable();
             $table->timestamps();
         });
     }

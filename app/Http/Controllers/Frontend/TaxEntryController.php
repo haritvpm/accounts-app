@@ -84,32 +84,42 @@ class TaxEntryController extends Controller
 
    
         $date = Carbon::createFromFormat('d/m/Y',$request->date )->format('Y-m-d');
-        $taxEntry = TaxEntry::where('date',$date)->first(); 
         
-        if(!$taxEntry)
-        {
-            $taxEntry = TaxEntry::create($request->except(['file1', 'file2']));
-        } 
+       
         $month = Carbon::createFromFormat('d/m/Y',$request->date )->format('F');
   
         $extract = new Extract();
-        $data = $extract->process($result1, $result2, $taxEntry->id, $pens, $errors, $month);
+        $acquittance = '';
+        $data = $extract->processpdftext($result1, $result2, $pens, $errors,$acquittance, $month);
         
         File::delete($fileName1, $fileName2);
         
         if( count($errors) > 0 ){
-           // $taxEntry->delete();
-           // return redirect()->back()->withErrors($errors);
+            // return redirect()->back()->withErrors($errors);
             return response()->json(['error'=> $errors[0] ]);
         }
 
+        $taxEntry = TaxEntry::where('date',$date)->where('acquittance', $acquittance )->first(); 
+        if(!$taxEntry)
+        {
+            $taxEntry = TaxEntry::create(
+                $request->except(['file1', 'file2']) + ['acquittance' => $acquittance] 
+            );
+        } 
        
         //$this->array_to_csv_download($data);
         if( count($data) > 0 ){
-            //remove all existing items if we have similar pen
+            foreach ($data as $tds) {
+              // $tds['date_id'] = $taxEntry->id;
+        }
 
+            //remove all existing items if we have similar pen
             Td::where('date_id', $taxEntry->id)->whereIn( 'pen', $pens )->delete();
-            Td::insert($data);
+           // Td::insert($data);
+            $taxEntry->dateTds()->createMany($data);
+            /* $taxEntry->update( [ 
+                'acquittance' => $acquittance,
+            ] ); */
         }
        
         return response()->json(['success'=>'You have successfully upload file.']);

@@ -21,14 +21,15 @@
                         <table class=" table table-bordered table-hover datatable datatable-TaxEntry">
                             <thead>
                                 <tr>
-                                    <th width="10">
-
-                                    </th>
+                                    
                                     <th>
                                         {{ trans('cruds.taxEntry.fields.id') }}
                                     </th>
                                     <th>
                                         {{ trans('cruds.taxEntry.fields.date') }}
+                                    </th>
+                                    <th>
+                                        Acquittance
                                     </th>
                                     <th>
                                         Items
@@ -44,14 +45,15 @@
                             <tbody>
                                 @foreach($taxEntries as $key => $taxEntry)
                                 <tr data-entry-id="{{ $taxEntry->id }}">
-                                    <td>
-
-                                    </td>
+                                   
                                     <td>
                                         {{ $taxEntry->id ?? '' }} 
                                     </td>
                                     <td>
                                         {{ $taxEntry->date ?? '' }}
+                                    </td>
+                                    <td>
+                                        {{ $taxEntry->acquittance ?? '' }}
                                     </td>
                                     <td>
                                         {{ $taxEntry->dateTds()->count() }}
@@ -113,7 +115,7 @@
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,
     lengthChange:false,
-    order: [[ 1, 'desc' ]],
+    order: [[ 0, 'desc' ]],
     pageLength: 10,
   
   });
