@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ trans('panel.site_title') }}</title>
-    <link href="{{ asset('css/cdncss/bootstrap.min.css') }}"  rel="stylesheet" />
+    <!-- <link href="{{ asset('css/cdncss/bootstrap.min.css') }}"  rel="stylesheet" /> -->
     <link href="{{ asset('css/adminltev3.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/cdncss/all.css') }}"  rel="stylesheet" />
     <link href="{{ asset('css/cdncss/icheck-bootstrap.min.css') }}"  rel="stylesheet" />
