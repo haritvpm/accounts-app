@@ -107,13 +107,13 @@ class Extract
 
         if (0 !== strcasecmp($inneracquittance, $dedacquittance)) {
          
-            $errors[]= "Document acquittance groups not the same:\n" . $inneracquittance . '|' . $dedacquittance;
+            $errors[]= "Document acquittance groups not the same:\n" . $inneracquittance . ' <> ' . $dedacquittance;
             return $data;
         }
 
         if (0 !== strcasecmp($dedmonth, $innermonth)) {
          
-            $errors[]= "Document months not the same:\n" . $innermonth . '|' . $dedmonth;
+            $errors[]= "Document months not the same:\n" . $innermonth . ' <> ' . $dedmonth;
             return $data;
         }
 

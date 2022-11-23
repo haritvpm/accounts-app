@@ -65,7 +65,7 @@
                                 }}</span>
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-danger" type="submit">
+                            <button class="btn btn-primary" type="submit">
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none;" id="spinnerbtn" ></span>
 
                                 Submit
@@ -73,7 +73,7 @@
                         </div>
                     </form>
 
-	<div class="alert alert-warning" id="alert" style="display:none;">
+	    <div class="alert alert-danger" id="alert" style="display:none;">
           <ul class="list-unstyled"  id="myerror">
             
           </ul>
@@ -158,7 +158,11 @@
                         //console.log('File has uploaded');
                         if( jsonResponse?.error ){
                             $('#spinnerbtn').hide();
-                            alert(jsonResponse.error);
+                           // alert(jsonResponse.error);
+                           $('#myerror').empty();
+                           $('#myerror').append('<li>' + jsonResponse.error + '</li>');
+                           $('#alert').show();
+
                         }
                         else{
                             window.location.href = "/tax-entries"
