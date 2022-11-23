@@ -24,7 +24,7 @@ setlocale(LC_MONETARY, 'en_IN');
                     @endif
 
 
-                    You are logged in as Admin!
+                    <!-- You are logged in as Admin! -->
 
 
 

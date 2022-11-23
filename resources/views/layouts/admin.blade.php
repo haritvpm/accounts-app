@@ -68,6 +68,12 @@
       </ul>
       @endif
 
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <i class="fa fa-user"></i> ({{ auth()->user()->name }})
+        </li>
+      </ul>
+
     </nav>
 
     @include('partials.menu')
@@ -106,7 +112,7 @@
     </form>
   </div>
   <script src="{{ asset('js/cdnjs/jquery.min.js') }}"></script>
-  <script src="{{ asset('js/cdnjs/bootstrap.min.js') }}"></script>
+  <!-- <script src="{{ asset('js/cdnjs/bootstrap.min.js') }}"></script> -->
   <script src="{{ asset('js/cdnjs/popper.min.js') }}"></script>
   <script src="{{ asset('js/cdnjs/select2.full.min.js') }}"></script>
   <script src="{{ asset('js/cdnjs/moment.min.js') }} "></script>
