@@ -68,12 +68,10 @@
                 </div> -->
                 <div class="panel-body">
                     <div >
-                        <table class=" table table-bordered table-hover datatable datatable-TaxEntry">
+                        <table class=" table datatable datatable-TaxEntry">
                             <thead>
                                 <tr>
-                                    <th width="10">
-
-                                    </th>
+                                    
                                     <th>
                                         {{ trans('cruds.taxEntry.fields.id') }}
                                     </th>
@@ -100,9 +98,7 @@
                             <tbody>
                                 @foreach($taxEntries as $key => $taxEntry)
                                 <tr data-entry-id="{{ $taxEntry->id }}">
-                                    <td>
-
-                                    </td>
+                                   
                                     <td>
                                         {{ $taxEntry->id ?? '' }} 
                                     </td>
@@ -172,10 +168,10 @@
 
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,
-    order: [[ 1, 'desc' ]],
+    order: [[ 0, 'desc' ]],
     pageLength: 25,
   });
-  let table = $('.datatable-TaxEntry:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+  let table = $('.datatable-TaxEntry:not(.ajaxTable)').DataTable({ buttons: dtButtons, select: false })
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();

@@ -11,12 +11,10 @@
                 </div>
                 <div class="panel-body ">
                     <div >
-                        <table class=" table table-bordered table-hover datatable datatable-Td">
-                            <thead>
+                        <table class=" table  datatable datatable-Td">
+                            <thead  class="table-light">
                                 <tr>
-                                    <th width="10">
-
-                                    </th>
+                                    
                                     <th width="20">
                                         Seat
                                     </th>
@@ -49,9 +47,7 @@
                             <tbody>
                                 @foreach($tds as $key => $td)
                                     <tr data-entry-id="{{ $td->id }}">
-                                        <td>
-
-                                        </td>
+                                        
                                         <td>
                                         {{ $td->created_by->name ?? 'admin' }}
                                         </td>
@@ -150,14 +146,14 @@
 
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,
-    order: [[ 1, 'asc' ]],
-    pageLength: 100,
+    order: [[ 1, 'desc' ]],
+    pageLength: 25,
   });
 
  
 
 
-  let table = $('.datatable-Td:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+  let table = $('.datatable-Td:not(.ajaxTable)').DataTable({ buttons: dtButtons, select: false  })
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();

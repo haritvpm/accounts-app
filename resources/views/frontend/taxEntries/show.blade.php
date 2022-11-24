@@ -45,6 +45,14 @@
                                 </tr>
                                 <tr>
                                     <th>
+                                        Acquittance
+                                    </th>
+                                    <td>
+                                        {{ $taxEntry->acquittance }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
                                         {{ trans('cruds.taxEntry.fields.status') }}
                                     </th>
                                     <td>

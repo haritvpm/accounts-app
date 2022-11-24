@@ -15,7 +15,7 @@
                         {{csrf_field()}}
                         <div class="form-group {{ $errors->has('date') ? 'has-error' : '' }}">
                             <label class="required" for="date">{{ trans('cruds.taxEntry.fields.date') }}</label>
-                            <input class="form-control date" type="text" name="date" id="date"
+                            <input class="form-control" type="text" name="date" id="date"
                                 value="{{ old('date', $taxEntry->date) }}" readonly required>
                             @if($errors->has('date'))
                             <span class="help-block" role="alert">{{ $errors->first('date') }}</span>

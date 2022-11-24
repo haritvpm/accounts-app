@@ -9,7 +9,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <title>{{ trans('panel.site_title') }}</title>
-  <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
+
 
 
   <link href="{{ asset('css/adminltev3.css') }}" rel="stylesheet" />
@@ -17,8 +17,8 @@
   <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/select.dataTables.min.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" />
-  <link href="{{ asset('css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
-  
+  <link href="{{ asset('css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
+
   <!--
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" rel="stylesheet" />
@@ -33,6 +33,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
     -->
   <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
+  <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
   @yield('styles')
 
 </head>
@@ -109,14 +110,14 @@
       {{ csrf_field() }}
     </form>
   </div>
-  
+    <script src="{{ asset('js/app.js') }}"></script>
   <script src="{{ asset('js/cdnjs/jquery.min.js') }}"></script>
-  <script src="{{ asset('js/cdnjs/bootstrap.min.js') }}"></script>
+
   <script src="{{ asset('js/cdnjs/popper.min.js') }}"></script>
   <script src="{{ asset('js/cdnjs/select2.full.min.js') }}"></script>
   <script src="{{ asset('js/cdnjs/moment.min.js') }} "></script>
   <script src="{{ asset('js/cdnjs/jquery.dataTables.min.js') }}"></script>
-  <script src="{{ asset('js/cdnjs/dataTables.bootstrap4.min.js') }}"></script>
+  <script src="{{ asset('js/cdnjs/dataTables.bootstrap5.min.js') }}"></script>
   <script src="{{ asset('js/cdnjs/dataTables.buttons.min.js') }}"></script>
   <script src="{{ asset('js/cdnjs/dataTables.select.min.js') }}"></script>
   <script src="{{ asset('js/cdnjs/buttons.flash.min.js') }}"></script>
@@ -131,6 +132,7 @@
   <script src="{{ asset('js/cdnjs/dropzone.min.js') }}"></script>
   <script src="{{ asset('js/main.js') }}"></script>
   <script src="{{ asset('js/cdnjs/adminlte.min.js') }}"></script>
+
 
   <script>
     $(function () {

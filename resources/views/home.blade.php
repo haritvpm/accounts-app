@@ -30,8 +30,8 @@ setlocale(LC_MONETARY, 'en_IN');
 
 
                  <div class="card-body">
-                    <div class="table-responsive">
-                        <table   class=" table table-bordered table-striped">
+                    <div>
+                        <table   class=" table table-bordered">
                             <thead>
                                 <tr>
                                      <th>
@@ -110,8 +110,8 @@ setlocale(LC_MONETARY, 'en_IN');
 
 
                     <!-- data about pending -->
-                    <div class="table-responsive">
-                        <table   class=" table table-bordered table-striped">
+                    <div >
+                        <table   class=" table table-bordered">
                             <thead>
                                 <tr>
                                      <th>

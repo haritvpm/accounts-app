@@ -17,8 +17,8 @@
                     {{ trans('cruds.td.title_singular') }} {{ trans('global.list') }}
                 </div>
                 <div class="panel-body">
-                    <div class="table-responsive">
-                        <table class=" table table-bordered table-hover datatable datatable-Td">
+                    <div >
+                        <table class=" table datatable datatable-Td">
                             <thead>
                                 <tr>
                                     <th width="10">
@@ -79,11 +79,11 @@
                                         </td>
                                         <td>
                                            
-                                                <a class="btn btn-xs btn-primary" href="{{ route('frontend.tds.show', $td->id) }}">
+                                                <a class="btn btn-xs btn-light" href="{{ route('frontend.tds.show', $td->id) }}">
                                                     {{ trans('global.view') }}
                                                 </a>
                                           
-                                                <a class="btn btn-xs btn-info" href="{{ route('frontend.tds.edit', $td->id) }}">
+                                                <a class="btn btn-xs btn-secondary" href="{{ route('frontend.tds.edit', $td->id) }}">
                                                     {{ trans('global.edit') }}
                                                 </a>
                                           

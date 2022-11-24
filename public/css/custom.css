@@ -7,12 +7,12 @@ textarea {
     width: 100% !important;
 }
 
-table.dataTable tbody td.select-checkbox::before,
+/* table.dataTable tbody td.select-checkbox::before,
 table.dataTable tbody td.select-checkbox::after,
 table.dataTable tbody th.select-checkbox::before,
 table.dataTable tbody th.select-checkbox::after {
     top: 50%;
-}
+} */
 
 .dataTables_length,
 .dataTables_filter,

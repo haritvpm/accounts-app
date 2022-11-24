@@ -13,19 +13,17 @@
     <div class="row">
         <div class="col-lg-12">
 
-            <div class="panel panel-default">
+            <div class="panel ">
                <!--  <div class="panel-heading">
                     {{ trans('cruds.td.title_singular') }} {{ trans('global.list') }}
                 </div> -->
                 <div class="panel-body">
 
-                    <div class="table-responsive">
-                        <table class=" table table-bordered table-striped table-hover datatable datatable-dateTds">
+                    <div >
+                        <table class=" table table-bordered table-sm datatable datatable-dateTds">
                             <thead>
                                 <tr>
-                                    <th width="10">
-
-                                    </th>
+                                    
                                     <th>
                                         Sl.No.
                                     </th>
@@ -55,9 +53,7 @@
                             <tbody>
                                 @foreach($tds as $key => $td)
                                     <tr data-entry-id="{{ $td->id }}">
-                                        <td>
-
-                                        </td>
+                                       
                                         <td>
                                             {{ $td->slno ?? '' }}
                                         </td>
@@ -148,14 +144,14 @@
 
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,
-    order: [[ 1, 'asc' ]],
-    pageLength: 100,
+    order: [[ 0, 'asc' ]],
+    pageLength: 25,
   });
 
  
 
 
-  let table = $('.datatable-dateTds:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+  let table = $('.datatable-dateTds:not(.ajaxTable)').DataTable({ buttons: dtButtons, select: false  })
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();

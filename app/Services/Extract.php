@@ -14,7 +14,7 @@ class Extract
 
     public function processpdftext($inner, $ded, &$pens, &$errors,&$acquittance, $month)
     {
-        //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
+       // $out = new \Symfony\Component\Console\Output\ConsoleOutput();
         $data = array();
 
         $innerlines = explode("\r\n", $inner);
@@ -133,7 +133,8 @@ class Extract
         for ($i = 0; $i < count($dedlines); $i++) {
             $l = $dedlines[$i];
             $slnotxt = sprintf("%u,", $slno);
-            //  $out->writeln($slnotxt);
+            
+           // $out->writeln($dedlines[$i]);
 
 
             if (0 == strncmp($l, $slnotxt, strlen($slnotxt))) {

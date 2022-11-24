@@ -15,8 +15,8 @@
     </div>
 
     <div class="card-body">
-        <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-Role">
+        <div >
+            <table class=" table datatable datatable-Role">
                 <thead>
                     <tr>
                         <th width="10">

@@ -12,6 +12,7 @@
     <link href="{{ asset('css/adminltev3.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/cdncss/all.css') }}"  rel="stylesheet" />
     <link href="{{ asset('css/cdncss/icheck-bootstrap.min.css') }}"  rel="stylesheet" />
+    <link href="{{ asset('css/app.css') }}"  rel="stylesheet" />
  <!--    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet" /> -->
     @yield('styles')
 </head>
@@ -19,6 +20,7 @@
 <body class="header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden login-page">
     @yield('content')
     @yield('scripts')
+  <script src="{{ asset('js/app.js') }}"></script>
 </body>
 
 </html>

@@ -15,8 +15,8 @@
     </div>
 
     <div class="card-body">
-        <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-Permission">
+        <div>
+            <table class=" table table-hover datatable datatable-Permission">
                 <thead>
                     <tr>
                         <th width="10">
@@ -83,7 +83,7 @@
 @parent
 <script>
     $(function () {
-  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+  let dtButtons = $.extend(true, [],[])
 @can('permission_delete')
   let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
   let deleteButton = {
