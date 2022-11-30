@@ -150,8 +150,8 @@ class TaxEntryController extends Controller
         //  abort_if(Gate::denies('tax_entry_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $taxEntry->load('created_by', 'dateTds');
-
-        return view('frontend.taxEntries.show', compact('taxEntry'));
+        $total =  number_format($taxEntry->dateTds()->sum('tds'));
+        return view('frontend.taxEntries.show', compact('taxEntry', 'total'));
     }
 
     public function destroy(TaxEntry $taxEntry)

@@ -53,6 +53,14 @@
                                 </tr>
                                 <tr>
                                     <th>
+                                        Total
+                                    </th>
+                                    <td>
+                                        {{ $total }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
                                         {{ trans('cruds.taxEntry.fields.status') }}
                                     </th>
                                     <td>
