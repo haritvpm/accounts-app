@@ -153,7 +153,7 @@ return [
             'deleted_at_helper' => ' ',
             'created_by' => 'Created By',
             'created_by_helper' => ' ',
-            'innerfile' => 'InnerBill PDF',
+            'innerfile' => 'Bill PDF',
             'innerfile_helper' => ' ',
             'deductionfile' => 'IncomeTax(311) PDF',
             'deductionfile_helper' => ' ',
