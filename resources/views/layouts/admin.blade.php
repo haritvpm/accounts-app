@@ -25,6 +25,7 @@
   
   <link href="{{ URL::asset('css/adminltev3.css') }}" rel="stylesheet" />
   
+  <link href="{{ asset('css/all.css') }}"  rel="stylesheet" />
   
   <!-- <link href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" rel="stylesheet" /> -->
 <!--   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet" />

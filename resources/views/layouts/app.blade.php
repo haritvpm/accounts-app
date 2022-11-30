@@ -10,7 +10,7 @@
     <title>{{ trans('panel.site_title') }}</title>
     <!-- <link href="{{ asset('css/cdncss/bootstrap.min.css') }}"  rel="stylesheet" /> -->
     <link href="{{ asset('css/adminltev3.css') }}" rel="stylesheet" />
-    <link href="{{ asset('css/cdncss/all.css') }}"  rel="stylesheet" />
+    <link href="{{ asset('css/all.css') }}"  rel="stylesheet" />
     <link href="{{ asset('css/cdncss/icheck-bootstrap.min.css') }}"  rel="stylesheet" />
     <link href="{{ asset('css/app.css') }}"  rel="stylesheet" />
  <!--    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet" /> -->

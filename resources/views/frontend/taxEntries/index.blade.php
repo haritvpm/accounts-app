@@ -64,14 +64,14 @@
                                     </td>
                                     <td>
 
-                                        <a class="btn btn-xs btn-light"
+                                        <a class="btn btn-xs btn-secondary"
                                             href="{{ route('frontend.tax-entries.show', $taxEntry->id) }}">
                                             {{ trans('global.view') }}
                                         </a>
 
 
 
-                                        <a class="btn btn-xs btn-secondary"
+                                        <a class="btn btn-xs btn-light"
                                             href="{{ route('frontend.tax-entries.edit', $taxEntry->id) }}">
                                             {{ trans('global.edit') }}
                                         </a>

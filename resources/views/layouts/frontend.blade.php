@@ -19,6 +19,8 @@
   <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
 
+  <link href="{{ asset('css/all.css') }}"  rel="stylesheet" />
+
   <!--
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" rel="stylesheet" />
