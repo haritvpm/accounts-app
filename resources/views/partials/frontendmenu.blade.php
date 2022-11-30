@@ -12,7 +12,7 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->is("home") ? "active" : "" }} " href=" {{ route("frontend.home")
+                    <a class="nav-link {{ request()->is('*home') ? "active" : "" }} " href=" {{ route("frontend.home")
                         }} ">
                         <i class=" fas fa-fw fa-tachometer-alt nav-icon">
                         </i>
@@ -26,7 +26,7 @@
 
                 <li class="nav-item">
                     <a href="{{ route("frontend.tax-entries.index") }}"
-                     class="nav-link {{ request()->is("tax-entries") || request()->is("tax-entries/*") ? "active" : "" }}">
+                     class="nav-link {{ request()->is("*tax-entries") || request()->is("*/tax-entries/*") ? "active" : "" }}">
                         <i class="fa-fw nav-icon fas fa-sack-dollar">
 
                         </i>
@@ -50,7 +50,7 @@
                 @can('salary_bill_detail_create')
                 <li class="nav-item">
                     <a href="{{ route("frontend.salary-bill-details.create") }}"
-                    class="nav-link {{ request()->is("salary-bill-details/create") ? "active" : "" }}">
+                    class="nav-link {{ request()->is("*salary-bill-details/create") ? "active" : "" }}">
                         <i class="fa-fw nav-icon fas fa-dollar-sign">
 
                         </i>
@@ -64,7 +64,7 @@
                 @can('salary_bill_detail_access')
                 <li class="nav-item">
                     <a href="{{ route("frontend.salary-bill-details.index") }}"
-                     class="nav-link {{ request()->is("salary-bill-details") ? "active" : "" }}">
+                     class="nav-link {{ request()->is("*salary-bill-details") ? "active" : "" }}">
                         <i class="fa-fw nav-icon fas fa-table ">
 
                         </i>
@@ -79,7 +79,7 @@
 
                 @can('profile_password_edit')
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->is('frontend/profile') || request()->is('frontend/profile./*') ? 'active' : '' }}"
+                    <a class="nav-link {{ request()->is('*frontend/profile') || request()->is('*frontend/profile./*') ? 'active' : '' }}"
                         href="{{ route('frontend.profile.index') }}">
                         <i class="fa-fw fas fa-key nav-icon">
                         </i>
