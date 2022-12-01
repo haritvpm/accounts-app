@@ -22,7 +22,12 @@ class TaxEntryController extends Controller
     {
         //abort_if(Gate::denies('tax_entry_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $taxEntries = TaxEntry::with(['created_by'])->get();
+        $taxEntries = TaxEntry::with(['created_by'])
+        ->whereHas('created_by', function($q)  {
+            // Query the name field in status table
+            $q->where('ddo', auth()->user()->ddo); // '=' is optional
+        })
+        ->get();
 
         return view('admin.taxEntries.index', compact('taxEntries'));
     }

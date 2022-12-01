@@ -53,8 +53,9 @@
                                         {{ $taxEntry->date ?? '' }}
                                     </td>
                                     <td>
-                                        {{ $taxEntry->acquittance ?? '' }}
+                                        {{ $taxEntry->acquittance ?? '' }} <br>  {{ $taxEntry->sparkcode ?? '' }}
                                     </td>
+                                    
                                     <td>
                                         {{ $taxEntry->dateTds()->count() }}
                                     </td>

@@ -25,6 +25,22 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.user.fields.email_helper') }}</span>
             </div>
+            <div class="form-group {{ $errors->has('ddo') ? 'has-error' : '' }}">
+                <label class="required">DDO</label>
+                <select class="form-control" name="ddo" id="ddo" required>
+                    <option value disabled {{ old('ddo', null)===null ? 'selected' : '' }}>{{
+                        trans('global.pleaseSelect') }}</option>
+                    @foreach(App\Models\TaxEntry::DDO_SELECT as $key => $label)
+                    <option value="{{ $key }}" {{ old('ddo', 'draft' )===(string) $key ? 'selected' : ''
+                        }}>{{
+                        $label }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('ddo'))
+                <span class="help-block" role="alert">{{ $errors->first('ddo') }}</span>
+                @endif
+               
+            </div>
             <div class="form-group">
                 <label class="required" for="password">{{ trans('cruds.user.fields.password') }}</label>
                 <input class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" type="password" name="password" id="password" required>

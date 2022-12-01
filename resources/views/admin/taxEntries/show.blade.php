@@ -43,6 +43,14 @@
                                 </tr>
                                 <tr>
                                     <th>
+                                        Sparkcode
+                                    </th>
+                                    <td>
+                                        {{ $taxEntry->sparkcode }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
                                         {{ trans('cruds.taxEntry.fields.status') }}
                                     </th>
                                     <td>

@@ -17,6 +17,12 @@ class TaxEntry extends Model
         'approved' => 'Approved',
     ];
 
+    const DDO_SELECT = [
+       
+        'sect' => 'Secretariat',
+        'hostel' => 'Hostel',
+    ];
+
     public $table = 'tax_entries';
 
     protected $appends = [
@@ -35,6 +41,7 @@ class TaxEntry extends Model
         'date',
         'status',
         'acquittance',
+        'sparkcode',
         'created_at',
         'updated_at',
         'deleted_at',

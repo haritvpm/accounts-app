@@ -12,7 +12,7 @@ class Extract
         
     }
 
-    public function processpdftext($inner, $ded, &$pens, &$errors,&$acquittance, $month)
+    public function processpdftext($inner, $ded, &$pens, &$errors,&$acquittance, $month, &$sparkcode)
     {
        // $out = new \Symfony\Component\Console\Output\ConsoleOutput();
         $data = array();
@@ -25,12 +25,22 @@ class Extract
         $innermonth = '';
         $inneracquittance = '';
 
+        
 
         for (; $i < count($innerlines); $i++) {
 
           
             $l = $innerlines[$i];
-            //$out->writeln(($l));
+         
+
+            
+
+            if (0 == strncmp($l, "Spark Code :", strlen("Spark Code :"))) {
+                $arr = explode('Spark Code :', $l);
+                $sparkcode = strstr($arr[1], ',', true);
+                //$out->writeln($sparkcode);
+                 
+            }
 
             if (0 == strncmp($l, "GOVERNMENT OF KERALA", strlen("GOVERNMENT OF KERALA"))) {
 

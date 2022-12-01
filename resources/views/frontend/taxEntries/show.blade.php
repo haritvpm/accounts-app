@@ -53,6 +53,14 @@
                                 </tr>
                                 <tr>
                                     <th>
+                                        Sparkcode
+                                    </th>
+                                    <td>
+                                        {{ $taxEntry->sparkcode }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
                                         Total
                                     </th>
                                     <td>

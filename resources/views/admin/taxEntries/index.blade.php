@@ -85,6 +85,9 @@
                                         Acquittance
                                     </th>
                                     <th>
+                                        Sparkcode
+                                    </th>
+                                    <th>
                                         Items
                                     </th>
                                     <th>
@@ -109,7 +112,10 @@
                                         {{ $taxEntry->date ?? '' }}
                                     </td>
                                     <td>
-                                        {{ $taxEntry->acquittance ?? '' }}
+                                      <small>  {{ $taxEntry->acquittance ?? '' }}  </small>
+                                    </td>
+                                    <td>
+                                        {{ $taxEntry->sparkcode ?? '' }}
                                     </td>
                                     <td>
                                         {{ $taxEntry->dateTds()->count() }}
@@ -120,7 +126,7 @@
                                     </td>
                                     <td>
 
-                                        <a class="btn btn-xs btn-light"
+                                        <a class="btn btn-xs btn-secondary"
                                             href="{{ route('admin.tax-entries.show', $taxEntry->id) }}">
                                             {{ trans('global.view') }}
                                         </a>

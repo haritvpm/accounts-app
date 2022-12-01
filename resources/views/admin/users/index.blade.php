@@ -32,6 +32,9 @@
                             {{ trans('cruds.user.fields.email') }}
                         </th>
                         <th>
+                           DDO
+                        </th>
+                        <th>
                             {{ trans('cruds.user.fields.roles') }}
                         </th>
                         <th>
@@ -53,6 +56,9 @@
                             </td>
                             <td>
                                 {{ $user->email ?? '' }}
+                            </td>
+                            <td>
+                                {{ App\Models\TaxEntry::DDO_SELECT[$user->ddo] ?? '' }}
                             </td>
                             <td>
                                 @foreach($user->roles as $key => $item)

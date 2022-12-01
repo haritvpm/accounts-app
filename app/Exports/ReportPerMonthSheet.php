@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithEvents;
+use Carbon\Carbon;
 
 class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, WithEvents
 {
@@ -47,6 +48,10 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
                 array_push($items, $cols->gross);
                 array_push($items, $cols->tds);
                 array_push($items, $taxentry->date );
+                $datebookadjustment = Carbon::createFromFormat(config('panel.date_format'), $taxentry->date)
+                        ->endOfMonth()
+                        ->format(config('panel.date_format'));
+                array_push($items, $datebookadjustment );
                 $tdscombined->push($items) ;
                 $tdstotal += $cols->tds;
             }
@@ -82,6 +87,12 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
                 array_push($items, $cols->gross);
                 array_push($items, $cols->tds);
                 array_push($items, $taxentry->date );
+
+                $datebookadjustment = Carbon::createFromFormat(config('panel.date_format'), $taxentry->date)
+                        ->endOfMonth()
+                        ->format(config('panel.date_format'));
+                array_push($items, $datebookadjustment );
+
                 $tdscombined->push( $items );
                 $tdstotal += $cols->tds;
             }
@@ -108,7 +119,7 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
     {
         return [
             'Sl.No', 'PAN of the deductee', 'PEN of the deductee', 
-            'Name of the deductee', 'Amount paid/credited', 'TDS', 'Date of credit'
+            'Name of the deductee', 'Amount paid/credited', 'TDS', 'Date of credit', 'Date of book adjustment'
         ];
     }
 

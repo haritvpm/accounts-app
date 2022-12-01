@@ -83,14 +83,15 @@ class TaxEntryController extends Controller
         $errors = array();
 
    
-        $date = Carbon::createFromFormat('d/m/Y',$request->date )->format('Y-m-d');
+        $date = Carbon::createFromFormat(config('panel.date_format'),$request->date )->format('Y-m-d');
         
        
-        $month = Carbon::createFromFormat('d/m/Y',$request->date )->format('F');
+        $month = Carbon::createFromFormat(config('panel.date_format'),$request->date )->format('F');
   
         $extract = new Extract();
         $acquittance = '';
-        $data = $extract->processpdftext($result1, $result2, $pens, $errors,$acquittance, $month);
+        $sparkcode ='';
+        $data = $extract->processpdftext($result1, $result2, $pens, $errors,$acquittance, $month,$sparkcode);
         
         File::delete($fileName1, $fileName2);
         
@@ -103,7 +104,7 @@ class TaxEntryController extends Controller
         if(!$taxEntry)
         {
             $taxEntry = TaxEntry::create(
-                $request->except(['file1', 'file2']) + ['acquittance' => $acquittance] 
+                $request->except(['file1', 'file2']) + ['acquittance' => $acquittance, 'sparkcode' => $sparkcode] 
             );
         } 
        

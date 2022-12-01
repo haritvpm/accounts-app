@@ -24,7 +24,12 @@ class TdsController extends Controller
         $tds = Td::with(['date', 'created_by'])
         ->whereHas('date', function($q){
             $q->whereYear('created_at', '>=', Carbon::now()->subYears(2)->toDateTimeString()); //show only last 2 year data
-        })->get();
+        })
+        ->whereHas('created_by', function($q)  {
+            // Query the name field in status table
+            $q->where('ddo', auth()->user()->ddo); // '=' is optional
+        })
+        ->get();
 
         return view('admin.tds.index', compact('tds'));
     }
@@ -119,17 +124,27 @@ class TdsController extends Controller
     
       for ($i=0; $i < 3 ; $i++) { 
       
-        $taxEntries[] = TaxEntry::with('dateTds')
+        $taxEntries[] = TaxEntry::with('dateTds', 'created_by')
         ->has('dateTds')
-        ->whereNotNull('created_by_id')
+        //->whereNotNull('created_by_id')
         ->whereYear('date', $year)
-        ->whereMonth('date',  $months[$period][$i] )->get();
+        ->whereMonth('date',  $months[$period][$i] )
+        ->whereHas('created_by', function($q)  {
+            // Query the name field in status table
+            $q->where('ddo', auth()->user()->ddo); // '=' is optional
+        })
+        ->get();
 
-        $adminEntries[] = TaxEntry::with('dateTds')
+        $adminEntries[] = TaxEntry::with('dateTds', 'created_by')
         ->has('dateTds')
-        ->whereNull('created_by_id')
+       // ->whereNull('created_by_id')
         ->whereYear('date', $year)
-        ->whereMonth('date',  $months[$period][$i] )->get();
+        ->whereMonth('date',  $months[$period][$i] )
+        ->whereHas('created_by', function($q)  {
+            // Query the name field in status table
+            $q->where('ddo', auth()->user()->ddo); // '=' is optional
+        })
+        ->get();
         
         $monthnames[] = Carbon::createFromDate(2019,  (int)$months[$period][$i] , 1 )->format('F');
       }
