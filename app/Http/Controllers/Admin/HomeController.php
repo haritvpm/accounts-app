@@ -35,7 +35,11 @@ class HomeController
 
       
         $taxEntryDetails = TaxEntry::latest()->with(['created_by'])
-                     ->where('created_by_id', auth()->id()) //ignore our own (admin) entries
+                     ->where('created_by_id', '<>' ,auth()->id()) //ignore our own (admin) entries
+                     ->whereHas('created_by', function($q)  {
+                        // Query the name field in status table
+                        $q->where('ddo', auth()->user()->ddo); // '=' is optional
+                    })
                      ->whereBetween('date',[Carbon::now()->subMonths(14), Carbon::now()])
                      ->get();
 

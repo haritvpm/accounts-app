@@ -74,7 +74,7 @@
 
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <i class="fa fa-user"></i> ({{ auth()->user()->name }})
+          <i class="fa fa-user"></i> {{ auth()->user()->name }} ({{ App\Models\TaxEntry::DDO_SELECT[auth()->user()->ddo]  }})
         </li>
       </ul>
 
