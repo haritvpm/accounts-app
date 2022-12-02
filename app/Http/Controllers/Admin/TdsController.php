@@ -126,7 +126,7 @@ class TdsController extends Controller
       
         $taxEntries[] = TaxEntry::with('dateTds', 'created_by')
         ->has('dateTds')
-        //->whereNotNull('created_by_id')
+        ->where('created_by_id', '<>', auth()->id())
         ->whereYear('date', $year)
         ->whereMonth('date',  $months[$period][$i] )
         ->whereHas('created_by', function($q)  {
@@ -137,10 +137,11 @@ class TdsController extends Controller
 
         $adminEntries[] = TaxEntry::with('dateTds', 'created_by')
         ->has('dateTds')
-       // ->whereNull('created_by_id')
+        ->where('created_by_id', auth()->id())
         ->whereYear('date', $year)
         ->whereMonth('date',  $months[$period][$i] )
         ->whereHas('created_by', function($q)  {
+           
             // Query the name field in status table
             $q->where('ddo', auth()->user()->ddo); // '=' is optional
         })
