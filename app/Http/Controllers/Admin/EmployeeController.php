@@ -20,7 +20,11 @@ class EmployeeController extends Controller
     {
       //  abort_if(Gate::denies('employee_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $employees = Employee::with(['created_by'])->get();
+        $employees = Employee::with(['created_by'])
+            ->whereHas('created_by', function($q)  {
+                // Query the name field in status table
+                $q->where('ddo', auth()->user()->ddo); // '=' is optional
+            })->get();
 
         return view('admin.employees.index', compact('employees'));
     }

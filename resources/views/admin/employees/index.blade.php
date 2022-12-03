@@ -63,12 +63,12 @@
                             </td>
                             <td>
                               
-                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.employees.show', $employee->id) }}">
-                                        {{ trans('global.view') }}
+                                    <a class="btn btn-xs btn-light" href="{{ route('admin.employees.show', $employee->id) }}">
+                                    <i class="fa fa-eye"></i>
                                     </a>
                             
-                                    <a class="btn btn-xs btn-info" href="{{ route('admin.employees.edit', $employee->id) }}">
-                                        {{ trans('global.edit') }}
+                                    <a class="btn btn-xs btn-light" href="{{ route('admin.employees.edit', $employee->id) }}">
+                                    <i class="fa fa-edit"></i>
                                     </a>
                             
                                     <form action="{{ route('admin.employees.destroy', $employee->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
@@ -99,7 +99,7 @@
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,
     order: [[ 1, 'desc' ]],
-    pageLength: 100,
+    pageLength: 10,
   });
   let table = $('.datatable-Employee:not(.ajaxTable)').DataTable({ buttons: dtButtons })
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){

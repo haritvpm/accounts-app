@@ -40,7 +40,7 @@ trait CsvImportTrait
                 }
 
                 if (count($tmp) > 0) {
-                    $insert[] = $tmp;
+                    $insert[] =  array_merge($tmp, ['created_by_id' => auth()->id() ]);
                 }
             }
 

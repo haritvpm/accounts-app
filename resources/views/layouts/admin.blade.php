@@ -43,6 +43,15 @@
   <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
 
   @yield('styles')
+
+  <style>
+.table>tbody>tr>td,
+.table>tbody>tr>th {
+  border-top: none;
+  /*border-bottom: none;*/
+}
+
+</style>
 </head>
 
 <body class="sidebar-mini layout-fixed" style="height: auto;">

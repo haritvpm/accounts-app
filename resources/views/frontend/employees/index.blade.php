@@ -3,19 +3,21 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            @can('employee_create')
+           
                 <div style="margin-bottom: 10px;" class="row">
                     <div class="col-lg-12">
                         <a class="btn btn-success" href="{{ route('frontend.employees.create') }}">
                             {{ trans('global.add') }} {{ trans('cruds.employee.title_singular') }}
                         </a>
+                        @can('employee_create')
                         <button class="btn btn-warning" data-toggle="modal" data-target="#csvImportModal">
                             {{ trans('global.app_csvImport') }}
                         </button>
                         @include('csvImport.modal', ['model' => 'Employee', 'route' => 'admin.employees.parseCsvImport'])
+                        @endcan
                     </div>
                 </div>
-            @endcan
+           
             <div class="card">
                 <div class="card-header">
                     {{ trans('cruds.employee.title_singular') }} {{ trans('global.list') }}

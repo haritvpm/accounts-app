@@ -76,6 +76,16 @@
                 @endcan
 
 
+                <li class="nav-item">
+                        <a href="{{ route("frontend.employees.index") }}" class="nav-link {{ request()->is("frontend/employees") || request()->is("frontend/employees/*") ? "active" : "" }}">
+                            <i class="fa-fw nav-icon fas fa-cogs">
+
+                            </i>
+                            <p>
+                                {{ trans('cruds.employee.title') }}
+                            </p>
+                        </a>
+                    </li>
 
                 @can('profile_password_edit')
                 <li class="nav-item">

@@ -24,9 +24,9 @@ class StoreTaxEntryRequest extends FormRequest
             'file1' => [
                 'required',
             ],
-            'file2' => [
+           /*  'file2' => [
                 'required',
-            ],
+            ], */
         ];
     }
 }
