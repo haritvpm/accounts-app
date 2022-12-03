@@ -16,6 +16,7 @@
         "laravel/sanctum": "^2.14",
         "laravel/tinker": "^2.7",
         "maatwebsite/excel": "^3.1.44",
+        "nuovo/spreadsheet-reader": "^0.5.11",
         "spatie/laravel-backup": "^8.1",
         "yajra/laravel-datatables-oracle": "^9.19"
     },

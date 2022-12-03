@@ -44,7 +44,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
      Route::get('backup/download/{file_name}', 'BackupController@download');
      Route::get('backup/delete/{file_name}', 'BackupController@delete');
 
-    //Route::resource('tds-reports', 'TdsReportController', ['except' => ['edit', 'update', 'show', 'destroy']]);
+    // Employee
+    Route::delete('employees/destroy', 'EmployeeController@massDestroy')->name('employees.massDestroy');
+    Route::post('employees/parse-csv-import', 'EmployeeController@parseCsvImport')->name('employees.parseCsvImport');
+    Route::post('employees/process-csv-import', 'EmployeeController@processCsvImport')->name('employees.processCsvImport');
+    Route::resource('employees', 'EmployeeController');
     
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {

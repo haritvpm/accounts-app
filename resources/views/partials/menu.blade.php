@@ -132,7 +132,16 @@
                     </a>
                 </li>
 
-               
+                <li class="nav-item">
+                        <a href="{{ route("admin.employees.index") }}" class="nav-link {{ request()->is("admin/employees") || request()->is("admin/employees/*") ? "active" : "" }}">
+                            <i class="fa-fw nav-icon fas fa-cogs">
+
+                            </i>
+                            <p>
+                                {{ trans('cruds.employee.title') }}
+                            </p>
+                        </a>
+                    </li>
                 <li class="nav-item">
                     <a href="{{ route("admin.backups.index") }}"
                      class="nav-link {{ request()->is("*admin/backups") || request()->is("*admin/backups/*") ? "active" : "" }}">

@@ -118,7 +118,7 @@
   <script src="{{ asset('js/app.js') }}"></script>
 
   <script src="{{ asset('js/cdnjs/jquery.min.js') }}"></script>
-  <!-- <script src="{{ asset('js/cdnjs/bootstrap.min.js') }}"></script> -->
+  <script src="{{ asset('js/cdnjs/bootstrap.min.js') }}"></script>
   <script src="{{ asset('js/cdnjs/popper.min.js') }}"></script>
   <script src="{{ asset('js/cdnjs/select2.full.min.js') }}"></script>
   <script src="{{ asset('js/cdnjs/moment.min.js') }} "></script>
