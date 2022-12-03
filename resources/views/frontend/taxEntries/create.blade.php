@@ -53,7 +53,7 @@
                             @endif
                             <span class="help-block">{{ trans('cruds.taxEntry.fields.innerfile_helper') }}</span>
                         </div>
-                        <div class="form-group {{ $errors->has('deductionfile') ? 'has-error' : '' }}">
+                       <!--  <div class="form-group {{ $errors->has('deductionfile') ? 'has-error' : '' }}">
                             <label class="required" for="deductionfile">{{
                                 trans('cruds.taxEntry.fields.deductionfile')
                                 }}</label>
@@ -63,7 +63,7 @@
                             @endif
                             <span class="help-block">{{ trans('cruds.taxEntry.fields.deductionfile_helper')
                                 }}</span>
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <button class="btn btn-primary" type="submit">
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none;" id="spinnerbtn" ></span>
@@ -95,7 +95,7 @@
 @section('scripts')
 @parent
     
-    <script src="{{ asset('js/cdnjs/jquery.form.min.js') }}"></script>
+    <!-- <script src="{{ asset('js/cdnjs/jquery.form.min.js') }}"></script> -->
     <script>
         $(function () {
             $(document).ready(function () {
@@ -155,6 +155,8 @@
                     complete: function (xhr) {
                         
                         let jsonResponse = JSON.parse(xhr.responseText);
+                        //alert(jsonResponse);
+
                         //console.log('File has uploaded');
                         if( jsonResponse?.error ){
                             $('#spinnerbtn').hide();

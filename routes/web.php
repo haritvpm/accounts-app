@@ -48,7 +48,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('employees/destroy', 'EmployeeController@massDestroy')->name('employees.massDestroy');
     Route::post('employees/parse-csv-import', 'EmployeeController@parseCsvImport')->name('employees.parseCsvImport');
     Route::post('employees/process-csv-import', 'EmployeeController@processCsvImport')->name('employees.processCsvImport');
+    
+    Route::post('employees/parse-spark-import', 'EmployeeController@parseSparkImport')->name('employees.parseSparkImport');
+    Route::post('employees/process-spark-import', 'EmployeeController@processSparkImport')->name('employees.processSparkImport');
+  
     Route::resource('employees', 'EmployeeController');
+
     
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
@@ -87,7 +92,6 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     // Employee
     Route::delete('employees/destroy', 'EmployeeController@massDestroy')->name('employees.massDestroy');
     Route::resource('employees', 'EmployeeController');
-
 
     Route::get('frontend/profile', 'ProfileController@index')->name('profile.index');
     Route::post('frontend/profile', 'ProfileController@update')->name('profile.update');

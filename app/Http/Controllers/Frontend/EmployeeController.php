@@ -39,7 +39,7 @@ class EmployeeController extends Controller
 
     public function store(StoreEmployeeRequest $request)
     {
-        $employee = Employee::create($request->all());
+        $employee = Employee::create($request->all() + ['created_by_id' => auth()->id() ]  );
 
         return redirect()->route('frontend.employees.index');
     }

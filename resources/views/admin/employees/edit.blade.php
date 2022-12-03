@@ -34,6 +34,20 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.employee.fields.pan_helper') }}</span>
             </div>
+
+            <div class="form-group">
+                <label for="ddo_id">DDO</label>
+                <select class="form-control  {{ $errors->has('created_by') ? 'is-invalid' : '' }}" name="created_by_id" id="created_by_id">
+                    @foreach($ddos as $id => $entry)
+                        <option value="{{ $id }}" {{ (old('created_by_id') ? old('created_by_id') : $employee->created_by->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('ddo'))
+                    <span class="text-danger">{{ $errors->first('created_by') }}</span>
+                @endif
+                
+            </div>
+
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}

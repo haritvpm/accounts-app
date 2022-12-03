@@ -6,10 +6,14 @@
             <a class="btn btn-success" href="{{ route('admin.employees.create') }}">
                 {{ trans('global.add') }} {{ trans('cruds.employee.title_singular') }}
             </a>
-            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#csvImportModal">
+            <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#csvImportModal">
                 {{ trans('global.app_csvImport') }}
             </button>
             @include('csvImport.modal', ['model' => 'Employee', 'route' => 'admin.employees.parseCsvImport'])
+            <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#SparkImportModal">
+                Spark Import
+            </button>
+            @include('admin.employees.sparksyncmodal', ['model' => 'Employee', 'route' => 'admin.employees.parseSparkImport'])
         </div>
     </div>
 
@@ -39,6 +43,9 @@
                             {{ trans('cruds.employee.fields.pan') }}
                         </th>
                         <th>
+                            Office
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -61,6 +68,9 @@
                             <td>
                                 {{ $employee->pan ?? '' }}
                             </td>
+                            <td>
+                            {{  \App\Models\TaxEntry::DDO_SELECT[$employee?->created_by?->ddo]  ?? '' }}
+                        </td>
                             <td>
                               
                                     <a class="btn btn-xs btn-light" href="{{ route('admin.employees.show', $employee->id) }}">

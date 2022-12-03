@@ -8,7 +8,6 @@ use App\Http\Requests\StoreTaxEntryRequest;
 use App\Http\Requests\UpdateTaxEntryRequest;
 use App\Models\TaxEntry;
 use App\Models\Td;
-use App\Models\Employee;
 //use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +23,8 @@ class TaxEntryController extends Controller
     {
         //abort_if(Gate::denies('tax_entry_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $taxEntries = TaxEntry::with(['created_by'])->withSum('dateTds', 'tds')->get();
+        $taxEntries = TaxEntry::with(['created_by'])->get();
+
         return view('frontend.taxEntries.index', compact('taxEntries'));
     }
 
@@ -44,7 +44,11 @@ class TaxEntryController extends Controller
         $request->file1->move(public_path('uploads'), $fileName1);
         $fileName1 = public_path('uploads') . '/' . $fileName1;
 
-     
+        $fileName2 = $time . '2.' . $request->file2->extension();
+        $request->file2->move(public_path('uploads'), $fileName2);
+        $fileName2 = public_path('uploads') . '/' . $fileName2;
+
+
         $tabula = new Tabula('/usr/bin/');
 
 
@@ -60,9 +64,24 @@ class TaxEntryController extends Controller
                 'stream' => false,
             ])
             ->convert();
+
+        $tabula2 = new Tabula('/usr/bin/');
+
+        $result2 = $tabula2->setPdf($fileName2)
+            ->setOptions([
+                'format' => 'csv',
+                'pages' => 'all',
+                'lattice' => true,
+                'stream' => false,
+               // 'outfile' => storage_path("app/public/out4.csv"),
+            ])
+            ->convert();
+
+
         //handle conversion
         $pens = array();
         $errors = array();
+
    
         $date = Carbon::createFromFormat(config('panel.date_format'),$request->date )->format('Y-m-d');
         
@@ -72,36 +91,16 @@ class TaxEntryController extends Controller
         $extract = new Extract();
         $acquittance = '';
         $sparkcode ='';
-        $data = $extract->processpdftext($result1, $pens, $errors,$acquittance, $sparkcode);
-        File::delete($fileName1);
+        $data = $extract->processpdftext($result1, $result2, $pens, $errors,$acquittance, $month,$sparkcode);
         
-        //extract PAN
+        File::delete($fileName1, $fileName2);
+        
         if( count($errors) > 0 ){
-           
+            // return redirect()->back()->withErrors($errors);
             return response()->json(['error'=> $errors[0] ]);
         }
 
-        
-        $empwithpen = Employee::wherein( 'pen', $pens )->pluck('pen');
-        $penwithnoemp = array_diff($pens, $empwithpen->toArray());
-       
-
-        if( count($penwithnoemp) ){
-            return response()->json(['error'=> 'No Employee found for : ' . implode(', ', $penwithnoemp) ]);
-        }
-
-
-        $pen_to_pan = Employee::wherein( 'pen', $pens )->pluck( 'pan','pen');
-       
-        $data = collect($data)->transform(function($item) use ($pen_to_pan) {
-           
-            $item['pan'] = $pen_to_pan[$item['pen']];
-            $item['created_by_id'] = auth()->id();
-            return $item;
-        });
-
-
-        $taxEntry = TaxEntry::where('date',$date)->where('sparkcode', $sparkcode )->first(); 
+        $taxEntry = TaxEntry::where('date',$date)->where('acquittance', $acquittance )->first(); 
         if(!$taxEntry)
         {
             $taxEntry = TaxEntry::create(
@@ -109,11 +108,11 @@ class TaxEntryController extends Controller
             );
         } 
        
+        //$this->array_to_csv_download($data);
         if( count($data) > 0 ){
-           
-           //foreach ($data as $tds) {
+            foreach ($data as $tds) {
               // $tds['date_id'] = $taxEntry->id;
-           //}
+        }
 
             //remove all existing items if we have similar pen
             Td::where('date_id', $taxEntry->id)->whereIn( 'pen', $pens )->delete();
