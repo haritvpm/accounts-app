@@ -42,10 +42,10 @@
                                         Items
                                     </th>
                                     <th>
-                                        Total
+                                        Total Amount
                                     </th>
                                     <th>
-                                        {{ trans('cruds.taxEntry.fields.status') }}
+                                        Total TDS
                                     </th>
                                     <th>
                                         &nbsp;&nbsp;
@@ -71,9 +71,10 @@
                                     <td>
                                         {{ $taxEntry->dateTds()->count() }}
                                     </td>
-                                    <td>{{ number_format($taxEntry->date_tds_sum_tds)}} </td>
+                                    <td> {{ number_format($taxEntry->date_tds_sum_gross)}} </td>
                                     <td>
-                                        {{ App\Models\TaxEntry::STATUS_SELECT[$taxEntry->status] ?? '' }}
+                                        {{ number_format($taxEntry->date_tds_sum_tds)}}
+                                        <!-- {{ App\Models\TaxEntry::STATUS_SELECT[$taxEntry->status] ?? '' }} -->
                                     </td>
                                     <td>
 

@@ -24,7 +24,10 @@ class TaxEntryController extends Controller
     {
         //abort_if(Gate::denies('tax_entry_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $taxEntries = TaxEntry::with(['created_by'])->withSum('dateTds', 'tds')->get();
+        $taxEntries = TaxEntry::with(['created_by'])
+        ->withSum('dateTds', 'tds')
+        ->withSum('dateTds', 'gross')
+        ->get();
 
         return view('frontend.taxEntries.index', compact('taxEntries'));
     }

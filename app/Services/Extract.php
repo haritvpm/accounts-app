@@ -17,6 +17,8 @@ class Extract
     const BONUS = 'BONUS';
 
     const ONAMADVANCE = 'ONAMADVANCE';
+    const DA_ARREAR = 'DA_ARREAR';
+    const PAY_ARREAR = 'PAY_ARREAR';
 
     public function __construct()
     {
@@ -119,6 +121,18 @@ class Extract
 
                 continue;
             }
+            if (0 == strncmp($l, 'Due and drawn statement cum D.A. ARREAR', strlen('Due and drawn statement cum D.A. ARREAR'))) {
+                $type = self::DA_ARREAR;
+                $acquittance = $innerlines[$i];
+                $acquittance = strstr($acquittance, ',', true);
+                $start = $i;
+            }
+            if (0 == strncmp($l, 'Due and drawn statement cum PAY', strlen('Due and drawn statement cum PAY'))) {
+                $type = self::PAY_ARREAR;
+                $acquittance = $innerlines[$i];
+                $acquittance = strstr($acquittance, ',', true);
+                $start = $i+1; //on more column than DA arrear statement to the header
+            }
         }
 
         if ($sparkcode == '') {
@@ -143,37 +157,61 @@ class Extract
         return $type;
     }
 
+    public function findColumnIndex($start, $innerlines, $has_it, &$errors, &$grosscol, &$it_col, $fieldGross='Gross Salary', $fieldIT='IT')
+    {
+        
+        $grosscol = -1;
+        $it_col = -1;
+
+        for ($i = $start; $i < count($innerlines); $i++) {
+            
+            $l = $innerlines[$i];
+            $heading = str_replace("\r",' ', $l);
+            
+            $cols = str_getcsv($heading);
+
+            for ($j = 0; $j < count($cols); $j++) {
+                if (strcmp($cols[$j], $fieldGross ) === 0) {
+                    $grosscol = $j;
+                }
+                if (strcmp($cols[$j], $fieldIT) === 0) {
+                    $it_col = $j;
+                }
+            }
+            
+            if (-1 !== $grosscol){
+                break;
+            }
+        }
+   
+
+        // dd($cols);
+        if (-1 == $grosscol) {
+            $errors[] = 'Unable to determine column for ' . $fieldGross;
+
+            return false;
+        }
+
+        if ($has_it && -1 == $it_col) {
+            $errors[] = 'Unable to determine column for ' . $fieldIT;
+
+            return false;
+        }
+
+
+        return true;
+    }
+
     public function processSalaryBill($start, $innerlines, &$pens, &$errors, $tds_rows_only, $has_it)
     {
         $i = $start;
         $i += 5;
-        $heading = $innerlines[$i];
-
-        $cols = str_getcsv($heading);
-        $grosscol = -1;
-        $it_col = -1;
-        for ($j = 0; $j < count($cols); $j++) {
-            if (strpos($cols[$j], 'Gross') !== false) {
-                $grosscol = $j;
-            }
-            if (strcmp($cols[$j], 'IT') === 0) {
-                $it_col = $j;
-            }
-        }
-
-        // dd($cols);
-        if (-1 == $grosscol) {
-            $errors[] = 'Unable to determine gross column';
-
+   
+        if(! $this->findColumnIndex($start, $innerlines,  $has_it, $errors, $grosscol, $it_col  ) ){
             return [];
         }
 
-        if ($has_it && -1 == $it_col) {
-            $errors[] = 'Unable to determine IT column';
-
-            return [];
-        }
-
+        
         // $out->writeln($grosscol);
         $data = [];
 
@@ -255,11 +293,14 @@ class Extract
             case self::ONAMADVANCE:
                 return $this->processSalaryBill($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it);
             case self::FESTIVALALLOWANCE:
-                return $this->processFestivalAllowance($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it, 'Festival');
+                return $this->processFestivalAllowance($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it, 'Festival Allowance');
             case self::OVERTIME_ALLOWANCE:
-                return $this->processFestivalAllowance($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it, 'Overtime');
+                return $this->processFestivalAllowance($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it, 'Overtime Duty Allowance');
             case self::BONUS:
                 return $this->processFestivalAllowance($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it, 'Bonus');
+            case self::DA_ARREAR:
+            case self::PAY_ARREAR:
+                return $this->processDaArrear($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it);
         }
 
         return [];
@@ -271,27 +312,8 @@ class Extract
 
         $i = $start;
         $i += 2;
-        $heading = $innerlines[$i];
-
-        $cols = str_getcsv($heading);
-        $grosscol = -1;
-        $it_col = -1;
-        for ($j = 0; $j < count($cols); $j++) {
-            if (strpos($cols[$j], $fieldGross /*'Festival'*/) !== false) {
-                $grosscol = $j;
-            }
-        }
-
-        // dd($cols);
-        if (-1 == $grosscol) {
-            $errors[] = 'Unable to determine'.$fieldGross.'Allowance column';
-
-            return [];
-        }
-
-        if ($has_it && -1 == $it_col) {
-            $errors[] = 'Unable to determine IT column';
-
+   
+        if(! $this->findColumnIndex($start, $innerlines,  $has_it, $errors, $grosscol, $it_col, $fieldGross ) ){
             return [];
         }
 
@@ -325,6 +347,92 @@ class Extract
                 $data[] = $items;
             }
         }
+
+        return  $data;
+    }
+
+    ////
+    public static function IsPEN($pen)
+    {
+        return  (strlen( $pen) >=6) && (strlen( $pen)  <= 8) &&
+                ((int) filter_var($pen, FILTER_SANITIZE_NUMBER_INT) >= 100000) && //should have a number inside exlcuding chars
+                FALSE === strpos($pen, ' ');
+
+    }
+    public function processDaArrear($start, $innerlines, &$pens, &$errors, $tds_rows_only, $has_it)
+    {
+        $heading = '';
+
+        $i = $start;
+        $i += 4;
+         
+        if(! $this->findColumnIndex($start, $innerlines,  $has_it, $errors, $grosscol, $it_col, 'Total', 'Income tax to be deducted' ) ){
+            return [];
+        }
+
+        $data = [];
+
+        $slno =1;
+        $totalarrear = 0;
+        $totaltds = 0;
+
+        for (; $i < count($innerlines); $i++) {
+            $l = $innerlines[$i]; //"176624 Anil Kumar B , Office Superintendent",,,,,,,,,,,,,,,,,,,,,
+            $cols = str_getcsv($l);
+            
+            //last line
+            if( 0 ===  strcmp($cols[0], "Grand Total(in figures)")  ){
+               
+                if($cols[$grosscol-2] != $totalarrear) {
+                    $errors[] = 'Grand Total and individual sum dont match';
+                    return [];
+                }
+                if($cols[$it_col-2] != $totaltds){
+                    $errors[] = 'Grand Total TDS and individual sum dont match';
+                    return [];
+                }
+                break;
+            }
+
+            $penname = explode( ',',$cols[0]) [0];
+
+            $pen = trim(strstr($penname, ' ', true)); //remove any hyphen 'revised'
+            $name = trim(strstr($penname, ' ')); //remove any hyphen 'revised'
+
+            if( Extract::IsPEN($pen)  ) //it is a PEN 
+            {
+                //find next 'total' line
+                for (; $i < count($innerlines); $i++) {
+                    $l = $innerlines[$i];
+                    $cols = str_getcsv($l);
+
+                    if( $cols[0] == 'Total' ){
+
+                        $gross = $cols[$grosscol-2];// first two cols are merged
+                        $tds = $cols[$it_col-2];// first two cols are merged
+                        $items = [
+                            'slno' => $slno++,
+                            'pen' => $pen,
+                            'name' => $name,
+                            'gross' =>$gross ,
+                            'tds' => $tds,
+        
+                        ];
+        
+                        $pens[] = $pen;
+                        $data[] = $items;
+                        $totalarrear += $gross;
+                        $totaltds += $tds;
+                        break;
+                    }
+                }
+            }
+
+            
+
+        }
+
+    //    dd( $data);
 
         return  $data;
     }
