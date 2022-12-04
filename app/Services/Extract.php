@@ -101,7 +101,7 @@ class Extract
         $data = array();
         
         $slno = 1;
-
+        $tds_total = 0;
         for (; $i < count($innerlines); $i++) {
             $l = $innerlines[$i];
             $slnotxt = sprintf("%u,", $slno);
@@ -120,6 +120,7 @@ class Extract
 
                 if( $it_col !== -1 ){
                     $tds =  $cols[$it_col];
+                    $tds_total += $cols[$it_col];
                 }
 
                 $items = array(
@@ -137,6 +138,23 @@ class Extract
 
             }
         }
+
+        //verify tds with total
+              
+        for( $r = count( $innerlines )-1; $it_col !== -1 && $r >=0 ; $r-- ){
+            $totalline = $innerlines[$r];
+            if ( 0 == strncmp($totalline, "Total", strlen("Total"))){
+                $cols = str_getcsv($totalline);
+                $total_as_per_sheet = $cols[$it_col-1]; //sl.no and name cols merged into one, so one before
+                if( $tds_total != $total_as_per_sheet ){
+                    $errors[] = "Unable to verify total tds" . $tds_total . '-' . $total_as_per_sheet ;
+                    return [];
+                } 
+
+                break;
+            }
+        }
+        
 
         return  $data ;
     }
