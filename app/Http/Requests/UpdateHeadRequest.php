@@ -2,10 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Head;
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Response;
 
 class UpdateHeadRequest extends FormRequest
 {
@@ -21,7 +19,7 @@ class UpdateHeadRequest extends FormRequest
                 'string',
                 'min:3',
                 'required',
-                'unique:heads,head,' . request()->route('head')->id,
+                'unique:heads,head,'.request()->route('head')->id,
             ],
         ];
     }

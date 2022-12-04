@@ -8,7 +8,6 @@ use App\Http\Requests\StoreYearRequest;
 use App\Http\Requests\UpdateYearRequest;
 use App\Models\Year;
 use Gate;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class YearController extends Controller

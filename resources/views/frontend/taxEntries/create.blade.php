@@ -53,17 +53,32 @@
                             @endif
                             <span class="help-block">{{ trans('cruds.taxEntry.fields.innerfile_helper') }}</span>
                         </div>
-                       <!--  <div class="form-group {{ $errors->has('deductionfile') ? 'has-error' : '' }}">
-                            <label class="required" for="deductionfile">{{
-                                trans('cruds.taxEntry.fields.deductionfile')
-                                }}</label>
-                            <input type="file" class="form-control-file" name="file2" id="deductionfile">
-                            @if($errors->has('deductionfile'))
-                            <span class="help-block" role="alert">{{ $errors->first('deductionfile') }}</span>
+                        <div class="form-group">
+                            <div>
+                                <input type="hidden" name="has_it" value="0">
+                                <input type="checkbox" name="has_it" id="has_it" value="1" {{ old('has_it', 0) == 1 || old('has_it') === null ? 'checked' : '' }}>
+                                <label for="has_it">{{ trans('cruds.taxEntry.fields.has_it') }}</label>
+                            </div>
+                            @if($errors->has('has_it'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('has_it') }}
+                                </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.taxEntry.fields.deductionfile_helper')
-                                }}</span>
-                        </div> -->
+                            <span class="help-block">{{ trans('cruds.taxEntry.fields.has_it_helper') }}</span>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <input type="hidden" name="tds_rows_only" value="0">
+                                <input type="checkbox" name="tds_rows_only" id="tds_rows_only" value="1" {{ old('tds_rows_only', 0) == 1 || old('tds_rows_only') === null ? 'checked' : '' }}>
+                                <label for="tds_rows_only">{{ trans('cruds.taxEntry.fields.tds_rows_only') }}</label>
+                            </div>
+                            @if($errors->has('tds_rows_only'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('tds_rows_only') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.taxEntry.fields.tds_rows_only_helper') }}</span>
+                        </div>
                         <div class="form-group">
                             <button class="btn btn-primary" type="submit">
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none;" id="spinnerbtn" ></span>
@@ -95,7 +110,7 @@
 @section('scripts')
 @parent
     
-    <script src="{{ asset('js/cdnjs/jquery.form.min.js') }}"></script>
+    <!-- <script src="{{ asset('js/cdnjs/jquery.form.min.js') }}"></script> -->
     <script>
         $(function () {
             $(document).ready(function () {
@@ -174,6 +189,17 @@
 
 
             });
+        });
+    </script>
+    <script>
+       $('#has_it').on('change', function() {
+        if (!$('#has_it').is(':checked')) {
+                $('#tds_rows_only').attr('disabled', true);
+                $('#tds_rows_only').prop('checked', false);
+            } else {
+                $('#tds_rows_only').attr('disabled', false);
+                $('#tds_rows_only').prop('checked', true);
+            }
         });
     </script>
 @endsection

@@ -8,7 +8,6 @@ use App\Http\Requests\UpdateAllocationRequest;
 use App\Http\Resources\Admin\AllocationResource;
 use App\Models\Allocation;
 use Gate;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class AllocationApiController extends Controller

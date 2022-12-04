@@ -13,8 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        
-        if(! Schema::hasTable('employees')) {
+        if (! Schema::hasTable('employees')) {
             Schema::create('employees', function (Blueprint $table) {
                 $table->id();
                 $table->string('name');
@@ -22,7 +21,6 @@ return new class extends Migration
                 $table->string('pan')->unique();
                 $table->string('category')->nullable();
                 $table->timestamps();
-                
             });
         }
     }

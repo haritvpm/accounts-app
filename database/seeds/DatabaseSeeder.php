@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use App\Models\Year;
+use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         $this->call([
+        $this->call([
             PermissionsTableSeeder::class,
             RolesTableSeeder::class,
             PermissionRoleTableSeeder::class,
@@ -21,35 +21,28 @@ class DatabaseSeeder extends Seeder
 
         ]);
 
+        $years = [
+            [
+                'id' => 1,
+                'financial_year' => '2019-20',
+                'active' => '0',
 
-         $years = [
-            [
-                'id'             => 1,
-                'financial_year'  => '2019-20',
-                'active'          => '0',
-                
             ],
             [
-                'id'             => 2,
+                'id' => 2,
                 'financial_year' => '2020-21',
-                'active'          => '1',
-                
+                'active' => '1',
+
             ],
             [
-                'id'             => 3,
-                'financial_year'  => '2021-22',
-                'active'          => '1',
-                
+                'id' => 3,
+                'financial_year' => '2021-22',
+                'active' => '1',
+
             ],
 
         ];
 
         Year::insert($years);
-
-
-        
-
-
-
     }
 }

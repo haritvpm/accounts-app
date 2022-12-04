@@ -9,7 +9,6 @@ use App\Http\Requests\UpdateAllocationRequest;
 use App\Models\Allocation;
 use App\Models\Year;
 use Gate;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class AllocationController extends Controller

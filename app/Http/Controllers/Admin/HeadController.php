@@ -8,7 +8,6 @@ use App\Http\Requests\StoreHeadRequest;
 use App\Http\Requests\UpdateHeadRequest;
 use App\Models\Head;
 use Gate;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class HeadController extends Controller

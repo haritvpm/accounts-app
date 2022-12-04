@@ -16,7 +16,7 @@ class TdsController extends Controller
 {
     public function index()
     {
-       // abort_if(Gate::denies('td_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        // abort_if(Gate::denies('td_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $tds = Td::with(['date', 'created_by'])
         ->orderBy('id', 'DESC')
@@ -61,7 +61,7 @@ class TdsController extends Controller
 
     public function show(Td $td)
     {
-     //   abort_if(Gate::denies('td_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //   abort_if(Gate::denies('td_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $td->load('date', 'created_by');
 
@@ -70,7 +70,7 @@ class TdsController extends Controller
 
     public function destroy(Td $td)
     {
-      //  abort_if(Gate::denies('td_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //  abort_if(Gate::denies('td_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $td->delete();
 

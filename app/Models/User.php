@@ -4,15 +4,15 @@ namespace App\Models;
 
 use Hash;
 use Illuminate\Auth\Notifications\ResetPassword;
-
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
 //use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
     use Notifiable;
-  //  use HasApiTokens;
+    //  use HasApiTokens;
 
     public $table = 'users';
 
@@ -24,7 +24,7 @@ class User extends Authenticatable
     protected $dates = [
         'created_at',
         'updated_at',
-       
+
     ];
 
     protected $fillable = [
@@ -35,7 +35,7 @@ class User extends Authenticatable
         'created_at',
         'updated_at',
         'ddo',
-        
+
     ];
 
     public function getIsAdminAttribute()

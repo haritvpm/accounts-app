@@ -9,7 +9,6 @@ use App\Http\Requests\UpdateSalaryBillDetailRequest;
 use App\Models\SalaryBillDetail;
 use App\Models\Year;
 use Gate;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class SalaryBillDetailsController extends Controller
@@ -28,7 +27,7 @@ class SalaryBillDetailsController extends Controller
         abort_if(Gate::denies('salary_bill_detail_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
 //        $years = Year::pluck('financial_year', 'id')->prepend(trans('global.pleaseSelect'), '');
-        $years = Year::latest('id')->where('active', 1)->pluck('financial_year', 'id');//->prepend(trans('global.pleaseSelect'), '');
+        $years = Year::latest('id')->where('active', 1)->pluck('financial_year', 'id'); //->prepend(trans('global.pleaseSelect'), '');
 
         return view('admin.salaryBillDetails.create', compact('years'));
     }
@@ -45,7 +44,7 @@ class SalaryBillDetailsController extends Controller
         abort_if(Gate::denies('salary_bill_detail_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
 //        $years = Year::pluck('financial_year', 'id')->prepend(trans('global.pleaseSelect'), '');
-        $years = Year::latest('id')->where('active', 1)->pluck('financial_year', 'id');//->prepend(trans('global.pleaseSelect'), '');
+        $years = Year::latest('id')->where('active', 1)->pluck('financial_year', 'id'); //->prepend(trans('global.pleaseSelect'), '');
 
         $salaryBillDetail->load('year', 'created_by');
 

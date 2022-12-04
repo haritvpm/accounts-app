@@ -11,14 +11,14 @@ class Head extends Model
     protected $dates = [
         'created_at',
         'updated_at',
-       
+
     ];
 
     protected $fillable = [
         'head',
         'created_at',
         'updated_at',
-        
+
     ];
 
     public function headAllocations()

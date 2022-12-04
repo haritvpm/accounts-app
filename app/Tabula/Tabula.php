@@ -19,16 +19,19 @@ use Symfony\Component\Process\Process;
  * https://github.com/tabulapdf/tabula-java
  *
  **/
-
 class Tabula
 {
     public $os;
+
     public $encoding = 'utf-8';
+
     public $javaOptions = [];
+
     public $input = null;
+
     public $options = [
         'pages' => null,
-        'guess' => true,
+        'guess' => false,
         'area' => [],
         'relativeArea' => false,
         'lattice' => false,
@@ -43,6 +46,7 @@ class Tabula
 
     /**
      * Additional dir to check for java executable
+     *
      * @var
      */
     private $binDir = [];
@@ -55,8 +59,9 @@ class Tabula
 
     /**
      * Tabula constructor.
-     * @param null $binDir
-     * @param string $encoding
+     *
+     * @param  null  $binDir
+     * @param  string  $encoding
      */
     public function __construct($binDir = null, $encoding = 'utf-8')
     {
@@ -67,7 +72,8 @@ class Tabula
             $this->binDir = is_array($binDir) ? $binDir : [$binDir];
         }
 
-        $this->jarArchive = public_path() . '/jar/tabula-1.0.4-jar-with-dependencies.jar';
+        //$this->jarArchive = public_path().'/jar/tabula-1.0.4-jar-with-dependencies.jar';
+        $this->jarArchive = public_path().'/jar/tabula-1.0.5-jar-with-dependencies.jar';
     }
 
     public function osCheck()
@@ -110,7 +116,7 @@ class Tabula
     }
 
     /**
-     * @param string $jarArchive
+     * @param  string  $jarArchive
      * @return Tabula
      */
     public function setJarArchive(string $jarArchive)
@@ -140,7 +146,7 @@ class Tabula
     }
 
     /**
-     * @param string $input
+     * @param  string  $input
      * @return Tabula
      */
     public function setPdf(string $input)
@@ -151,7 +157,7 @@ class Tabula
     }
 
     /**
-     * @param array $options
+     * @param  array  $options
      * @return Tabula
      */
     public function setOptions(array $options)
@@ -160,7 +166,6 @@ class Tabula
 
         return $this;
     }
-
 
     private function buildJavaOptions()
     {
@@ -214,11 +219,11 @@ class Tabula
      */
     public function existFileCheck($path)
     {
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             throw new InvalidArgumentException('File does not exist.');
         }
 
-        if (!is_readable($path)) {
+        if (! is_readable($path)) {
             throw new InvalidArgumentException("Could not read `{$path}`");
         }
 
@@ -231,28 +236,27 @@ class Tabula
      */
     public function existDirectoryCheck($path)
     {
-        if (!is_dir($path)) {
+        if (! is_dir($path)) {
             throw new InvalidArgumentException('Folder to target Pdf does not exist.');
         }
 
         return true;
     }
 
-
     /**
-     * @param array $options
+     * @param  array  $options
      */
     private function buildOptions(array $options)
     {
         $buildOptions = [];
 
-        if (!is_null($this->input)) {
+        if (! is_null($this->input)) {
             if ($this->existFileCheck($this->input)) {
                 $buildOptions = array_merge($buildOptions, [$this->input]);
             }
         }
 
-        if (!is_null($options['pages'])) {
+        if (! is_null($options['pages'])) {
             if ($options['pages'] === 'all') {
                 $buildOptions = array_merge($buildOptions, ['--page', 'all']);
             } else {
@@ -263,7 +267,7 @@ class Tabula
 
         $multipleArea = false;
 
-        if (!is_null($options['area']) && !empty($options['area'])) {
+        if (! is_null($options['area']) && ! empty($options['area'])) {
             $options['guess'] = false;
 
             foreach ($options['area'] as $key => $value) {
@@ -287,29 +291,29 @@ class Tabula
             $buildOptions = array_merge($buildOptions, ['--stream']);
         }
 
-        if ($options['guess'] && !$multipleArea) {
+        if ($options['guess'] && ! $multipleArea) {
             $buildOptions = array_merge($buildOptions, ['--guess']);
         }
 
-        if (!is_null($options['format'])) {
+        if (! is_null($options['format'])) {
             $format = $this->extractFormatForConversion($options['format']);
             $buildOptions = array_merge($buildOptions, ['--format', $format]);
         }
 
-        if (!is_null($options['outfile'])) {
+        if (! is_null($options['outfile'])) {
             $buildOptions = array_merge($buildOptions, ['--outfile', $options['outfile']]);
         }
 
-        if (!is_null($options['columns'])) {
+        if (! is_null($options['columns'])) {
             $columns = implode(',', $options['columns']);
             $buildOptions = array_merge($buildOptions, ['--columns', $columns]);
         }
 
-        if (!is_null($options['password'])) {
+        if (! is_null($options['password'])) {
             $buildOptions = array_merge($buildOptions, ['--password', $options['password']]);
         }
 
-        if (!is_null($options['batch'])) {
+        if (! is_null($options['batch'])) {
             if ($this->existDirectoryCheck($options['batch'])) {
                 $buildOptions = array_merge($buildOptions, ['--batch', $options['batch']]);
             }
@@ -330,7 +334,7 @@ class Tabula
 
         $process->run();
 
-        if (!$process->isSuccessful()) {
+        if (! $process->isSuccessful()) {
             throw new RuntimeException($process->getErrorOutput());
         }
 
@@ -341,6 +345,7 @@ class Tabula
     {
         self::buildJavaOptions();
         self::buildOptions($this->options);
+
         return self::run();
     }
 }

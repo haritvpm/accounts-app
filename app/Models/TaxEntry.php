@@ -6,11 +6,9 @@ use App\Traits\MultiTenantModelTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-
 class TaxEntry extends Model
 {
     use MultiTenantModelTrait;
-
 
     const STATUS_SELECT = [
         'draft' => 'Draft',
@@ -18,7 +16,7 @@ class TaxEntry extends Model
     ];
 
     const DDO_SELECT = [
-       
+
         'sect' => 'Secretariat',
         'hostel' => 'Hostel',
     ];
@@ -46,7 +44,7 @@ class TaxEntry extends Model
         'updated_at',
         'deleted_at',
         'created_by_id',
-       
+
     ];
 
     public function dateTds()
@@ -63,6 +61,7 @@ class TaxEntry extends Model
     {
         $this->attributes['date'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
     }
+
     public function created_by()
     {
         return $this->belongsTo(User::class, 'created_by_id');

@@ -6,11 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroySalaryBillDetailRequest;
 use App\Http\Requests\StoreSalaryBillDetailRequest;
 use App\Http\Requests\UpdateSalaryBillDetailRequest;
-use App\Models\SalaryBillDetail;
 use App\Models\Allocation;
+use App\Models\SalaryBillDetail;
 use App\Models\Year;
 use Gate;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class SalaryBillDetailsController extends Controller
@@ -19,25 +18,19 @@ class SalaryBillDetailsController extends Controller
     {
         abort_if(Gate::denies('salary_bill_detail_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-
         //$curyear = Year::latest()->where('active', 1)->take(1)->pluck('financial_year', 'id');
 
         $years = Year::latest('financial_year')->where('active', 1);
         $curyear = $years->take(1)->value('financial_year');
-       // $years = $years->pluck('financial_year', 'id');
-      
+        // $years = $years->pluck('financial_year', 'id');
 
-       
-        $salaryBillDetails = SalaryBillDetail::latest()->with(['year', 'created_by']) 
-                    ->whereHas('year', function ($query)   use($curyear) {
-                         $query->where('financial_year',  $curyear);
-                     })
-                    ->where('created_by_id', auth()->id() )
-                                        
+        $salaryBillDetails = SalaryBillDetail::latest()->with(['year', 'created_by'])
+                    ->whereHas('year', function ($query) use ($curyear) {
+                        $query->where('financial_year', $curyear);
+                    })
+                    ->where('created_by_id', auth()->id())
+
                     ->get();
-
-
-
 
         /*$allocations = Allocation::with('year')
            ->whereHas('year', function ($query)   use($curyear) {
@@ -45,33 +38,26 @@ class SalaryBillDetailsController extends Controller
             });
         */
 
-
-
-        $fields = array("pay", "da", "hra", "other", "ota");
+        $fields = ['pay', 'da', 'hra', 'other', 'ota'];
 
         //$allocation = [];
         $totaluser = [];
         //$balance = [];
 
         foreach ($fields as $field) {
-
-          //  $allocation[$field] = $allocations->sum($field);
+            //  $allocation[$field] = $allocations->sum($field);
             $totaluser[$field] = $salaryBillDetails->sum($field);
             //$balance[$field] =  $allocation[$field] - $total[$field];
-          
         }
 
-
-
-       
-        return view('frontend.salaryBillDetails.index', compact('salaryBillDetails',  'curyear', /*'allocation',*/ 'totaluser'/*, 'balance'*/));
+        return view('frontend.salaryBillDetails.index', compact('salaryBillDetails', 'curyear', /*'allocation',*/ 'totaluser'/*, 'balance'*/));
     }
 
     public function create()
     {
         abort_if(Gate::denies('salary_bill_detail_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $years = Year::latest('id')->where('active', 1)->pluck('financial_year', 'id');//->prepend(trans('global.pleaseSelect'), '');
+        $years = Year::latest('id')->where('active', 1)->pluck('financial_year', 'id'); //->prepend(trans('global.pleaseSelect'), '');
 
         return view('frontend.salaryBillDetails.create', compact('years'));
     }
@@ -87,7 +73,7 @@ class SalaryBillDetailsController extends Controller
     {
         abort_if(Gate::denies('salary_bill_detail_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $years = Year::latest('id')->where('active', 1)->pluck('financial_year', 'id');//->prepend(trans('global.pleaseSelect'), '');
+        $years = Year::latest('id')->where('active', 1)->pluck('financial_year', 'id'); //->prepend(trans('global.pleaseSelect'), '');
 
         $salaryBillDetail->load('year', 'created_by');
 

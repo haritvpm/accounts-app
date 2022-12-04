@@ -4,26 +4,21 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyTaxEntryRequest;
-use App\Http\Requests\StoreTaxEntryRequest;
 use App\Http\Requests\UpdateTaxEntryRequest;
 use App\Models\TaxEntry;
 use App\Models\Td;
 //use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Tabula\Tabula;
-use Illuminate\Support\Facades\File;
-use Carbon\Carbon;
 
 class TaxEntryController extends Controller
 {
-
     public function index()
     {
         //abort_if(Gate::denies('tax_entry_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $taxEntries = TaxEntry::with(['created_by'])
-        ->whereHas('created_by', function($q)  {
+        ->whereHas('created_by', function ($q) {
             // Query the name field in status table
             $q->where('ddo', auth()->user()->ddo); // '=' is optional
         })
@@ -41,14 +36,13 @@ class TaxEntryController extends Controller
 
     public function store(StoreTdRequest $request)
     {
-       
         //create a taxentry first with the date
-        $taxEntry = TaxEntry::create( [
+        $taxEntry = TaxEntry::create([
             'date' => $request->date,
-            'status' => 'approved'
-        ] );
+            'status' => 'approved',
+        ]);
 
-        $td = Td::create(  array_merge($request->except(['date']), [ 'date_id' => $taxEntry->id ]  ));
+        $td = Td::create(array_merge($request->except(['date']), ['date_id' => $taxEntry->id]));
 
         return redirect()->route('admin.tax-entries.index');
     }
@@ -97,7 +91,4 @@ class TaxEntryController extends Controller
     TaxEntry::whereIn('id', request('ids'))->delete();
     return response(null, Response::HTTP_NO_CONTENT);
     } */
-
-   
-
 }

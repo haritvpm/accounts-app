@@ -8,7 +8,6 @@ use App\Http\Requests\UpdateSalaryBillDetailRequest;
 use App\Http\Resources\Admin\SalaryBillDetailResource;
 use App\Models\SalaryBillDetail;
 use Gate;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class SalaryBillDetailsApiController extends Controller

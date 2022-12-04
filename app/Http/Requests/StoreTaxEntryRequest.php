@@ -2,10 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Models\TaxEntry;
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Response;
 
 class StoreTaxEntryRequest extends FormRequest
 {
@@ -19,12 +17,12 @@ class StoreTaxEntryRequest extends FormRequest
         return [
             'date' => [
                 'required',
-                'date_format:' . config('panel.date_format'),
+                'date_format:'.config('panel.date_format'),
             ],
             'file1' => [
                 'required',
             ],
-           /*  'file2' => [
+            /*  'file2' => [
                 'required',
             ], */
         ];

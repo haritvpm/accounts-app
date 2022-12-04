@@ -3,7 +3,6 @@
 //Route::redirect('/', '/salaryrecord/public/login');
 Route::redirect('/', '/login');
 
-
 Auth::routes(['register' => false]);
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
@@ -19,7 +18,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Users
     Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
     Route::resource('users', 'UsersController');
-
 
     // Year
     Route::delete('years/destroy', 'YearController@massDestroy')->name('years.massDestroy');
@@ -38,23 +36,21 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('tds/download', 'TdsController@download')->name('tds.download');
     Route::resource('tax-entries', 'TaxEntryController');
 
-     // Backup routes
-     Route::resource('backups',  'BackupController');
-     Route::get('backup/create', 'BackupController@create');
-     Route::get('backup/download/{file_name}', 'BackupController@download');
-     Route::get('backup/delete/{file_name}', 'BackupController@delete');
+    // Backup routes
+    Route::resource('backups', 'BackupController');
+    Route::get('backup/create', 'BackupController@create');
+    Route::get('backup/download/{file_name}', 'BackupController@download');
+    Route::get('backup/delete/{file_name}', 'BackupController@delete');
 
     // Employee
     Route::delete('employees/destroy', 'EmployeeController@massDestroy')->name('employees.massDestroy');
     Route::post('employees/parse-csv-import', 'EmployeeController@parseCsvImport')->name('employees.parseCsvImport');
     Route::post('employees/process-csv-import', 'EmployeeController@processCsvImport')->name('employees.processCsvImport');
-    
+
     Route::post('employees/parse-spark-import', 'EmployeeController@parseSparkImport')->name('employees.parseSparkImport');
     Route::post('employees/process-spark-import', 'EmployeeController@processSparkImport')->name('employees.processSparkImport');
-  
-    Route::resource('employees', 'EmployeeController');
 
-    
+    Route::resource('employees', 'EmployeeController');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password
@@ -69,8 +65,6 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     Route::get('/home', 'HomeController@index')->name('home');
     // Route::get('/home', 'SalaryBillDetailsController@create')->name('home');
 
-
-
     // Year
     Route::delete('years/destroy', 'YearController@massDestroy')->name('years.massDestroy');
     Route::resource('years', 'YearController');
@@ -83,10 +77,12 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     Route::delete('salary-bill-details/destroy', 'SalaryBillDetailsController@massDestroy')->name('salary-bill-details.massDestroy');
     Route::resource('salary-bill-details', 'SalaryBillDetailsController');
 
-
     // Tax Entry
     //Route::delete('tax-entries/destroy', 'TaxEntryController@massDestroy')->name('tax-entries.massDestroy');
+    Route::get('tax-entries/create-311', 'TaxEntryController@create_311')->name('tax-entries.create-311');
+    Route::post('tax-entries/store-311', 'TaxEntryController@store_311')->name('tax-entries.store-311');
     Route::resource('tax-entries', 'TaxEntryController');
+
     Route::resource('tds', 'TdsController');
 
     // Employee

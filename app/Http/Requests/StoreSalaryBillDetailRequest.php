@@ -2,10 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Models\SalaryBillDetail;
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Response;
 
 class StoreSalaryBillDetailRequest extends FormRequest
 {
@@ -25,7 +23,7 @@ class StoreSalaryBillDetailRequest extends FormRequest
             ],
             'other' => [
                 'required',
-               
+
             ],
             'year_id' => [
                 'required',

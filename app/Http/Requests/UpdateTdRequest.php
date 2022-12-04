@@ -5,13 +5,12 @@ namespace App\Http\Requests;
 use App\Models\Td;
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Response;
 
 class UpdateTdRequest extends FormRequest
 {
     public function authorize()
     {
-        return 1;//Gate::allows('td_edit');
+        return 1; //Gate::allows('td_edit');
     }
 
     public function rules()
@@ -35,7 +34,7 @@ class UpdateTdRequest extends FormRequest
             'tds' => [
                 'required',
             ],
-           
+
             'slno' => [
                 'nullable',
                 'integer',

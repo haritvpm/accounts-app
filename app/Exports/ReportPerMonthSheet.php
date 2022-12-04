@@ -1,28 +1,32 @@
 <?php
+
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithTitle;
-//use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-//use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Events\AfterSheet;
-use Maatwebsite\Excel\Concerns\WithEvents;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
+//use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\FromCollection;
+//use Illuminate\Database\Eloquent\Collection;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Events\AfterSheet;
 
 class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, WithEvents
 {
     private $monthname;
+
     private $taxentries;
+
     private $adminEntries;
+
     private $adminentryheading;
 
-    public function __construct( $monthname, $taxentries, $adminEntries)
+    public function __construct($monthname, $taxentries, $adminEntries)
     {
         $this->monthname = $monthname;
-        $this->taxentries  = $taxentries;
-        $this->adminEntries  = $adminEntries;
+        $this->taxentries = $taxentries;
+        $this->adminEntries = $adminEntries;
         $this->adminentryheading = -1;
     }
 
@@ -30,16 +34,13 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
     {
         $tdscombined = new Collection();
 
-        
         $slno = 1;
         $tdstotal = 0;
 
         foreach ($this->taxentries as $taxentry) {
-
             $tds = $taxentry->dateTds()->get();
-            
-            foreach ($tds as $cols){
-                                          
+
+            foreach ($tds as $cols) {
                 $items = [];
                 array_push($items, $slno++);
                 array_push($items, $cols->pan);
@@ -47,38 +48,33 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
                 array_push($items, $cols->name);
                 array_push($items, $cols->gross);
                 array_push($items, $cols->tds);
-                array_push($items, $taxentry->date );
+                array_push($items, $taxentry->date);
                 $datebookadjustment = Carbon::createFromFormat(config('panel.date_format'), $taxentry->date)
                         ->endOfMonth()
                         ->format(config('panel.date_format'));
-                array_push($items, $datebookadjustment );
-                $tdscombined->push($items) ;
+                array_push($items, $datebookadjustment);
+                $tdscombined->push($items);
                 $tdstotal += $cols->tds;
             }
-                                  
         }
 
-        if( $slno > 1 ) { //has entries
-            $tdscombined->push( [ '', '', '','', 'Total', $tdstotal, ''] );
+        if ($slno > 1) { //has entries
+            $tdscombined->push(['', '', '', '', 'Total', $tdstotal, '']);
             $slno++;
         }
 
-
-        if($this->adminEntries->count()){
-            $tdscombined->push( ['26Q'] );
-            $this->adminentryheading  = ++$slno;
+        if ($this->adminEntries->count()) {
+            $tdscombined->push(['26Q']);
+            $this->adminentryheading = ++$slno;
         }
 
-        
         $slno = 1;
         $tdstotal = 0;
 
         foreach ($this->adminEntries as $taxentry) {
-
             $tds = $taxentry->dateTds()->get();
-            
-            foreach ($tds as $cols){
-                                          
+
+            foreach ($tds as $cols) {
                 $items = [];
                 array_push($items, $slno++);
                 array_push($items, $cols->pan);
@@ -86,28 +82,25 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
                 array_push($items, $cols->name);
                 array_push($items, $cols->gross);
                 array_push($items, $cols->tds);
-                array_push($items, $taxentry->date );
+                array_push($items, $taxentry->date);
 
                 $datebookadjustment = Carbon::createFromFormat(config('panel.date_format'), $taxentry->date)
                         ->endOfMonth()
                         ->format(config('panel.date_format'));
-                array_push($items, $datebookadjustment );
+                array_push($items, $datebookadjustment);
 
-                $tdscombined->push( $items );
+                $tdscombined->push($items);
                 $tdstotal += $cols->tds;
             }
-                                  
         }
 
-        if( $slno > 1 ){
-            $tdscombined->push( [ '', '', '','', 'Total', $tdstotal, ''] );
-        } 
-
+        if ($slno > 1) {
+            $tdscombined->push(['', '', '', '', 'Total', $tdstotal, '']);
+        }
 
         return $tdscombined;
     }
 
-   
     /**
      * @return string
      */
@@ -115,11 +108,12 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
     {
         return $this->monthname;
     }
+
     public function headings(): array
     {
         return [
-            'Sl.No', 'PAN of the deductee', 'PEN of the deductee', 
-            'Name of the deductee', 'Amount paid/credited', 'TDS', 'Date of credit', 'Date of book adjustment'
+            'Sl.No', 'PAN of the deductee', 'PEN of the deductee',
+            'Name of the deductee', 'Amount paid/credited', 'TDS', 'Date of credit', 'Date of book adjustment',
         ];
     }
 
@@ -128,37 +122,32 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
      */
     public function registerEvents(): array
     {
-        
         return [
             // Handle by a closure.
-           
-            AfterSheet::class => function(AfterSheet $event) {
 
-                $t =  $this->adminentryheading  ;
-                if(  $t != -1)
-                {
+            AfterSheet::class => function (AfterSheet $event) {
+                $t = $this->adminentryheading;
+                if ($t != -1) {
                     $workSheet = $event
                         ->sheet
                         ->getDelegate()
                         ->mergeCells(
-                        
-                            'A' . $t . ':G' . $t
-                    );
-                        
-                    $headers =  $event->getSheet()->getDelegate()->getStyle('A' . $t . ':G' . $t);
+
+                            'A'.$t.':G'.$t
+                        );
+
+                    $headers = $event->getSheet()->getDelegate()->getStyle('A'.$t.':G'.$t);
 
                     $headers
                         ->getAlignment()
                         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
                         ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
                 }
-                
             },
-            
+
             // Array callable, refering to a static method.
-           // AfterSheet::class => [self::class, 'afterSheet'],
-            
-           
+            // AfterSheet::class => [self::class, 'afterSheet'],
+
         ];
     }
 
@@ -167,35 +156,32 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
      *
      * @param  AfterSheet  $event
      * @return void
+     *
      * @throws Exception
      */
     public static function afterSheet(AfterSheet $event)
     {
-
-        /*$sheet->mergeCells( 'A' . $slno . ':G' . $slno); 
+        /*$sheet->mergeCells( 'A' . $slno . ':G' . $slno);
         $style = array(
             'alignment' => array(
                 'horizontal' =>'center',
             )
         );
-        
+
         $sheet->getStyle('A' . $slno . ':G' . $slno)->applyFromArray($style);
         */
 
         try {
-
-
-            if(  $this->adminentryheading != -1)
-            {
+            if ($this->adminentryheading != -1) {
                 $workSheet = $event
                     ->sheet
                     ->getDelegate()
                     ->mergeCells([
-                       
-                        'A2:D2'
+
+                        'A2:D2',
                     ]);
-                    
-                $headers = $workSheet->getStyle('A' . $this->adminentryheading . ':G' . $this->adminentryheading);
+
+                $headers = $workSheet->getStyle('A'.$this->adminentryheading.':G'.$this->adminentryheading);
 
                 $headers
                     ->getAlignment()
@@ -204,11 +190,8 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
             }
 
             //$headers->getFont()->setBold(true);
-
-            
         } catch (Exception $exception) {
             throw $exception;
         }
     }
-
 }

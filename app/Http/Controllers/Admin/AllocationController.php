@@ -9,7 +9,6 @@ use App\Http\Requests\UpdateAllocationRequest;
 use App\Models\Allocation;
 use App\Models\Year;
 use Gate;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class AllocationController extends Controller
@@ -27,7 +26,7 @@ class AllocationController extends Controller
     {
         abort_if(Gate::denies('allocation_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $years = Year::pluck('financial_year', 'id');//->prepend(trans('global.pleaseSelect'), '');
+        $years = Year::pluck('financial_year', 'id'); //->prepend(trans('global.pleaseSelect'), '');
 
         return view('admin.allocations.create', compact('years'));
     }
@@ -43,7 +42,7 @@ class AllocationController extends Controller
     {
         abort_if(Gate::denies('allocation_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $years = Year::pluck('financial_year', 'id');//->prepend(trans('global.pleaseSelect'), '');
+        $years = Year::pluck('financial_year', 'id'); //->prepend(trans('global.pleaseSelect'), '');
 
         $allocation->load('year');
 

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Allocation;
+use App\Models\SalaryBillDetail;
+use App\Models\Year;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
-use App\Models\SalaryBillDetail;
-use App\Models\Allocation;
-use App\Models\Year;
 class LoginController extends Controller
 {
     /*
@@ -51,42 +51,35 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
-
-
-
-       $years = Year::latest('financial_year')->where('active', 1);
+        $years = Year::latest('financial_year')->where('active', 1);
         $curyear = $years->take(1)->value('financial_year');
-       // $years = $years->pluck('financial_year', 'id');
-      
+        // $years = $years->pluck('financial_year', 'id');
 
         $allocations = Allocation::with('year')
-           ->whereHas('year', function ($query)   use($curyear) {
-                $query->where('financial_year',  $curyear);
-            });
+           ->whereHas('year', function ($query) use ($curyear) {
+               $query->where('financial_year', $curyear);
+           });
 
-         $salaryBillDetails = SalaryBillDetail::latest()->with(['year', 'created_by']) 
-                    ->whereHas('year', function ($query)   use($curyear) {
-                         $query->where('financial_year',  $curyear);
-                     })->get();
+        $salaryBillDetails = SalaryBillDetail::latest()->with(['year', 'created_by'])
+                   ->whereHas('year', function ($query) use ($curyear) {
+                       $query->where('financial_year', $curyear);
+                   })->get();
 
-
-        $fields = array("pay", "da", "hra", "other", "ota");
+        $fields = ['pay', 'da', 'hra', 'other', 'ota'];
 
         $allocation = [];
         $total = [];
         $balance = [];
 
         foreach ($fields as $field) {
-
             $allocation[$field] = $allocations->sum($field);
             $total[$field] = $salaryBillDetails->sum($field);
-            $balance[$field] =  $allocation[$field] - $total[$field];
-          
+            $balance[$field] = $allocation[$field] - $total[$field];
         }
 
-
-       return view('auth.login', compact('curyear', 'allocation', 'total', 'balance'));
+        return view('auth.login', compact('curyear', 'allocation', 'total', 'balance'));
     }
+
     public function username()
     {
         return 'name';

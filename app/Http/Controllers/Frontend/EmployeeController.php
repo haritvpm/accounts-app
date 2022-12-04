@@ -9,7 +9,6 @@ use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\Employee;
 use Gate;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class EmployeeController extends Controller
@@ -21,7 +20,7 @@ class EmployeeController extends Controller
         //abort_if(Gate::denies('employee_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $employees = Employee::with(['created_by'])
-            ->whereHas('created_by', function($q)  {
+            ->whereHas('created_by', function ($q) {
                 // Query the name field in status table
                 $q->where('ddo', auth()->user()->ddo); // '=' is optional
             })
@@ -32,21 +31,21 @@ class EmployeeController extends Controller
 
     public function create()
     {
-       // abort_if(Gate::denies('employee_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        // abort_if(Gate::denies('employee_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return view('frontend.employees.create');
     }
 
     public function store(StoreEmployeeRequest $request)
     {
-        $employee = Employee::create($request->all() + ['created_by_id' => auth()->id() ]  );
+        $employee = Employee::create($request->all() + ['created_by_id' => auth()->id()]);
 
         return redirect()->route('frontend.employees.index');
     }
 
     public function edit(Employee $employee)
     {
-     //   abort_if(Gate::denies('employee_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //   abort_if(Gate::denies('employee_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $employee->load('created_by');
 
@@ -62,7 +61,7 @@ class EmployeeController extends Controller
 
     public function show(Employee $employee)
     {
-      //  abort_if(Gate::denies('employee_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //  abort_if(Gate::denies('employee_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $employee->load('created_by');
 
@@ -71,7 +70,7 @@ class EmployeeController extends Controller
 
     public function destroy(Employee $employee)
     {
-      //  abort_if(Gate::denies('employee_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //  abort_if(Gate::denies('employee_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $employee->delete();
 

@@ -67,10 +67,10 @@
                                             {{ $td->name ?? '' }}
                                         </td>
                                         <td>
-                                            {{ $td->gross ?? '' }}
+                                            {{ number_format($td->gross) ?? '' }}
                                         </td>
                                         <td>
-                                            {{ $td->tds ?? '' }}
+                                            {{ number_format($td->tds) ?? '' }}
                                         </td>
                                         <td>
                                             {{ $td->date->date ?? '' }}

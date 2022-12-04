@@ -5,13 +5,12 @@ namespace App\Http\Requests;
 use App\Models\Employee;
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Response;
 
 class StoreEmployeeRequest extends FormRequest
 {
     public function authorize()
     {
-        return 1;// Gate::allows('employee_create');
+        return 1; // Gate::allows('employee_create');
     }
 
     public function rules()
