@@ -69,7 +69,7 @@
                         <div class="form-group">
                             <div>
                                 <input type="hidden" name="tds_rows_only" value="0">
-                                <input type="checkbox" name="tds_rows_only" id="tds_rows_only" value="1" {{ old('tds_rows_only', 0) == 1 || old('tds_rows_only') === null ? 'checked' : '' }}>
+                                <input type="checkbox" name="tds_rows_only" id="tds_rows_only" value="1" {{ old('tds_rows_only', 0) == 1 || old('tds_rows_only') !== null ? 'checked' : '' }}>
                                 <label for="tds_rows_only">{{ trans('cruds.taxEntry.fields.tds_rows_only') }}</label>
                             </div>
                             @if($errors->has('tds_rows_only'))

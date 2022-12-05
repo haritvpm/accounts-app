@@ -300,7 +300,9 @@ class Extract
                 return $this->processFestivalAllowance($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it, 'Bonus');
             case self::DA_ARREAR:
             case self::PAY_ARREAR:
-                return $this->processDaArrear($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it);
+                return $this->processDaArrear($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it );
+            case self::SALARYBILLMULTIPLE:
+                return $this->processDaArrear($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it, 'Gross Salary', 'IT', 1 );
         }
 
         return [];
@@ -359,14 +361,20 @@ class Extract
                 FALSE === strpos($pen, ' ');
 
     }
-    public function processDaArrear($start, $innerlines, &$pens, &$errors, $tds_rows_only, $has_it)
+    /*
+    $coloffset = How many columns are merged to show 'Total' minus one. For DA, PAY it is 3. For Multiple Month Salary, it is 2
+
+    */
+    public function processDaArrear($start, $innerlines, &$pens, &$errors, $tds_rows_only, $has_it, 
+                                    $fieldgross='Total', $fieldIT='Income tax to be deducted',
+                                    $coloffset = 2)
     {
         $heading = '';
 
         $i = $start;
         $i += 4;
          
-        if(! $this->findColumnIndex($start, $innerlines,  $has_it, $errors, $grosscol, $it_col, 'Total', 'Income tax to be deducted' ) ){
+        if(! $this->findColumnIndex($start, $innerlines,  $has_it, $errors, $grosscol, $it_col, $fieldgross, $fieldIT ) ){
             return [];
         }
 
@@ -383,11 +391,11 @@ class Extract
             //last line
             if( 0 ===  strcmp($cols[0], "Grand Total(in figures)")  ){
                
-                if($cols[$grosscol-2] != $totalarrear) {
+                if($cols[$grosscol-$coloffset] != $totalarrear) {
                     $errors[] = 'Grand Total and individual sum dont match';
                     return [];
                 }
-                if($cols[$it_col-2] != $totaltds){
+                if($cols[$it_col-$coloffset] != $totaltds){
                     $errors[] = 'Grand Total TDS and individual sum dont match';
                     return [];
                 }
@@ -408,8 +416,8 @@ class Extract
 
                     if( $cols[0] == 'Total' ){
 
-                        $gross = $cols[$grosscol-2];// first two cols are merged
-                        $tds = $cols[$it_col-2];// first two cols are merged
+                        $gross = $cols[$grosscol-$coloffset];// first two cols are merged
+                        $tds = $cols[$it_col-$coloffset];// first two cols are merged
                         $items = [
                             'slno' => $slno++,
                             'pen' => $pen,
@@ -432,7 +440,7 @@ class Extract
 
         }
 
-    //    dd( $data);
+//        dd( $data);
 
         return  $data;
     }
