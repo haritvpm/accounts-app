@@ -19,12 +19,65 @@ class Extract
     const ONAMADVANCE = 'ONAMADVANCE';
     const DA_ARREAR = 'DA_ARREAR';
     const PAY_ARREAR = 'PAY_ARREAR';
-
+    const SURRENDER = 'SURRENDER';
+    const MR = 'MR';
+    const SPARK_ID_PAY = 'SPARK_ID_PAY';
+    
     public function __construct()
     {
     }
 
-    public function getpdfType($innerlines, $no_lattice, &$start, &$acquittance, &$sparkcode)
+    public function getSparkCode( $no_lattice, &$sparkcode)
+    {
+
+        $nolattice_lines = explode("\r\n", $no_lattice);
+
+        for ($i = count($nolattice_lines) - 1; $i >= 0; $i--) {
+            $l = $nolattice_lines[$i];
+            
+            if (false !== stripos($l, 'Spark Code :')) {
+                $sparkcode = substr($l, strlen('Spark Code :') + stripos($l, 'Spark Code :'));
+                $sparkcode = strstr($sparkcode, ',', true);
+                $sparkcode = trim($sparkcode, '\'" ,');
+                if (strpos($sparkcode, ' ') === false) {
+                    $sparkcode = substr($sparkcode, 0, 20); //remove page number
+                    $sparkcode = chunk_split($sparkcode, 5, ' '); //insert space every 5th position
+                }
+                $sparkcode = trim($sparkcode, ' ');
+
+                break;
+            }
+        }
+        
+    }
+    /*
+    if line is separated by \r, $col will have a value. otherwise -1 
+    */
+    public function getTitle($acquittance, $col = -1) 
+    {
+         //PAY AND ALLOWANCE IN RESPECT OF Gazetted Officers1 FOR October 2022,,,,,,,,,,,,,,,,,,,,,,,,,,,
+      
+        if( -1 == $col){
+            $acquittance = strstr($acquittance, ',', true);
+           
+        } else {
+            $arr = explode("\r", $acquittance);
+            $acquittance = strstr($arr[$col], ',', true);
+            $acquittance = trim($acquittance, '\'"'); // any combination of ' and "
+          
+        }
+
+        $acquittance = str_replace('IN RESPECT OF', '-', $acquittance);
+        $acquittance = str_replace('THE MONTH OF', '', $acquittance);
+        $acquittance = str_replace('FOR THE PERIOD', '', $acquittance);
+        $acquittance = str_replace('PAYBILL OF', '', $acquittance);
+                    
+
+        return $acquittance;
+
+    }
+
+    public function getpdfType($innerlines, &$start, &$acquittance, &$sparkcode)
     {
         $start = 0;
 
@@ -35,8 +88,7 @@ class Extract
             $l = $innerlines[$i];
 
             if (0 == strncmp($l, 'Spark Code :', strlen('Spark Code :'))) {
-                $arr = explode('Spark Code :', $l);
-                $sparkcode = strstr($arr[1], ',', true);
+                $this->getSparkCode($l, $sparkcode);
             }
 
             if ($type !== self::UNKNOWN && strlen($sparkcode)) {
@@ -48,7 +100,7 @@ class Extract
             }
 
             if (0 == strncmp($l, 'GOVERNMENT OF KERALA', strlen('GOVERNMENT OF KERALA'))) {
-                //GET month between FOR and coma in: PAY AND ALLOWANCE IN RESPECT OF Gazetted Officers1 FOR October 2022,,,,,,,,,,,,,,,,,,,,,,,,,,,
+                //PAY AND ALLOWANCE IN RESPECT OF Gazetted Officers1 FOR October 2022,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
                 if (false !== strpos($innerlines[$i + 3], 'PAY AND ALLOWANCE IN RESPECT OF')) {
                     $type = self::SALARYBILL;
@@ -57,12 +109,9 @@ class Extract
                         $type = self::SALARYBILLMULTIPLE;
                     }
 
-                    //GET month between FOR and coma in: PAY AND ALLOWANCE IN RESPECT OF Gazetted Officers1 FOR October 2022,,,,,,,,,,,,,,,,,,,,,,,,,,,
-                    $acquittance = $innerlines[$i + 3];
-                    $acquittance = strstr($acquittance, ',', true);
-                    $acquittance = str_replace('IN RESPECT OF', '-', $acquittance);
-                    $acquittance = str_replace('THE MONTH OF', '', $acquittance);
-
+                    //PAY AND ALLOWANCE IN RESPECT OF Gazetted Officers1 FOR October 2022,,,,,,,,,,,,,,,,,,,,,,,,,,,
+                    $acquittance = $this->getTitle($innerlines[$i + 3]);
+                     
                     continue;
                 }
 
@@ -71,11 +120,7 @@ class Extract
                     $start = $i + 3;
 
                     //PAY AND ALLOWANCE IN RESPECT OF Gazetted Officers1 FOR October 2022,,,,,,,,,,,,,,,,,,,,,,,,,,,
-
-                    $acquittance = $innerlines[$i + 3];
-                    $acquittance = strstr($acquittance, ',', true);
-                    $acquittance = str_replace('IN RESPECT OF', '-', $acquittance);
-                    $acquittance = str_replace('THE MONTH OF', '', $acquittance);
+                    $acquittance = $this->getTitle($innerlines[$i + 3]);
 
                     continue;
                 }
@@ -85,12 +130,8 @@ class Extract
                 $type = self::FESTIVALALLOWANCE;
 
                 //.....\rFESTIVAL ALLOWANCE IN RESPECT OF MLA HOSTEL FOR THE MONTH OF September 2022",
-                $arr = explode("\r", $l);
+                $acquittance = $this->getTitle($l, 4);
                 $start = $i;
-                $acquittance = strstr($arr[4], ',', true);
-                $acquittance = trim($acquittance, '\'"'); // any combination of ' and "
-                $acquittance = str_replace('IN RESPECT OF', '-', $acquittance);
-                $acquittance = str_replace('THE MONTH OF', '', $acquittance);
 
                 continue;
             }
@@ -98,12 +139,9 @@ class Extract
                 $type = self::BONUS;
 
                 //.....\rAD HOC BONUS IN RESPECT OF MLA HOSTEL FOR THE MONTH OF September 2022,
-                $arr = explode("\r", $l);
+                $acquittance = $this->getTitle($l, 4);
                 $start = $i;
-                $acquittance = strstr($arr[4], ',', true);
-                $acquittance = trim($acquittance, '\'"'); // any combination of ' and "
-                $acquittance = str_replace('IN RESPECT OF', '-', $acquittance);
-                $acquittance = str_replace('THE MONTH OF', '', $acquittance);
+               
 
                 continue;
             }
@@ -112,47 +150,47 @@ class Extract
                 $type = self::OVERTIME_ALLOWANCE;
 
                 //.....\rPAY AND ALLOWANCE IN RESPECT OF MLA HOSTEL FOR September 2022",
-                $arr = explode("\r", $l);
+               
                 $start = $i;
-
-                $acquittance = strstr($arr[3], ',', true);
-                $acquittance = trim($acquittance, '\'"'); // any combination of ' and "
+                $acquittance = $this->getTitle($l, 3);
                 $acquittance = str_replace('PAY AND ALLOWANCE IN RESPECT OF ', 'OVERTIME ALLOWANCE - ', $acquittance);
 
                 continue;
             }
             if (0 == strncmp($l, 'Due and drawn statement cum D.A. ARREAR', strlen('Due and drawn statement cum D.A. ARREAR'))) {
                 $type = self::DA_ARREAR;
-                $acquittance = $innerlines[$i];
-                $acquittance = strstr($acquittance, ',', true);
+                $acquittance = $this->getTitle($l);
+           
                 $start = $i;
             }
             if (0 == strncmp($l, 'Due and drawn statement cum PAY', strlen('Due and drawn statement cum PAY'))) {
                 $type = self::PAY_ARREAR;
-                $acquittance = $innerlines[$i];
-                $acquittance = strstr($acquittance, ',', true);
+                $acquittance = $this->getTitle($l);
                 $start = $i+1; //on more column than DA arrear statement to the header
             }
-        }
 
-        if ($sparkcode == '') {
-            for ($i = count($no_lattice) - 1; $i >= 0; $i--) {
-                $l = $no_lattice[$i];
 
-                if (false !== strpos($l, 'Spark Code :')) {
-                    $sparkcode = substr($l, strlen('Spark Code :') + strpos($l, 'Spark Code :'));
-                    $sparkcode = strstr($sparkcode, ',', true);
-                    $sparkcode = trim($sparkcode, '\'" ,');
-                    if (strpos($sparkcode, ' ') === false) {
-                        $sparkcode = substr($sparkcode, 0, 20); //remove page number
-                        $sparkcode = chunk_split($sparkcode, 5, ' '); //insert space every 5th position
-                    }
-                    $sparkcode = trim($sparkcode, ' ');
-
-                    break;
-                }
+            if (0 == strncmp($l, 'SURRENDER LEAVE SALARY', strlen('SURRENDER LEAVE SALARY'))) {
+                $type = self::SURRENDER;
+                $acquittance = $this->getTitle($l);
+                $start = $i+1; 
             }
+
+            if (0 == strncmp($l, 'NATURE OF CLAIM-,Medical Reimbursement Bill', strlen('NATURE OF CLAIM-,Medical Reimbursement Bill'))) {
+                $type = self::MR;
+                $acquittance = 'MEDICAL REIMBURSEMENT';
+                $start = $i+1; 
+            }
+            
+            if (0 == strncmp($l, 'NATURE OF CLAIM-,Pay and Allowance for Employees with SPARK ID', strlen('NATURE OF CLAIM-,Pay and Allowance for Employees with SPARK ID'))) {
+                $type = self::SPARK_ID_PAY;
+                $acquittance = 'Pay and Allowance for Employees with SPARK ID';
+                $start = $i+1; 
+            }
+            
         }
+
+       
 
         return $type;
     }
@@ -162,28 +200,40 @@ class Extract
         
         $grosscol = -1;
         $it_col = -1;
-
-        for ($i = $start; $i < count($innerlines); $i++) {
+        $ITColNames = [ 'IT', 'INCOME TAX DEDUCTION', 'Income tax to be deducted' ];
+                               
+        for ($i = $start+1; $i < count($innerlines); $i++) {
             
             $l = $innerlines[$i];
             $heading = str_replace("\r",' ', $l);
             
             $cols = str_getcsv($heading);
 
-            for ($j = 0; $j < count($cols); $j++) {
-                if (strcmp($cols[$j], $fieldGross ) === 0) {
+           for ($j = 0; $j < count($cols); $j++) {
+                if (strcmp($cols[$j], $fieldGross ) === 0) { //this will automatically find the last matching column if there are multiple 'total' cols like in lkeave surrender
                     $grosscol = $j;
+                   
                 }
                 if (strcmp($cols[$j], $fieldIT) === 0) {
                     $it_col = $j;
                 }
             }
-            
+            if(!$has_it){
+                for ($j = 0; $j < count($ITColNames); $j++){
+                    if( in_array( $ITColNames[$j],$cols)){
+                       $errors[] = 'has a column for IT: ' . $ITColNames[$j];
+                       return false;
+                    }
+                }
+
+            }
+
             if (-1 !== $grosscol){
                 break;
             }
         }
-   
+
+        
 
         // dd($cols);
         if (-1 == $grosscol) {
@@ -278,15 +328,15 @@ class Extract
         return  $data;
     }
 
-    public function processpdftext($inner, $no_lattice, &$pens, &$errors, &$acquittance, &$sparkcode, $tds_rows_only, $has_it)
+    public function processpdftext($inner,  &$pens, &$errors, &$acquittance, &$sparkcode, $tds_rows_only, $has_it)
     {
         // $out = new \Symfony\Component\Console\Output\ConsoleOutput();
 
         $innerlines = explode("\r\n", $inner);
-        $nolattice_lines = explode("\r\n", $no_lattice);
+       
 
         $start = 0;
-        $type = $this->getpdfType($innerlines, $nolattice_lines, $start, $acquittance, $sparkcode);
+        $type = $this->getpdfType($innerlines, $start, $acquittance, $sparkcode);
 
         switch($type) {
             case self::SALARYBILL:
@@ -303,19 +353,26 @@ class Extract
                 return $this->processDaArrear($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it );
             case self::SALARYBILLMULTIPLE:
                 return $this->processDaArrear($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it, 'Gross Salary', 'IT', 1 );
+            case self::SURRENDER:
+                 return $this->processFestivalAllowance($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it, 'TOTAL', 'INCOME TAX DEDUCTION');
+            case self::MR:
+                return $this->processMedical($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it, 'Amount `');
+            case self::SPARK_ID_PAY:
+                return $this->processMedical($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it, 'Net Amount`', 'IT');
+                                                                                                                                          
         }
 
         return [];
     }
 
-    public function processFestivalAllowance($start, $innerlines, &$pens, &$errors, $tds_rows_only, $has_it, $fieldGross)
+    public function processFestivalAllowance($start, $innerlines, &$pens, &$errors, $tds_rows_only, $has_it, $fieldGross,$fieldIT)
     {
         $heading = '';
 
         $i = $start;
         $i += 2;
    
-        if(! $this->findColumnIndex($start, $innerlines,  $has_it, $errors, $grosscol, $it_col, $fieldGross ) ){
+        if(! $this->findColumnIndex($start, $innerlines,  $has_it, $errors, $grosscol, $it_col, $fieldGross,$fieldIT ) ){
             return [];
         }
 
@@ -357,7 +414,7 @@ class Extract
     public static function IsPEN($pen)
     {
         return  (strlen( $pen) >=6) && (strlen( $pen)  <= 8) &&
-                ((int) filter_var($pen, FILTER_SANITIZE_NUMBER_INT) >= 100000) && //should have a number inside exlcuding chars
+                ((int) filter_var($pen, FILTER_SANITIZE_NUMBER_INT) >= 10000) && //should have a number inside exlcuding chars
                 FALSE === strpos($pen, ' ');
 
     }
@@ -444,4 +501,51 @@ class Extract
 
         return  $data;
     }
+
+    
+    public function processMedical($start, $innerlines, &$pens, &$errors, $tds_rows_only, $has_it, $fieldGross,$fieldIT='IT')
+    {
+        $heading = '';
+
+        $i = $start;
+        $i += 2;
+       
+        if(! $this->findColumnIndex($start, $innerlines,  $has_it, $errors, $grosscol, $it_col, $fieldGross,$fieldIT ) ){
+            return [];
+        }
+
+        $data = [];
+
+        $slno = 1;
+        $tds_total = 0;
+        for (; $i < count($innerlines); $i++) {
+            $l = $innerlines[$i];
+            $slnotxt = sprintf('%u,', $slno);
+            //  $out->writeln($slnotxt);
+
+            if (0 == strncmp($l, $slnotxt, strlen($slnotxt))) {
+                $slno++;
+                $cols = str_getcsv($l);
+
+                $pen = trim($cols[2]); 
+                $name = trim($cols[1]); 
+
+                $items = [
+                    'slno' => $slno - 1,
+                    'pen' => $pen,
+                    'name' => $name,
+                    'gross' => $cols[$grosscol],
+                    'tds' => '0',
+
+                ];
+
+                $pens[] = $pen;
+
+                $data[] = $items;
+            }
+        }
+// dd($data);
+        return  $data;
+    }
+
 }

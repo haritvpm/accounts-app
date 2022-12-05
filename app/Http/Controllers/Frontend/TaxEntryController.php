@@ -154,15 +154,6 @@ class TaxEntryController extends Controller
             ])
             ->convert();
 
-        $tabula2 = new Tabula('/usr/bin/');
-        $no_lattice = $tabula2->setPdf($fileName1) //comvert without lattice mode which only takes borders, and ignores sparkcode in some pdf like festival allowance
-        ->setOptions([
-            'format' => 'csv',
-            'pages' => 'all', //in festival allowance first page spark code and page number (1) are concatenated. it is ok in other pages. so we cant take just first page
-            'stream' => true,
-        ])
-        ->convert();
-
         //handle conversion
         $pens = [];
         $errors = [];
@@ -174,9 +165,23 @@ class TaxEntryController extends Controller
         $extract = new Extract();
         $acquittance = '';
         $sparkcode = '';
-        $data = $extract->processpdftext($result1, $no_lattice,
+        $data = $extract->processpdftext($result1,
             $pens, $errors, $acquittance, $sparkcode,
             $request->tds_rows_only, $request->has_it);
+
+        if ($sparkcode == '') {
+            $tabula2 = new Tabula('/usr/bin/');
+            $no_lattice = $tabula2->setPdf($fileName1) //comvert without lattice mode which only takes borders, and ignores sparkcode in some pdf like festival allowance
+            ->setOptions([
+                'format' => 'csv',
+                'pages' => 'all', //in festival allowance first page spark code and page number (1) are concatenated. it is ok in other pages. so we cant take just first page
+                'stream' => true,
+            ])
+            ->convert();
+
+            $extract->getSparkCode($no_lattice, $sparkcode);
+        }
+
 
         File::delete($fileName1);
 
