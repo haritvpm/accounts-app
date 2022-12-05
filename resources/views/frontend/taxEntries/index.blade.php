@@ -5,11 +5,11 @@
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <a class="btn btn-success" href="{{ route('frontend.tax-entries.create-311') }}">
-                Upload (with 311)
+                Upload Salary Bill and 311
             </a>
         
             <a class="btn btn-dark" href="{{ route('frontend.tax-entries.create') }}">
-                Upload (without 311)
+                Upload Bill
             </a>
         </div>
     </div>
