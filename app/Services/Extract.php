@@ -22,7 +22,8 @@ class Extract
     const SURRENDER = 'SURRENDER';
     const MR = 'MR';
     const SPARK_ID_PAY = 'SPARK_ID_PAY';
-    
+    const DECEASED = 'DECEASED';
+
     public function __construct()
     {
     }
@@ -87,7 +88,7 @@ class Extract
         for ($i = 0; $i < count($innerlines); $i++) {
             $l = $innerlines[$i];
 
-            if (0 == strncmp($l, 'Spark Code :', strlen('Spark Code :'))) {
+            if (str_starts_with($l, 'Spark Code :')) {
                 $this->getSparkCode($l, $sparkcode);
             }
 
@@ -99,7 +100,7 @@ class Extract
                 continue; //already found a type. no need to parse fully
             }
 
-            if (0 == strncmp($l, 'GOVERNMENT OF KERALA', strlen('GOVERNMENT OF KERALA'))) {
+            if (str_starts_with($l, 'GOVERNMENT OF KERALA')) {
                 //PAY AND ALLOWANCE IN RESPECT OF Gazetted Officers1 FOR October 2022,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
                 if (false !== strpos($innerlines[$i + 3], 'PAY AND ALLOWANCE IN RESPECT OF')) {
@@ -157,35 +158,40 @@ class Extract
 
                 continue;
             }
-            if (0 == strncmp($l, 'Due and drawn statement cum D.A. ARREAR', strlen('Due and drawn statement cum D.A. ARREAR'))) {
+            if (str_starts_with($l, 'Due and drawn statement cum D.A. ARREAR')) {
                 $type = self::DA_ARREAR;
                 $acquittance = $this->getTitle($l);
            
                 $start = $i;
             }
-            if (0 == strncmp($l, 'Due and drawn statement cum PAY', strlen('Due and drawn statement cum PAY'))) {
+            if (str_starts_with($l, 'Due and drawn statement cum PAY')) {
                 $type = self::PAY_ARREAR;
                 $acquittance = $this->getTitle($l);
                 $start = $i+1; //on more column than DA arrear statement to the header
             }
 
 
-            if (0 == strncmp($l, 'SURRENDER LEAVE SALARY', strlen('SURRENDER LEAVE SALARY'))) {
+            if (str_starts_with($l, 'SURRENDER LEAVE SALARY')) {
                 $type = self::SURRENDER;
                 $acquittance = $this->getTitle($l);
                 $start = $i+1; 
             }
 
-            if (0 == strncmp($l, 'NATURE OF CLAIM-,Medical Reimbursement Bill', strlen('NATURE OF CLAIM-,Medical Reimbursement Bill'))) {
+            if (str_starts_with($l, 'NATURE OF CLAIM-,Medical Reimbursement Bill')) {
                 $type = self::MR;
                 $acquittance = 'MEDICAL REIMBURSEMENT';
                 $start = $i+1; 
             }
             
-            if (0 == strncmp($l, 'NATURE OF CLAIM-,Pay and Allowance for Employees with SPARK ID', strlen('NATURE OF CLAIM-,Pay and Allowance for Employees with SPARK ID'))) {
+            if (str_starts_with($l, 'NATURE OF CLAIM-,Pay and Allowance for Employees with SPARK ID')) {
                 $type = self::SPARK_ID_PAY;
                 $acquittance = 'Pay and Allowance for Employees with SPARK ID';
                 $start = $i+1; 
+            }
+            if (str_starts_with($l, 'NATURE OF CLAIM-,Salary of deceased employees to Nominees')) {
+                $type = self::DECEASED;
+                $acquittance = 'Salary of deceased employees to Nominees';
+                $start = $i+24;  //skip to header with bank data.
             }
             
         }
@@ -272,7 +278,7 @@ class Extract
             $slnotxt = sprintf('%u,', $slno);
             //  $out->writeln($slnotxt);
 
-            if (0 == strncmp($l, $slnotxt, strlen($slnotxt))) {
+            if (str_starts_with($l, $slnotxt)) {
                 $slno++;
                 $cols = str_getcsv($l);
 
@@ -311,7 +317,7 @@ class Extract
         if ($has_it) {
             for ($r = count($innerlines) - 1; $it_col !== -1 && $r >= 0; $r--) {
                 $totalline = $innerlines[$r];
-                if (0 == strncmp($totalline, 'Total', strlen('Total'))) {
+                if (str_starts_with($totalline, 'Total')) {
                     $cols = str_getcsv($totalline);
                     $total_as_per_sheet = $cols[$it_col - 1]; //sl.no and name cols merged into one, so one before
                     if ($tds_total != $total_as_per_sheet) {
@@ -359,7 +365,9 @@ class Extract
                 return $this->processMedical($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it, 'Amount `');
             case self::SPARK_ID_PAY:
                 return $this->processMedical($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it, 'Net Amount`', 'IT');
-                                                                                                                                          
+            case self::DECEASED:
+                return $this->processDeceased($start, $innerlines, $pens, $errors, $tds_rows_only, $has_it, 'Amount`');
+                                                                                                                                           
         }
 
         return [];
@@ -367,8 +375,7 @@ class Extract
 
     public function processFestivalAllowance($start, $innerlines, &$pens, &$errors, $tds_rows_only, $has_it, $fieldGross,$fieldIT)
     {
-        $heading = '';
-
+        
         $i = $start;
         $i += 2;
    
@@ -385,19 +392,30 @@ class Extract
             $slnotxt = sprintf('%u,', $slno);
             //  $out->writeln($slnotxt);
 
-            if (0 == strncmp($l, $slnotxt, strlen($slnotxt))) {
+            if (str_starts_with($l, $slnotxt)) {
                 $slno++;
                 $cols = str_getcsv($l);
 
                 $pen = trim($cols[1]); //remove any hyphen 'revised'
                 $name = trim($cols[2]); //remove any hyphen 'revised'
 
+                $tds = '0';
+
+                if ($has_it) {
+                    $tds = $cols[$it_col];
+                    $tds_total += $cols[$it_col];
+
+                    if (intval($tds) == 0 && $tds_rows_only) {
+                        continue;
+                    }
+                }
+
                 $items = [
                     'slno' => $slno - 1,
                     'pen' => $pen,
                     'name' => $name,
                     'gross' => $cols[$grosscol],
-                    'tds' => '0',
+                    'tds' => $tds,
 
                 ];
 
@@ -426,8 +444,7 @@ class Extract
                                     $fieldgross='Total', $fieldIT='Income tax to be deducted',
                                     $coloffset = 2)
     {
-        $heading = '';
-
+       
         $i = $start;
         $i += 4;
          
@@ -452,7 +469,7 @@ class Extract
                     $errors[] = 'Grand Total and individual sum dont match';
                     return [];
                 }
-                if($cols[$it_col-$coloffset] != $totaltds){
+                if( $has_it && $cols[$it_col-$coloffset] != $totaltds){
                     $errors[] = 'Grand Total TDS and individual sum dont match';
                     return [];
                 }
@@ -474,7 +491,17 @@ class Extract
                     if( $cols[0] == 'Total' ){
 
                         $gross = $cols[$grosscol-$coloffset];// first two cols are merged
-                        $tds = $cols[$it_col-$coloffset];// first two cols are merged
+
+                        $tds = '0';
+
+                        if ($has_it) {
+                            $tds = $cols[$it_col-$coloffset];// first two cols are merged
+                            if (intval($tds) == 0 && $tds_rows_only) {
+                                continue;
+                            }
+                            $totaltds += $tds;
+                        }
+
                         $items = [
                             'slno' => $slno++,
                             'pen' => $pen,
@@ -487,7 +514,7 @@ class Extract
                         $pens[] = $pen;
                         $data[] = $items;
                         $totalarrear += $gross;
-                        $totaltds += $tds;
+                       
                         break;
                     }
                 }
@@ -505,8 +532,7 @@ class Extract
     
     public function processMedical($start, $innerlines, &$pens, &$errors, $tds_rows_only, $has_it, $fieldGross,$fieldIT='IT')
     {
-        $heading = '';
-
+    
         $i = $start;
         $i += 2;
        
@@ -523,19 +549,32 @@ class Extract
             $slnotxt = sprintf('%u,', $slno);
             //  $out->writeln($slnotxt);
 
-            if (0 == strncmp($l, $slnotxt, strlen($slnotxt))) {
+            if (str_starts_with($l, $slnotxt)) {
                 $slno++;
                 $cols = str_getcsv($l);
 
                 $pen = trim($cols[2]); 
                 $name = trim($cols[1]); 
 
+
+                $tds = '0';
+
+                if ($has_it) {
+                    $tds = $cols[$it_col];
+                    $tds_total += $cols[$it_col];
+
+                    if (intval($tds) == 0 && $tds_rows_only) {
+                        continue;
+                    }
+                }
+
+
                 $items = [
                     'slno' => $slno - 1,
                     'pen' => $pen,
                     'name' => $name,
                     'gross' => $cols[$grosscol],
-                    'tds' => '0',
+                    'tds' => $tds,
 
                 ];
 
@@ -545,6 +584,65 @@ class Extract
             }
         }
 // dd($data);
+        return  $data;
+    }
+
+    
+    public function processDeceased($start, $innerlines, &$pens, &$errors, $tds_rows_only, $has_it, $fieldGross,$fieldIT='IT')
+    {
+           
+        if(! $this->findColumnIndex($start, $innerlines,  $has_it, $errors, $grosscol, $it_col, $fieldGross,$fieldIT ) ){
+            return [];
+        }
+
+        $data = [];
+
+        $slno = 0;
+        $tds_total = 0;
+        
+        $i = $start+2; //next line after header
+
+        for (; $i < count($innerlines); $i++) {
+            $l = $innerlines[$i];
+          
+            if (str_starts_with($l, 'Payees'))
+            {
+                break;
+            }
+             {
+                $slno++;
+                $cols = str_getcsv($l);
+
+                $account = trim($cols[$grosscol-2]); 
+                $name = trim($cols[0]); 
+
+                $tds = '0';
+
+                if ($has_it) {
+                    $tds = $cols[$it_col];
+                    $tds_total += $cols[$it_col];
+
+                    if (intval($tds) == 0 && $tds_rows_only) {
+                        continue;
+                    }
+                }
+
+
+                $items = [
+                    'slno' => $slno,
+                    'pen' => $account,
+                    'name' => $name,
+                    'gross' => $cols[$grosscol],
+                    'tds' => $tds,
+
+                ];
+
+                $pens[] = $account;
+
+                $data[] = $items;
+            }
+        }
+//  dd($data);
         return  $data;
     }
 
