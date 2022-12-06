@@ -61,10 +61,18 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        Total
+                                        Total Amount
                                     </th>
                                     <td>
-                                        {{ $total }}
+                                        {{ $totalgross }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Total TDS
+                                    </th>
+                                    <td>
+                                        {{ $totaltds }}
                                     </td>
                                 </tr>
                                 <tr>
