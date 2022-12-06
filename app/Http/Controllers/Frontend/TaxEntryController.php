@@ -155,19 +155,16 @@ class TaxEntryController extends Controller
             ->convert();
 
         //handle conversion
-        $pens = [];
-        $errors = [];
-
+       
+       
         $date = Carbon::createFromFormat(config('panel.date_format'), $request->date)->format('Y-m-d');
 
         $month = Carbon::createFromFormat(config('panel.date_format'), $request->date)->format('F');
 
         $extract = new Extract();
-        $acquittance = '';
-        $sparkcode = '';
-        $data = $extract->processpdftext($result1,
-            $pens, $errors, $acquittance, $sparkcode,
-            $request->tds_rows_only, $request->has_it);
+        $data = $extract->processpdftext($result1,$request->tds_rows_only, $request->has_it);
+        $sparkcode = $extract->sparkcode;
+        $acquittance = $extract->acquittance;
 
         if ($sparkcode == '') {
             $tabula2 = new Tabula('/usr/bin/');
@@ -182,22 +179,21 @@ class TaxEntryController extends Controller
             $extract->getSparkCode($no_lattice, $sparkcode);
         }
 
-
         File::delete($fileName1);
 
         //extract PAN
-        if (count($errors) > 0) {
-            return response()->json(['error' => $errors[0]]);
+        if (count($extract->errors) > 0) {
+            return response()->json(['error' => $extract->errors[0]]);
         }
 
-        $empwithpen = Employee::wherein('pen', $pens)->pluck('pen');
-        $penwithnoemp = array_diff($pens, $empwithpen->toArray());
+        $empwithpen = Employee::wherein('pen', $extract->pens)->pluck('pen');
+        $penwithnoemp = array_diff($extract->pens, $empwithpen->toArray());
 
         if (count($penwithnoemp)) {
             return response()->json(['error' => 'No Employee found for : '.implode(', ', $penwithnoemp)]);
         }
 
-        $pen_to_pan = Employee::wherein('pen', $pens)->pluck('pan', 'pen');
+        $pen_to_pan = Employee::wherein('pen', $extract->pens)->pluck('pan', 'pen');
 
         $data = collect($data)->transform(function ($item) use ($pen_to_pan) {
             $item['pan'] = $pen_to_pan[$item['pen']];
@@ -225,7 +221,7 @@ class TaxEntryController extends Controller
             //}
 
             //remove all existing items if we have similar pen. not needed since we check spark code
-            Td::where('date_id', $taxEntry->id)->whereIn('pen', $pens)->delete();
+            Td::where('date_id', $taxEntry->id)->whereIn('pen', $extract->pens)->delete();
             // Td::insert($data);
             $taxEntry->dateTds()->createMany($data);
             /* $taxEntry->update( [

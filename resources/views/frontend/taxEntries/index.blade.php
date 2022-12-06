@@ -33,7 +33,7 @@
                                         {{ trans('cruds.taxEntry.fields.date') }}
                                     </th>
                                     <th>
-                                        Acquittance
+                                        Title
                                     </th>
                                     <th>
                                         Sparkcode

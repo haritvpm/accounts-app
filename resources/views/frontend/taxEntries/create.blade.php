@@ -198,7 +198,7 @@
                 $('#tds_rows_only').prop('checked', false);
             } else {
                 $('#tds_rows_only').attr('disabled', false);
-                $('#tds_rows_only').prop('checked', true);
+                $('#tds_rows_only').prop('checked', false);
             }
         });
     </script>
