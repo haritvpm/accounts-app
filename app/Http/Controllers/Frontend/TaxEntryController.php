@@ -181,11 +181,16 @@ class TaxEntryController extends Controller
 
         File::delete($fileName1);
 
-        //extract PAN
+       
         if (count($extract->errors) > 0) {
             return response()->json(['error' => $extract->errors[0]]);
         }
 
+        if ($sparkcode == '') {
+            return response()->json(['error' => 'Unable to find Spark code']);
+        }
+
+         //extract PAN
         $empwithpen = Employee::wherein('pen', $extract->pens)->pluck('pen');
         $penwithnoemp = array_diff($extract->pens, $empwithpen->toArray());
 
@@ -194,17 +199,29 @@ class TaxEntryController extends Controller
         }
 
         $pen_to_pan = Employee::wherein('pen', $extract->pens)->pluck('pan', 'pen');
+        $pen_to_name = Employee::wherein('pen', $extract->pens)->pluck('name', 'pen');
 
-        $data = collect($data)->transform(function ($item) use ($pen_to_pan) {
+        $name_mismatches = [];
+        $data = collect($data)->transform(function ($item) use ($pen_to_pan, $pen_to_name, &$name_mismatches) {
             $item['pan'] = $pen_to_pan[$item['pen']];
             $item['created_by_id'] = auth()->id();
 
+            $name1 = str_replace(array(' ', '.'), '', $item['name']);
+            $name2 = str_replace(array(' ', '.'), '', $pen_to_name[$item['pen']]);
+
+            if( strcasecmp($name1,$name2 ) ){
+                $name_mismatches[] = $item['pen'] . ': '. $item['name'] . ' <> ' . $pen_to_name[$item['pen']] ;
+            }
+            
             return $item;
         });
 
-        if ($sparkcode == '') {
-            return response()->json(['error' => 'Unable to find Spark code']);
+        
+        if (count($name_mismatches)) {
+            return response()->json(['warning' => 'Name Mismatches: '.implode(', ', $name_mismatches)]);
         }
+
+       
 
         $taxEntry = TaxEntry::where('sparkcode', $sparkcode)->first();
         if (! $taxEntry) {
@@ -216,17 +233,12 @@ class TaxEntryController extends Controller
         }
 
         if (count($data) > 0) {
-            //foreach ($data as $tds) {
-            // $tds['date_id'] = $taxEntry->id;
-            //}
-
+          
             //remove all existing items if we have similar pen. not needed since we check spark code
-            Td::where('date_id', $taxEntry->id)->whereIn('pen', $extract->pens)->delete();
-            // Td::insert($data);
+            //Td::where('date_id', $taxEntry->id)->whereIn('pen', $extract->pens)->delete();
+            
             $taxEntry->dateTds()->createMany($data);
-            /* $taxEntry->update( [
-                'acquittance' => $acquittance,
-            ] ); */
+           
         }
 
         return response()->json(['success' => 'You have successfully upload file.']);

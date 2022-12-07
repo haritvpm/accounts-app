@@ -159,18 +159,10 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
      *
      * @throws Exception
      */
+    /*
     public static function afterSheet(AfterSheet $event)
     {
-        /*$sheet->mergeCells( 'A' . $slno . ':G' . $slno);
-        $style = array(
-            'alignment' => array(
-                'horizontal' =>'center',
-            )
-        );
-
-        $sheet->getStyle('A' . $slno . ':G' . $slno)->applyFromArray($style);
-        */
-
+        
         try {
             if ($this->adminentryheading != -1) {
                 $workSheet = $event
@@ -193,5 +185,5 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
         } catch (Exception $exception) {
             throw $exception;
         }
-    }
+    } */
 }

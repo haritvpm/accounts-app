@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+use Illuminate\Support\Str;
 
 class Extract
 {
@@ -291,10 +292,17 @@ class Extract
                 $slno++;
                 $cols = str_getcsv($l);
 
-                $pen = strstr($cols[1], ' ', true);
+                //"821472 ( 683/2017 )NAVEENJAMES NORONA -Revised"
+                $penname = str_replace(  "\r" , " ", $cols[1]);
+                                
+                $pen = strstr($penname, ' ', true);
 
-                $name = strstr($cols[1], ' ');
-                $name = trim(strstr($name, '-', true)); //remove any hyphen 'revised'
+                $name = Str::of($penname)->after(' ')->before('-' )-> after(')')->trim();
+
+               
+               /*  if($slno == 90){
+                    dd($pen .'^'. $name);
+                } */
 
                 $tds = '0';
 
