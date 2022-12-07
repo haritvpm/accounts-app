@@ -128,6 +128,24 @@ class TaxEntryController extends Controller
             ] ); */
         }
 
+        //Now add these PENS to employees;
+
+        $empwithpen = Employee::wherein('pen', $pens)->pluck('pen');
+        $penwithnoemp = array_diff($pens, $empwithpen->toArray());
+       
+        $new_employees = collect($data)->wherein( 'pen', $penwithnoemp )->map(fn ($item) => 
+                            [
+                            'pen' => $item['pen'],
+                            'pan' => $item['pan'],
+                            'name' => $item['name'],
+                            'created_by_id' => auth()->id()
+                            ]
+                        )->toArray();
+
+        if( count($new_employees) ){
+            Employee::insert($new_employees);
+        }
+
         return response()->json(['success' => 'You have successfully upload file.']);
         // return redirect()->route('frontend.tax-entries.index');
     }

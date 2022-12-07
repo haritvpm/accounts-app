@@ -104,7 +104,7 @@
 
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,
-    order: [[ 1, 'desc' ]],
+    order: [[ 0, 'desc' ]],
     pageLength: 100,
   });
   let table = $('.datatable-Employee:not(.ajaxTable)').DataTable({ buttons: dtButtons })

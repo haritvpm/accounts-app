@@ -24,6 +24,7 @@ class EmployeeController extends Controller
                 // Query the name field in status table
                 $q->where('ddo', auth()->user()->ddo); // '=' is optional
             })
+           // ->orderByDesc('id')
             ->get();
 
         return view('frontend.employees.index', compact('employees'));
