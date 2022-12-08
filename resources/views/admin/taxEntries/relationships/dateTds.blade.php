@@ -55,7 +55,7 @@
                                     <tr data-entry-id="{{ $td->id }}">
                                        
                                         <td>
-                                            {{ $td->slno ?? '' }}
+                                            {{ $td->slno ?? $loop->index+1  }}
                                         </td>
                                         <td>
                                             {{ $td->pan ?? '' }}
@@ -84,7 +84,7 @@
                                                     {{ trans('global.view') }}
                                                 </a> -->
                                       
-                                                @if( empty($td->created_by_id))
+                                                @if( empty($td->created_by_id)  || $td->date->created_by_id == auth()->id() )
                                                 <a class="btn btn-xs btn-secondary" href="{{ route('admin.tds.edit', $td->id) }}">
                                                     {{ trans('global.edit') }}
                                                 </a>

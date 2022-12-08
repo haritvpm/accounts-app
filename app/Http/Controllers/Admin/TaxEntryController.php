@@ -22,6 +22,8 @@ class TaxEntryController extends Controller
             // Query the name field in status table
             $q->where('ddo', auth()->user()->ddo); // '=' is optional
         })
+        ->withSum('dateTds', 'tds')
+        ->withSum('dateTds', 'gross')
         ->get();
 
         return view('admin.taxEntries.index', compact('taxEntries'));
@@ -71,8 +73,10 @@ class TaxEntryController extends Controller
         //  abort_if(Gate::denies('tax_entry_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $taxEntry->load('created_by', 'dateTds');
+        $totaltds = number_format($taxEntry->dateTds()->sum('tds'));
+        $totalgross = number_format($taxEntry->dateTds()->sum('gross'));
 
-        return view('admin.taxEntries.show', compact('taxEntry'));
+        return view('admin.taxEntries.show', compact('taxEntry', 'totaltds', 'totalgross'));
     }
 
     public function destroy(TaxEntry $taxEntry)

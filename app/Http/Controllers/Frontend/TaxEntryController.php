@@ -132,17 +132,16 @@ class TaxEntryController extends Controller
 
         $empwithpen = Employee::wherein('pen', $pens)->pluck('pen');
         $penwithnoemp = array_diff($pens, $empwithpen->toArray());
-       
-        $new_employees = collect($data)->wherein( 'pen', $penwithnoemp )->map(fn ($item) => 
-                            [
-                            'pen' => $item['pen'],
-                            'pan' => $item['pan'],
-                            'name' => $item['name'],
-                            'created_by_id' => auth()->id()
-                            ]
-                        )->toArray();
 
-        if( count($new_employees) ){
+        $new_employees = collect($data)->wherein('pen', $penwithnoemp)->map(fn ($item) => [
+            'pen' => $item['pen'],
+            'pan' => $item['pan'],
+            'name' => $item['name'],
+            'created_by_id' => auth()->id(),
+        ]
+        )->toArray();
+
+        if (count($new_employees)) {
             Employee::insert($new_employees);
         }
 
@@ -173,14 +172,13 @@ class TaxEntryController extends Controller
             ->convert();
 
         //handle conversion
-       
-       
+
         $date = Carbon::createFromFormat(config('panel.date_format'), $request->date)->format('Y-m-d');
 
         $month = Carbon::createFromFormat(config('panel.date_format'), $request->date)->format('F');
 
         $extract = new Extract();
-        $data = $extract->processpdftext($result1,$request->tds_rows_only, $request->has_it);
+        $data = $extract->processpdftext($result1, $request->tds_rows_only, $request->has_it);
         $sparkcode = $extract->sparkcode;
         $acquittance = $extract->acquittance;
 
@@ -199,7 +197,6 @@ class TaxEntryController extends Controller
 
         File::delete($fileName1);
 
-       
         if (count($extract->errors) > 0) {
             return response()->json(['error' => $extract->errors[0]]);
         }
@@ -208,7 +205,7 @@ class TaxEntryController extends Controller
             return response()->json(['error' => 'Unable to find Spark code']);
         }
 
-         //extract PAN
+        //extract PAN
         $empwithpen = Employee::wherein('pen', $extract->pens)->pluck('pen');
         $penwithnoemp = array_diff($extract->pens, $empwithpen->toArray());
 
@@ -224,22 +221,19 @@ class TaxEntryController extends Controller
             $item['pan'] = $pen_to_pan[$item['pen']];
             $item['created_by_id'] = auth()->id();
 
-            $name1 = str_replace(array(' ', '.'), '', $item['name']);
-            $name2 = str_replace(array(' ', '.'), '', $pen_to_name[$item['pen']]);
+            $name1 = str_replace([' ', '.'], '', $item['name']);
+            $name2 = str_replace([' ', '.'], '', $pen_to_name[$item['pen']]);
 
-            if( strcasecmp($name1,$name2 ) ){
-                $name_mismatches[] = $item['pen'] . ': '. $item['name'] . ' <> ' . $pen_to_name[$item['pen']] ;
+            if (strcasecmp($name1, $name2)) {
+                $name_mismatches[] = $item['pen'].': '.$item['name'].' <> '.$pen_to_name[$item['pen']];
             }
-            
+
             return $item;
         });
 
-        
         if (count($name_mismatches)) {
             return response()->json(['warning' => 'Name Mismatches: '.implode(', ', $name_mismatches)]);
         }
-
-       
 
         $taxEntry = TaxEntry::where('sparkcode', $sparkcode)->first();
         if (! $taxEntry) {
@@ -251,12 +245,10 @@ class TaxEntryController extends Controller
         }
 
         if (count($data) > 0) {
-          
             //remove all existing items if we have similar pen. not needed since we check spark code
             //Td::where('date_id', $taxEntry->id)->whereIn('pen', $extract->pens)->delete();
-            
+
             $taxEntry->dateTds()->createMany($data);
-           
         }
 
         return response()->json(['success' => 'You have successfully upload file.']);

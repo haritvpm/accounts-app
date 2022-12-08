@@ -162,7 +162,7 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
     /*
     public static function afterSheet(AfterSheet $event)
     {
-        
+
         try {
             if ($this->adminentryheading != -1) {
                 $workSheet = $event

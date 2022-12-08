@@ -35,7 +35,7 @@
                             </div>
                             
                                 <div class="form-group" style="margin: 5px;">
-                                    <button class="btn btn-dark" type="submit">
+                                    <button class="btn btn-success" type="submit">
                                         Download
                                     </button>
                                 </div>
@@ -53,7 +53,7 @@
 
     <div class="col-lg-12">
     
-        <a class="btn btn-secondary" href="{{ route('admin.tds.create') }}">
+        <a class="btn btn-dark" href="{{ route('admin.tds.create') }}">
             {{ trans('global.add') }} {{ trans('cruds.td.title_singular') }}
         </a>
     </div>
@@ -91,7 +91,10 @@
                                         Items
                                     </th>
                                     <th>
-                                        {{ trans('cruds.taxEntry.fields.status') }}
+                                        Total Amount
+                                    </th>
+                                    <th>
+                                        Total TDS
                                     </th>
                                     <th>
                                         &nbsp;&nbsp;
@@ -112,7 +115,7 @@
                                         {{ $taxEntry->date ?? '' }}
                                     </td>
                                     <td>
-                                      <small>  {{ $taxEntry->acquittance ?? '' }}  </small>
+                                      <small>  {{ $taxEntry->acquittance ??  $taxEntry->dateTds()?->first()?->name }}  </small>
                                     </td>
                                     <td>
                                         {{ $taxEntry->sparkcode ?? '' }}
@@ -121,8 +124,10 @@
                                         {{ $taxEntry->dateTds()->count() }}
                                     </td>
                                     
+                                    <td> {{ number_format($taxEntry->date_tds_sum_gross)}} </td>
                                     <td>
-                                        {{ App\Models\TaxEntry::STATUS_SELECT[$taxEntry->status] ?? '' }}
+                                        {{ number_format($taxEntry->date_tds_sum_tds)}}
+                                        <!-- {{ App\Models\TaxEntry::STATUS_SELECT[$taxEntry->status] ?? '' }} -->
                                     </td>
                                     <td>
 
@@ -132,8 +137,8 @@
                                         </a>
 
 
-                                        @if( empty($taxEntry->created_by_id))
-                                       <!-- admin edits from dateTds.blade  <a class="btn btn-xs btn-info"
+                                        @if( empty($taxEntry->created_by_id) || $taxEntry->created_by_id == auth()->id() )
+                                       <!--  <a class="btn btn-sm btn-info"
                                             href="  {{ route('admin.tax-entries.edit', $taxEntry->id) }}"  
                                              >
                                             {{ trans('global.edit') }}
@@ -143,7 +148,7 @@
                                             style="display: inline-block;">
                                             <input type="hidden" name="_method" value="DELETE">
                                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                            <input type="submit" class="btn btn-xs btn-danger"
+                                            <input type="submit" class="btn btn-sm btn-danger"
                                                 value="{{ trans('global.delete') }}">
                                         </form>
                                         @endif

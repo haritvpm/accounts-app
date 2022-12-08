@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+
 use Illuminate\Support\Str;
 
 class Extract
@@ -31,18 +32,22 @@ class Extract
 
     const DECEASED = 'DECEASED';
 
-    public array $pens ;
-    public array $errors ;
-    public string $acquittance ;
-    public string $sparkcode ;
+    public array $pens;
+
+    public array $errors;
+
+    public string $acquittance;
+
+    public string $sparkcode;
 
     public array $innerlines;
+
     public $tds_rows_only;
+
     public $has_it;
 
-    public function __construct(  )
+    public function __construct()
     {
-        
         $this->pens = [];
         $this->errors = [];
         $this->acquittance = '';
@@ -57,14 +62,13 @@ class Extract
             $l = $nolattice_lines[$i];
 
             if (false !== stripos($l, 'Spark Code :')) {
-            
                 $sparkcode = substr($l, strlen('Spark Code :') + stripos($l, 'Spark Code :'));
-               
+
                 $sparkcode = strtok($sparkcode, ',');
-               
+
                 $sparkcode = trim($sparkcode, '\'" ,');
-               
-                if (!str_contains($sparkcode, ' ')) {
+
+                if (! str_contains($sparkcode, ' ')) {
                     $sparkcode = substr($sparkcode, 0, 20); //remove page number
                     $sparkcode = chunk_split($sparkcode, 5, ' '); //insert space every 5th position
                 }
@@ -73,8 +77,6 @@ class Extract
                 break;
             }
         }
-        
-
     }
 
     /*
@@ -107,8 +109,8 @@ class Extract
         $type = self::UNKNOWN;
         $this->sparkcode = '';
 
-        for ($i = 0; $i < count( $this->innerlines); $i++) {
-            $l =  $this->innerlines[$i];
+        for ($i = 0; $i < count($this->innerlines); $i++) {
+            $l = $this->innerlines[$i];
 
             if (str_starts_with($l, 'Spark Code :')) {
                 $this->getSparkCode($l, $this->sparkcode);
@@ -125,25 +127,25 @@ class Extract
             if (str_starts_with($l, 'GOVERNMENT OF KERALA')) {
                 //PAY AND ALLOWANCE IN RESPECT OF Gazetted Officers1 FOR October 2022,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
-                if (str_contains( $this->innerlines[$i + 3], 'PAY AND ALLOWANCE IN RESPECT OF')) {
+                if (str_contains($this->innerlines[$i + 3], 'PAY AND ALLOWANCE IN RESPECT OF')) {
                     $type = self::SALARYBILL;
                     $start = $i;
-                    if (str_contains( $this->innerlines[$start + 3], ' PERIOD ')) {
+                    if (str_contains($this->innerlines[$start + 3], ' PERIOD ')) {
                         $type = self::SALARYBILLMULTIPLE;
                     }
 
                     //PAY AND ALLOWANCE IN RESPECT OF Gazetted Officers1 FOR October 2022,,,,,,,,,,,,,,,,,,,,,,,,,,,
-                    $this->acquittance = $this->getTitle( $this->innerlines[$i + 3]);
+                    $this->acquittance = $this->getTitle($this->innerlines[$i + 3]);
 
                     continue;
                 }
 
-                if (str_contains( $this->innerlines[$i + 3], 'PAYBILL OF FESTIVAL ADVANCE IN RESPECT OF')) {
+                if (str_contains($this->innerlines[$i + 3], 'PAYBILL OF FESTIVAL ADVANCE IN RESPECT OF')) {
                     $type = self::ONAMADVANCE;
                     $start = $i + 3;
 
                     //PAY AND ALLOWANCE IN RESPECT OF Gazetted Officers1 FOR October 2022,,,,,,,,,,,,,,,,,,,,,,,,,,,
-                    $this->acquittance = $this->getTitle( $this->innerlines[$i + 3]);
+                    $this->acquittance = $this->getTitle($this->innerlines[$i + 3]);
 
                     continue;
                 }
@@ -168,14 +170,14 @@ class Extract
                 continue;
             }
             if (strpos($l, 'PAY AND ALLOWANCE IN RESPECT') > 50 &&
-                false !== strpos( $this->innerlines[$i + 2], 'Overtime')) {
+                str_contains($this->innerlines[$i + 2], 'Overtime')) {
                 $type = self::OVERTIME_ALLOWANCE;
 
                 //.....\rPAY AND ALLOWANCE IN RESPECT OF MLA HOSTEL FOR September 2022",
 
                 $start = $i;
                 $this->acquittance = $this->getTitle($l, 3);
-                $this->acquittance = str_replace('PAY AND ALLOWANCE IN RESPECT OF ', 'OVERTIME ALLOWANCE - ', $this->acquittance);
+                $this->acquittance = str_replace('PAY AND ALLOWANCE', 'OVERTIME ALLOWANCE', $this->acquittance);
 
                 continue;
             }
@@ -224,8 +226,8 @@ class Extract
         $it_col = -1;
         $ITColNames = ['IT', 'INCOME TAX DEDUCTION', 'Income tax to be deducted'];
 
-        for ($i = $start + 1; $i < count( $this->innerlines); $i++) {
-            $l =  $this->innerlines[$i];
+        for ($i = $start + 1; $i < count($this->innerlines); $i++) {
+            $l = $this->innerlines[$i];
             $heading = str_replace("\r", ' ', $l);
 
             $cols = str_getcsv($heading);
@@ -238,10 +240,10 @@ class Extract
                     $it_col = $j;
                 }
             }
-            if (!  $this->has_it) {
+            if (! $this->has_it) {
                 for ($j = 0; $j < count($ITColNames); $j++) {
                     if (in_array($ITColNames[$j], $cols)) {
-                         $this->errors[] = 'has a column for IT: '.$ITColNames[$j];
+                        $this->errors[] = 'has a column for IT: '.$ITColNames[$j];
 
                         return false;
                     }
@@ -255,13 +257,13 @@ class Extract
 
         // dd($cols);
         if (-1 == $grosscol) {
-             $this->errors[] = 'Unable to determine column for '.$fieldGross;
+            $this->errors[] = 'Unable to determine column for '.$fieldGross;
 
             return false;
         }
 
-        if ( $this->has_it && -1 == $it_col) {
-             $this->errors[] = 'Unable to determine column for '.$fieldIT;
+        if ($this->has_it && -1 == $it_col) {
+            $this->errors[] = 'Unable to determine column for '.$fieldIT;
 
             return false;
         }
@@ -283,8 +285,8 @@ class Extract
 
         $slno = 1;
         $tds_total = 0;
-        for (; $i < count( $this->innerlines); $i++) {
-            $l =  $this->innerlines[$i];
+        for (; $i < count($this->innerlines); $i++) {
+            $l = $this->innerlines[$i];
             $slnotxt = sprintf('%u,', $slno);
             //  $out->writeln($slnotxt);
 
@@ -293,24 +295,23 @@ class Extract
                 $cols = str_getcsv($l);
 
                 //"821472 ( 683/2017 )NAVEENJAMES NORONA -Revised"
-                $penname = str_replace(  "\r" , " ", $cols[1]);
-                                
+                $penname = str_replace("\r", ' ', $cols[1]);
+
                 $pen = strstr($penname, ' ', true);
 
-                $name = Str::of($penname)->after(' ')->before('-' )-> after(')')->trim();
+                $name = Str::of($penname)->after(' ')->before('-')->after(')')->trim();
 
-               
-               /*  if($slno == 90){
-                    dd($pen .'^'. $name);
-                } */
+                /*  if($slno == 90){
+                     dd($pen .'^'. $name);
+                 } */
 
                 $tds = '0';
 
-                if ( $this->has_it) {
+                if ($this->has_it) {
                     $tds = $cols[$it_col];
                     $tds_total += $cols[$it_col];
 
-                    if (intval($tds) == 0 &&  $this->tds_rows_only) {
+                    if (intval($tds) == 0 && $this->tds_rows_only) {
                         continue;
                     }
                 }
@@ -331,14 +332,14 @@ class Extract
         }
 
         //verify tds with total
-        if ( $this->has_it) {
-            for ($r = count( $this->innerlines) - 1; $it_col !== -1 && $r >= 0; $r--) {
-                $totalline =  $this->innerlines[$r];
+        if ($this->has_it) {
+            for ($r = count($this->innerlines) - 1; $it_col !== -1 && $r >= 0; $r--) {
+                $totalline = $this->innerlines[$r];
                 if (str_starts_with($totalline, 'Total')) {
                     $cols = str_getcsv($totalline);
                     $total_as_per_sheet = $cols[$it_col - 1]; //sl.no and name cols merged into one, so one before
                     if ($tds_total != $total_as_per_sheet) {
-                         $this->errors[] = 'Unable to verify total tds'.$tds_total.'-'.$total_as_per_sheet;
+                        $this->errors[] = 'Unable to verify total tds'.$tds_total.'-'.$total_as_per_sheet;
 
                         return [];
                     }
@@ -358,20 +359,20 @@ class Extract
         $this->innerlines = explode("\r\n", $inner);
         $this->tds_rows_only = $tds_rows_only;
         $this->has_it = $has_it;
-        
+
         $start = 0;
         $type = $this->getpdfType($start);
 
         switch($type) {
             case self::SALARYBILL:
             case self::ONAMADVANCE:
-                return $this->processSalaryBill($start, );
+                return $this->processSalaryBill($start);
             case self::FESTIVALALLOWANCE:
                 return $this->processFestivalAllowance($start, 'Festival Allowance');
             case self::OVERTIME_ALLOWANCE:
-                return $this->processFestivalAllowance($start,  'Overtime Duty Allowance');
+                return $this->processFestivalAllowance($start, 'Overtime Duty Allowance');
             case self::BONUS:
-                return $this->processFestivalAllowance($start,  'Bonus');
+                return $this->processFestivalAllowance($start, 'Bonus');
             case self::DA_ARREAR:
             case self::PAY_ARREAR:
                 return $this->processDaArrear($start);
@@ -380,7 +381,7 @@ class Extract
             case self::SURRENDER:
                 return $this->processFestivalAllowance($start, 'TOTAL', 'INCOME TAX DEDUCTION');
             case self::MR:
-                return $this->processMedical($start,  'Amount `');
+                return $this->processMedical($start, 'Amount `');
             case self::SPARK_ID_PAY:
                 return $this->processMedical($start, 'Net Amount`', 'IT');
             case self::DECEASED:
@@ -390,7 +391,7 @@ class Extract
         return [];
     }
 
-    public function processFestivalAllowance($start,  $fieldGross, $fieldIT='IT')
+    public function processFestivalAllowance($start, $fieldGross, $fieldIT = 'IT')
     {
         $i = $start;
         $i += 2;
@@ -403,8 +404,8 @@ class Extract
 
         $slno = 1;
         $tds_total = 0;
-        for (; $i < count( $this->innerlines); $i++) {
-            $l =  $this->innerlines[$i];
+        for (; $i < count($this->innerlines); $i++) {
+            $l = $this->innerlines[$i];
             $slnotxt = sprintf('%u,', $slno);
             //  $out->writeln($slnotxt);
 
@@ -417,11 +418,11 @@ class Extract
 
                 $tds = '0';
 
-                if ( $this->has_it) {
+                if ($this->has_it) {
                     $tds = $cols[$it_col];
                     $tds_total += $cols[$it_col];
 
-                    if (intval($tds) == 0 &&  $this->tds_rows_only) {
+                    if (intval($tds) == 0 && $this->tds_rows_only) {
                         continue;
                     }
                 }
@@ -472,19 +473,19 @@ class Extract
         $totalarrear = 0;
         $totaltds = 0;
 
-        for (; $i < count( $this->innerlines); $i++) {
-            $l =  $this->innerlines[$i]; //"176624 Anil Kumar B , Office Superintendent",,,,,,,,,,,,,,,,,,,,,
+        for (; $i < count($this->innerlines); $i++) {
+            $l = $this->innerlines[$i]; //"176624 Anil Kumar B , Office Superintendent",,,,,,,,,,,,,,,,,,,,,
             $cols = str_getcsv($l);
 
             //last line
             if (0 === strcmp($cols[0], 'Grand Total(in figures)')) {
                 if ($cols[$grosscol - $coloffset] != $totalarrear) {
-                     $this->errors[] = 'Grand Total and individual sum dont match';
+                    $this->errors[] = 'Grand Total and individual sum dont match';
 
                     return [];
                 }
-                if ( $this->has_it && $cols[$it_col - $coloffset] != $totaltds) {
-                     $this->errors[] = 'Grand Total TDS and individual sum dont match';
+                if ($this->has_it && $cols[$it_col - $coloffset] != $totaltds) {
+                    $this->errors[] = 'Grand Total TDS and individual sum dont match';
 
                     return [];
                 }
@@ -498,8 +499,8 @@ class Extract
 
             if (Extract::IsPEN($pen)) { //it is a PEN
                 //find next 'total' line
-                for (; $i < count( $this->innerlines); $i++) {
-                    $l =  $this->innerlines[$i];
+                for (; $i < count($this->innerlines); $i++) {
+                    $l = $this->innerlines[$i];
                     $cols = str_getcsv($l);
 
                     if ($cols[0] == 'Total') {
@@ -507,9 +508,9 @@ class Extract
 
                         $tds = '0';
 
-                        if ( $this->has_it) {
+                        if ($this->has_it) {
                             $tds = $cols[$it_col - $coloffset]; // first two cols are merged
-                            if (intval($tds) == 0 &&  $this->tds_rows_only) {
+                            if (intval($tds) == 0 && $this->tds_rows_only) {
                                 continue;
                             }
                             $totaltds += $tds;
@@ -552,8 +553,8 @@ class Extract
 
         $slno = 1;
         $tds_total = 0;
-        for (; $i < count( $this->innerlines); $i++) {
-            $l =  $this->innerlines[$i];
+        for (; $i < count($this->innerlines); $i++) {
+            $l = $this->innerlines[$i];
             $slnotxt = sprintf('%u,', $slno);
             //  $out->writeln($slnotxt);
 
@@ -566,11 +567,11 @@ class Extract
 
                 $tds = '0';
 
-                if ( $this->has_it) {
+                if ($this->has_it) {
                     $tds = $cols[$it_col];
                     $tds_total += $cols[$it_col];
 
-                    if (intval($tds) == 0 &&  $this->tds_rows_only) {
+                    if (intval($tds) == 0 && $this->tds_rows_only) {
                         continue;
                     }
                 }
@@ -593,7 +594,7 @@ class Extract
         return  $data;
     }
 
-    public function processDeceased($start,  $fieldGross, $fieldIT = 'IT')
+    public function processDeceased($start, $fieldGross, $fieldIT = 'IT')
     {
         if (! $this->findColumnIndex($start, $grosscol, $it_col, $fieldGross, $fieldIT)) {
             return [];
@@ -606,8 +607,8 @@ class Extract
 
         $i = $start + 2; //next line after header
 
-        for (; $i < count( $this->innerlines); $i++) {
-            $l =  $this->innerlines[$i];
+        for (; $i < count($this->innerlines); $i++) {
+            $l = $this->innerlines[$i];
 
             if (str_starts_with($l, 'Payees')) {
                 break;
@@ -621,11 +622,11 @@ class Extract
 
             $tds = '0';
 
-            if ( $this->has_it) {
+            if ($this->has_it) {
                 $tds = $cols[$it_col];
                 $tds_total += $cols[$it_col];
 
-                if (intval($tds) == 0 &&  $this->tds_rows_only) {
+                if (intval($tds) == 0 && $this->tds_rows_only) {
                     continue;
                 }
             }

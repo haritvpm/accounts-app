@@ -38,8 +38,11 @@ class HomeController
                         // Query the name field in status table
                          $q->where('ddo', auth()->user()->ddo); // '=' is optional
                      })
-                     ->whereBetween('date', [Carbon::now()->subMonths(14), Carbon::now()])
+                     //->whereBetween('date', [Carbon::now()->subMonths(14), Carbon::now()])
+                     ->whereDate('date', '>', Carbon::now()->subMonths(14)->toDateString())
                      ->get();
+
+                  //   dd($taxEntryDetails->pluck('id'));
 
         $fields = ['pay', 'da', 'hra', 'other', 'ota'];
 

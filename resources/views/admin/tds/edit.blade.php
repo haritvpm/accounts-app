@@ -63,10 +63,16 @@
                             <span class="help-block">{{ trans('cruds.taxEntry.fields.date_helper') }}</span>
                         </div>
 
+                      
                         <div class="form-group">
+                            <a class="btn btn-secondary"  href="{{ route('admin.tax-entries.show', $td->date->id) }}">
+                            Cancel
+                            </a>
+
                             <button class="btn btn-danger" type="submit">
                                 {{ trans('global.save') }}
                             </button>
+
                         </div>
                     </form>
                 </div>

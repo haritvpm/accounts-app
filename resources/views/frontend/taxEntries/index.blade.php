@@ -78,17 +78,17 @@
                                     </td>
                                     <td>
 
-                                        <a class="btn btn-xs btn-secondary"
+                                        <a class="btn btn-sm btn-secondary"
                                             href="{{ route('frontend.tax-entries.show', $taxEntry->id) }}">
                                             {{ trans('global.view') }}
                                         </a>
 
 
 
-                                        <a class="btn btn-xs btn-light"
+                                        <!-- <a class="btn btn-sm btn-light"
                                             href="{{ route('frontend.tax-entries.edit', $taxEntry->id) }}">
                                             {{ trans('global.edit') }}
-                                        </a>
+                                        </a> -->
 
 
 
@@ -97,7 +97,7 @@
                                             style="display: inline-block;">
                                             <input type="hidden" name="_method" value="DELETE">
                                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                            <input type="submit" class="btn btn-xs btn-danger"
+                                            <input type="submit" class="btn btn-sm btn-danger"
                                                 value="{{ trans('global.delete') }}">
                                         </form>
 
