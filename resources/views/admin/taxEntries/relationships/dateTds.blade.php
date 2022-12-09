@@ -55,7 +55,7 @@
                                     <tr data-entry-id="{{ $td->id }}">
                                        
                                         <td>
-                                            {{ $td->slno ?? $loop->index+1  }}
+                                            {{ $loop->index+1  }}
                                         </td>
                                         <td>
                                             {{ $td->pan ?? '' }}
