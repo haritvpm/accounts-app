@@ -73,11 +73,11 @@
                         </td>
                             <td>
                               
-                                    <a class="btn btn-xs btn-light" href="{{ route('admin.employees.show', $employee->id) }}">
+                                    <a class="btn btn-sm btn-light" href="{{ route('admin.employees.show', $employee->id) }}">
                                     <i class="fa fa-eye"></i>
                                     </a>
                             
-                                    <a class="btn btn-xs btn-light" href="{{ route('admin.employees.edit', $employee->id) }}">
+                                    <a class="btn btn-sm btn-light" href="{{ route('admin.employees.edit', $employee->id) }}">
                                     <i class="fa fa-edit"></i>
                                     </a>
                             

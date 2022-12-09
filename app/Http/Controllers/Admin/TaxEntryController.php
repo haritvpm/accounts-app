@@ -10,6 +10,8 @@ use App\Models\Td;
 //use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Tabula\Tabula;
+use Illuminate\Support\Facades\File;
 
 class TaxEntryController extends Controller
 {
@@ -89,6 +91,41 @@ class TaxEntryController extends Controller
 
         return back();
     }
+
+    public function pdf2csv(Request $request)
+    {
+        
+        $time = time();
+
+        $fileName1 = $time.'1.'.$request->file1->extension();
+        $request->file1->move(public_path('uploads'), $fileName1);
+        $fileName1 = public_path('uploads').'/'.$fileName1;
+
+        $tabula = new Tabula('/usr/bin/');
+
+        //Tabula PHP does not return a value. It was set to output to file using 'output' param
+        // So I edited vendor/initred/laravel-tabula/src/InitRed/Tabula/Tabula.php to  return $process->getOutput(); in function run()
+
+        $result1 = $tabula->setPdf($fileName1)
+            ->setOptions([
+                'format' => 'csv',
+                'pages' => 'all',
+                'lattice' => true,
+                'stream' => false,
+            ])
+            ->convert();
+
+        File::delete($fileName1);
+        $innerlines = explode("\r\n", $result1);
+        $data =[];
+        for ( $i=0; $i < count($innerlines); $i++) {
+          
+            $data[] = str_replace("\r", ' ', $innerlines[$i]);
+        }
+        return response()->json($data);
+
+    }
+
 
     /*     public function massDestroy(MassDestroyTaxEntryRequest $request)
     {

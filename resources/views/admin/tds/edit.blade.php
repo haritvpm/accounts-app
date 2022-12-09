@@ -4,11 +4,11 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="card ">
+                <!-- <div class="card-title">
                     {{ trans('global.edit') }} {{ trans('cruds.td.title_singular') }}
-                </div>
-                <div class="panel-body">
+                </div> -->
+                <div class="card-body">
                     <form method="POST" action="{{ route("admin.tds.update", [$td->id]) }}" enctype="multipart/form-data">
                     {{ method_field('PUT') }}
                         {{csrf_field()}}

@@ -172,7 +172,10 @@
 
                         }
                         else{
-                            window.location.href = "/tax-entries"
+                           // window.location.href = "/tax-entries"
+                           var i = window.location.href.lastIndexOf("/");
+                           window.location = window.location.href.substr(0,i)
+
                         }
                     }
                 });

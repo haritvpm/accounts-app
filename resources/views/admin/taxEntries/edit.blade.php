@@ -5,9 +5,9 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-heading">
+                <!-- <div class="card-heading">
                     {{ trans('global.edit') }} {{ trans('cruds.taxEntry.title_singular') }}
-                </div>
+                </div> -->
                 <div class="card-body">
                     <form method="POST" action="{{ route('admin.tax-entries.update', [$taxEntry->id]) }}"
                       enctype="multipart/form-data">

@@ -45,9 +45,9 @@
                                     <th>
                                         {{ trans('cruds.td.fields.date') }}
                                     </th>
-                                    <!-- <th>
+                                    <th>
                                         &nbsp;
-                                    </th> -->
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -55,7 +55,7 @@
                                     <tr data-entry-id="{{ $td->id }}">
                                        
                                         <td>
-                                            {{  $loop->index+1 ?? '' }}
+                                            {{  $loop->iteration ?? '' }}
                                         </td>
                                         <td>
                                             {{ $td->pan ?? '' }}
@@ -75,23 +75,26 @@
                                         <td>
                                             {{ $td->date->date ?? '' }}
                                         </td>
-                                        <!-- <td>
+                                        <td>
                                           
-                                                <a class="btn btn-xs btn-primary" href="{{ route('frontend.tds.show', $td->id) }}">
+                                                <!-- <a class="btn btn-sm btn-primary" href="{{ route('frontend.tds.show', $td->id) }}">
                                                     {{ trans('global.view') }}
-                                                </a>
-                                      
-                                                <a class="btn btn-xs btn-info" href="{{ route('frontend.tds.edit', $td->id) }}">
+                                                </a> -->
+                                                <!-- edit if this is a manual entry which does not have sparkcode. no edit if parsed from pdf -->
+                                                @if(  $td->date->created_by_id == auth()->id() && empty($td->date->sparkcode))
+                                                <a class="btn btn-sm btn-info" href="{{ route('frontend.tds.edit', $td->id) }}">
                                                     {{ trans('global.edit') }}
                                                 </a>
-                                      
+                                                @endif
+                                               
+<!--                                       
                                                 <form action="{{ route('frontend.tds.destroy', $td->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                    <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
-                                                </form>
+                                                    <input type="submit" class="btn btn-sm btn-danger" value="{{ trans('global.delete') }}">
+                                                </form> -->
                                    
-                                        </td> -->
+                                        </td>
 
                                     </tr>
                                 @endforeach

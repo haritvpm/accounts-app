@@ -49,8 +49,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::post('employees/parse-spark-import', 'EmployeeController@parseSparkImport')->name('employees.parseSparkImport');
     Route::post('employees/process-spark-import', 'EmployeeController@processSparkImport')->name('employees.processSparkImport');
-
     Route::resource('employees', 'EmployeeController');
+
+    //pd2csv
+    
+    Route::view('pdf2csv', 'admin.taxEntries.pdf2csv');
+    Route::post('pdf2csv', 'TaxEntryController@pdf2csv')->name('tax-entries.pdf2csv');
+
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password

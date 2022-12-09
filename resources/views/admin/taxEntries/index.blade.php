@@ -54,7 +54,7 @@
     <div class="col-lg-12">
     
         <a class="btn btn-dark" href="{{ route('admin.tds.create') }}">
-            {{ trans('global.add') }} {{ trans('cruds.td.title_singular') }}
+            {{ trans('global.add') }} 26Q
         </a>
     </div>
 </div>

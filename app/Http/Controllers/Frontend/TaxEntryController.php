@@ -110,7 +110,7 @@ class TaxEntryController extends Controller
                 $request->except(['file1', 'file2']) + ['acquittance' => $acquittance, 'sparkcode' => $sparkcode]
             );
         } else {
-            return response()->json(['error' => 'Spark code already exists']);
+            return response()->json(['error' => 'Spark code ' . $sparkcode . ' already exists']);
         }
 
         //$this->array_to_csv_download($data);
@@ -241,7 +241,7 @@ class TaxEntryController extends Controller
                 $request->except(['file1', 'tds_rows_only', 'has_it']) + ['acquittance' => $acquittance, 'sparkcode' => $sparkcode]
             );
         } else {
-            return response()->json(['error' => 'Spark code already exists']);
+            return response()->json(['error' => 'Spark code ' . $sparkcode . ' already exists']);
         }
 
         if (count($data) > 0) {

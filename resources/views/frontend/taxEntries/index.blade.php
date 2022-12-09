@@ -11,6 +11,14 @@
             <a class="btn btn-dark" href="{{ route('frontend.tax-entries.create') }}">
                 Upload Bill
             </a>
+
+          
+            <a class="btn btn-dark" href="{{ route('frontend.tds.create') }}">
+                {{ trans('global.add') }} Entry
+            </a>
+     
+
+
         </div>
     </div>
 
@@ -63,7 +71,7 @@
                                         {{ $taxEntry->date ?? '' }}
                                     </td>
                                     <td>
-                                        <small>{{ $taxEntry->acquittance ?? '' }} </small>
+                                        <small>{{ $taxEntry->acquittance ??  $taxEntry->dateTds()?->first()?->name }} </small>
                                     </td>
                                     <td>
                                     {{ $taxEntry->sparkcode ?? '' }}

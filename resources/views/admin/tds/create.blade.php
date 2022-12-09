@@ -7,9 +7,9 @@
             <div class="card">
                
                 <div class="card-body">
-                <div class="card-title">
+                <!-- <div class="card-title">
                     {{ trans('global.create') }} {{ trans('cruds.td.title_singular') }}
-                </div>
+                </div> -->
                     <form method="POST" action="{{ route("admin.tds.store") }}" enctype="multipart/form-data">
                     {{ method_field('POST') }}
                         {{csrf_field()}}

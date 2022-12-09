@@ -51,7 +51,7 @@ class TdsController extends Controller
 
         $td = Td::create(array_merge($request->except(['date']), ['date_id' => $taxEntry->id]));
 
-        return redirect()->route('admin.tds.index');
+        return redirect()->route('admin.taxEntries.index');
     }
 
     public function edit(Td $td)

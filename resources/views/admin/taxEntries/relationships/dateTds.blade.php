@@ -55,7 +55,7 @@
                                     <tr data-entry-id="{{ $td->id }}">
                                        
                                         <td>
-                                            {{ $loop->index+1  }}
+                                            {{ $loop->iteration  }}
                                         </td>
                                         <td>
                                             {{ $td->pan ?? '' }}
@@ -80,12 +80,12 @@
                                         
                                           
 <!-- 
-                                                <a class="btn btn-xs btn-primary" href="{{ route('frontend.tds.show', $td->id) }}">
+                                                <a class="btn btn-sm btn-primary" href="{{ route('frontend.tds.show', $td->id) }}">
                                                     {{ trans('global.view') }}
                                                 </a> -->
                                       
                                                 @if( empty($td->created_by_id)  || $td->date->created_by_id == auth()->id() )
-                                                <a class="btn btn-xs btn-secondary" href="{{ route('admin.tds.edit', $td->id) }}">
+                                                <a class="btn btn-sm btn-secondary" href="{{ route('admin.tds.edit', $td->id) }}">
                                                     {{ trans('global.edit') }}
                                                 </a>
                                                 @endif
@@ -93,7 +93,7 @@
                                                 <form action="{{ route('frontend.tds.destroy', $td->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                    <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
+                                                    <input type="submit" class="btn btn-sm btn-danger" value="{{ trans('global.delete') }}">
                                                 </form> -->
                                    
                                         </td>

@@ -5,9 +5,9 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-heading">
+                <!-- <div class="card-heading">
                     {{ trans('global.create') }} {{ trans('cruds.td.title_singular') }}
-                </div>
+                </div> -->
                 <div class="card-body">
                     <form method="POST" action="{{ route("frontend.tds.store") }}" enctype="multipart/form-data">
                     {{ method_field('POST') }}
@@ -53,16 +53,13 @@
                             <span class="help-block">{{ trans('cruds.td.fields.tds_helper') }}</span>
                         </div>
                         <div class="form-group {{ $errors->has('date') ? 'has-error' : '' }}">
-                            <label class="required" for="date_id">{{ trans('cruds.td.fields.date') }}</label>
-                            <select class="form-control select2" name="date_id" id="date_id" required>
-                                @foreach($dates as $id => $entry)
-                                    <option value="{{ $id }}" {{ old('date_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                                @endforeach
-                            </select>
+                            <label class="required" for="date">{{ trans('cruds.taxEntry.fields.date') }}</label>
+                            <input class="form-control date" type="text" name="date" id="date" value="{{ old('date') }}"
+                                required>
                             @if($errors->has('date'))
-                                <span class="help-block" role="alert">{{ $errors->first('date') }}</span>
+                            <span class="help-block" role="alert">{{ $errors->first('date') }}</span>
                             @endif
-                            <span class="help-block">{{ trans('cruds.td.fields.date_helper') }}</span>
+                            <span class="help-block">{{ trans('cruds.taxEntry.fields.date_helper') }}</span>
                         </div>
                         <div class="form-group">
                             <button class="btn btn-danger" type="submit">

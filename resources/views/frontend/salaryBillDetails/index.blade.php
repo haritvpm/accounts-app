@@ -99,7 +99,7 @@
                                         </td>
                                         <td>
                                           <!--   @can('salary_bill_detail_show')
-                                                <a class="btn btn-xs btn-primary" href="{{ route('frontend.salary-bill-details.show', $salaryBillDetail->id) }}">
+                                                <a class="btn btn-sm btn-primary" href="{{ route('frontend.salary-bill-details.show', $salaryBillDetail->id) }}">
                                                     {{ trans('global.view') }}
                                                 </a>
                                             @endcan -->
@@ -108,7 +108,7 @@
 
                                             @can('salary_bill_detail_edit')
 
-                                                <a class="btn btn-xs btn-info" href="{{ route('frontend.salary-bill-details.edit', $salaryBillDetail->id) }}">
+                                                <a class="btn btn-sm btn-info" href="{{ route('frontend.salary-bill-details.edit', $salaryBillDetail->id) }}">
                                                     {{ trans('global.edit') }}
                                                 </a>
                                             @endcan
@@ -117,7 +117,7 @@
                                                 <form action="{{ route('frontend.salary-bill-details.destroy', $salaryBillDetail->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                    <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
+                                                    <input type="submit" class="btn btn-sm btn-danger" value="{{ trans('global.delete') }}">
                                                 </form>
                                             @endcan
                                             @endif

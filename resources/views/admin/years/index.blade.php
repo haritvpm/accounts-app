@@ -53,13 +53,13 @@
                             </td>
                             <td>
                                 @can('year_show')
-                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.years.show', $year->id) }}">
+                                    <a class="btn btn-sm btn-primary" href="{{ route('admin.years.show', $year->id) }}">
                                         {{ trans('global.view') }}
                                     </a>
                                 @endcan
 
                                 @can('year_edit')
-                                    <a class="btn btn-xs btn-info" href="{{ route('admin.years.edit', $year->id) }}">
+                                    <a class="btn btn-sm btn-info" href="{{ route('admin.years.edit', $year->id) }}">
                                         {{ trans('global.edit') }}
                                     </a>
                                 @endcan
@@ -68,7 +68,7 @@
                                     <form action="{{ route('admin.years.destroy', $year->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
+                                        <input type="submit" class="btn btn-sm btn-danger" value="{{ trans('global.delete') }}">
                                     </form>
                                 @endcan
 
