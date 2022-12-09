@@ -26,7 +26,7 @@
 
                 <li class="nav-item">
                     <a href="{{ route("frontend.tax-entries.index") }}"
-                     class="nav-link {{ request()->is("*tax-entries") || request()->is("*/tax-entries/*") ? "active" : "" }}">
+                     class="nav-link {{ request()->is("*tax-entries") || request()->is("*tax-entries/*") ? "active" : "" }}">
                         <i class="fa-fw nav-icon fas fa-sack-dollar">
 
                         </i>

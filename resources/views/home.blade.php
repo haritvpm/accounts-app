@@ -11,12 +11,12 @@ setlocale(LC_MONETARY, 'en_IN');
 <div class="content">
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header">
+            <div >
+                <div class="card-title">
                     Dashboard
                 </div>
 
-                <div class="card-body">
+                <div >
                     @if(session('status'))
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}
@@ -31,7 +31,7 @@ setlocale(LC_MONETARY, 'en_IN');
 
                  <div class="card-body">
                     <div>
-                        <table   class=" table table-bordered">
+                        <table   class=" table table-bordered table-secondary">
                             <thead>
                                 <tr>
                                      <th>
@@ -111,7 +111,7 @@ setlocale(LC_MONETARY, 'en_IN');
 
                     <!-- data about pending -->
                     <div >
-                        <table   class=" table table-bordered">
+                        <table   class=" table table-bordered table-light">
                             <thead>
                                 <tr>
                                      <th>

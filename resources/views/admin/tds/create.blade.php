@@ -4,11 +4,12 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="card">
+               
+                <div class="card-body">
+                <div class="card-title">
                     {{ trans('global.create') }} {{ trans('cruds.td.title_singular') }}
                 </div>
-                <div class="panel-body">
                     <form method="POST" action="{{ route("admin.tds.store") }}" enctype="multipart/form-data">
                     {{ method_field('POST') }}
                         {{csrf_field()}}

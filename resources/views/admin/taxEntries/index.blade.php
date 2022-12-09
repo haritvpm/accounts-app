@@ -4,7 +4,7 @@
  
 <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
-            <div class="panel-body">
+            <div class="card-body">
                         <form  class="form-inline" method="POST" action="{{ route("admin.tds.download") }}" enctype="multipart/form-data">
                         {{ method_field('POST') }}
                             {{csrf_field()}}
@@ -62,11 +62,11 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="panel panel-default">
-              <!--   <div class="panel-heading">
+            <div class="card ">
+              <!--   <div class="card-heading">
                     {{ trans('cruds.taxEntry.title_singular') }} {{ trans('global.list') }}
                 </div> -->
-                <div class="panel-body">
+                <div class="card-body">
                     <div >
                         <table class=" table datatable datatable-TaxEntry">
                             <thead>
@@ -131,7 +131,7 @@
                                     </td>
                                     <td>
 
-                                        <a class="btn btn-xs btn-secondary"
+                                        <a class="btn btn-sm btn-secondary"
                                             href="{{ route('admin.tax-entries.show', $taxEntry->id) }}">
                                             {{ trans('global.view') }}
                                         </a>

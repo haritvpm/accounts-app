@@ -51,8 +51,9 @@
       </ul>
 
       <!-- Right navbar links -->
-      @if(count(config('panel.available_languages', [])) > 1)
+     
       <ul class="navbar-nav ml-auto">
+      @if(count(config('panel.available_languages', [])) > 1)
         <li class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" href="#">
             {{ strtoupper(app()->getLocale()) }}
@@ -64,13 +65,23 @@
             @endforeach
           </div>
         </li>
-      </ul>
+      
       @endif
 
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <i class="fa fa-user"></i> ({{ auth()->user()->name }})
-        </li>
+             
+          <li class="nav-item">
+                    <a href="#" class="nav-link active"
+                        onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
+                        
+                            <i class="fas fa-fw fa-sign-out-alt nav-icon">
+
+                            </i>
+                            {{ trans('global.logout') }} ({{ auth()->user()->name }})
+                        
+                    </a>
+            </li>
+           
+      
       </ul>
 
 

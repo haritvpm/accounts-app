@@ -4,11 +4,11 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="card">
+                <div class="card-heading">
                     {{ trans('global.edit') }} {{ trans('cruds.taxEntry.title_singular') }}
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <form method="POST" action="{{ route('admin.tax-entries.update', [$taxEntry->id]) }}"
                       enctype="multipart/form-data">
                       {{ method_field('PUT') }}

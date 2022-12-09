@@ -16,13 +16,13 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="panel panel-default">
-               <!--  <div class="panel-heading">
+            <div class="card">
+               <!--  <div class="card-heading">
                     {{ trans('cruds.taxEntry.title_singular') }} {{ trans('global.list') }}
                 </div> -->
-                <div class="panel-body">
-                    <div class="table-responsive">
-                        <table class=" table table-bordered table-hover datatable datatable-TaxEntry">
+                <div class="card-body">
+                    <div >
+                        <table class=" table  datatable datatable-TaxEntry">
                             <thead>
                                 <tr>
                                     

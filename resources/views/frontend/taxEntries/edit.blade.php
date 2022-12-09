@@ -4,11 +4,11 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="card">
+                <div class="card-title">
                     {{ trans('global.edit') }} {{ trans('cruds.taxEntry.title_singular') }}
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <form method="POST" action="{{ route('frontend.tax-entries.update', [$taxEntry->id]) }}"
                       enctype="multipart/form-data">
                       {{ method_field('PUT') }}
@@ -22,7 +22,7 @@
                             @endif
                             <span class="help-block">{{ trans('cruds.taxEntry.fields.date_helper') }}</span>
                         </div>
-                        <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
+                      <!--   <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
                             <label>{{ trans('cruds.taxEntry.fields.status') }}</label>
                             <select class="form-control" name="status" id="status">
                                 <option value disabled {{ old('status', null)===null ? 'selected' : '' }}>{{
@@ -36,7 +36,7 @@
                             <span class="help-block" role="alert">{{ $errors->first('status') }}</span>
                             @endif
                             <span class="help-block">{{ trans('cruds.taxEntry.fields.status_helper') }}</span>
-                        </div>
+                        </div> -->
 
                         <div class="form-group">
                             <button class="btn btn-danger" type="submit">

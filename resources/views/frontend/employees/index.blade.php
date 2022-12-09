@@ -40,9 +40,9 @@
                                     <th>
                                         {{ trans('cruds.employee.fields.pan') }}
                                     </th>
-                                    <th>
+                                   <!--  <th>
                                         &nbsp;
-                                    </th>
+                                    </th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -60,7 +60,7 @@
                                         <td>
                                             {{ $employee->pan ?? '' }}
                                         </td>
-                                        <td>
+                                        <!-- <td>
                                             @can('employee_show')
                                                 <a class="btn btn-xs btn-primary" href="{{ route('frontend.employees.show', $employee->id) }}">
                                                     {{ trans('global.view') }}
@@ -81,7 +81,7 @@
                                                 </form>
                                             @endcan
 
-                                        </td>
+                                        </td> -->
 
                                     </tr>
                                 @endforeach

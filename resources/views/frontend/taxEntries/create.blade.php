@@ -4,11 +4,13 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="card ">
+                
+                <div class="card-body">
+                    <!-- <h5 class="card-title">
                     {{ trans('global.create') }} {{ trans('cruds.taxEntry.title_singular') }}
-                </div>
-                <div class="panel-body">
+                    </h5>
+                  -->
                     <form id="fileUploadForm" method="POST" action="{{ route( 'frontend.tax-entries.store') }}"
                         enctype="multipart/form-data">
                         {{ method_field('POST') }}
@@ -28,7 +30,7 @@
                             @endif
                             <span class="help-block">{{ trans('cruds.taxEntry.fields.date_helper') }}</span>
                         </div>
-                        <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
+                        <!-- <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
                             <label>{{ trans('cruds.taxEntry.fields.status') }}</label>
                             <select class="form-control" name="status" id="status">
                                 <option value disabled {{ old('status', null)===null ? 'selected' : '' }}>{{
@@ -43,7 +45,7 @@
                             <span class="help-block" role="alert">{{ $errors->first('status') }}</span>
                             @endif
                             <span class="help-block">{{ trans('cruds.taxEntry.fields.status_helper') }}</span>
-                        </div>
+                        </div> -->
                         <div class="form-group {{ $errors->has('innerfile') ? 'has-error' : '' }}">
                             <label class="required" for="innerfile">{{
                                 trans('cruds.taxEntry.fields.innerfile')}}</label>
@@ -79,7 +81,11 @@
                             @endif
                             <span class="help-block">{{ trans('cruds.taxEntry.fields.tds_rows_only_helper') }}</span>
                         </div>
+                        <hr>
                         <div class="form-group">
+                            <a class="btn btn-secondary"  href="{{ route('frontend.tax-entries.index') }}">
+                            Cancel
+                            </a>
                             <button class="btn btn-primary" type="submit">
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none;" id="spinnerbtn" ></span>
 

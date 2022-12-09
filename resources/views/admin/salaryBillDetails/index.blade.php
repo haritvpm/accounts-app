@@ -25,7 +25,7 @@
 
     <div class="card-body">
         <div >
-            <table class=" table   cell-border  table-hover datatable datatable-SalaryBillDetail">
+            <table class=" table   cell-border datatable datatable-SalaryBillDetail">
                 <thead>
                     <tr>
                         <th width="10">

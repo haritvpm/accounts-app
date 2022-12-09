@@ -4,11 +4,11 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="panel panel-default">
-               <!--  <div class="panel-heading">
+            <div class="card">
+               <!--  <div class="card-heading">
                     {{ trans('global.show') }} {{ trans('cruds.taxEntry.title') }}
                 </div> -->
-                <div class="panel-body">
+                <div class="card-body">
                     <div class="form-group">
                         <div class="form-group">
                             <a class="btn btn-secondary" href="{{ route('admin.tax-entries.index') }}">
@@ -22,7 +22,7 @@
                                         {{ trans('cruds.taxEntry.fields.id') }}
                                     </th>
                                     <td>
-                                        {{ $taxEntry->id }}
+                                        {{ $taxEntry->id }} (Created: {{$taxEntry->created_at->toDateString()}}, Updated: {{$taxEntry->updated_at->toDateString()}} )
                                     </td>
                                 </tr>
                                 <tr>
@@ -73,14 +73,14 @@
                                         {{ $totaltds }}
                                     </td>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <th>
                                         {{ trans('cruds.taxEntry.fields.status') }}
                                     </th>
                                     <td>
                                         {{ App\Models\TaxEntry::STATUS_SELECT[$taxEntry->status] ?? '' }}
                                     </td>
-                                </tr>
+                                </tr> -->
 
                             </tbody>
                         </table>
@@ -93,7 +93,7 @@
                 </div>
             </div>
 
-            <div class="panel panel-default">
+            <div class="card-body">
                 
                 @includeIf('admin.taxEntries.relationships.dateTds', ['tds' => $taxEntry->dateTds])
                

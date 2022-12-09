@@ -12,11 +12,11 @@
     @endcan
     <div class="row">
         <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="card">
+                <div class="card-heading">
                     {{ trans('cruds.td.title_singular') }} {{ trans('global.list') }}
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <div >
                         <table class=" table datatable datatable-Td">
                             <thead>
