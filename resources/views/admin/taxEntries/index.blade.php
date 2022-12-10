@@ -25,7 +25,7 @@
                                     <select class="form-control" name="period" id="period" required>
                                       
                                         @foreach(App\Models\TdsReport::PERIOD_RADIO as $key => $label)
-                                            <option value="{{ $key }}" {{ old('period', '0') === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
+                                            <option value="{{ $key }}" {{ old('period', $period) === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
                                         @endforeach
                                     </select>
                                     @if($errors->has('period'))

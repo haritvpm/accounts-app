@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Tabula\Tabula;
 use Illuminate\Support\Facades\File;
+use Carbon\Carbon;
 
 class TaxEntryController extends Controller
 {
@@ -27,8 +28,14 @@ class TaxEntryController extends Controller
         ->withSum('dateTds', 'tds')
         ->withSum('dateTds', 'gross')
         ->get();
+        
+        //select current month period in drop down for admin
 
-        return view('admin.taxEntries.index', compact('taxEntries'));
+        $period = (int)((int)Carbon::now()->month-1)  / 3 - 1 ;
+        if( $period < 0) {$period = 3;}
+        $period = (string)(int)$period;
+       
+        return view('admin.taxEntries.index', compact('taxEntries', 'period'));
     }
 
     public function create()
