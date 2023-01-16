@@ -390,7 +390,22 @@ class Extract
 
         return [];
     }
-
+    public function replace_text_between($str, $needle_start, $needle_end, $replacement) {
+        $pos = strpos($str, $needle_start);
+       
+        if($pos === false) return $str;
+        
+        $start = $pos /*+ strlen($needle_start)*/ ;
+    
+        $pos = strpos($str, $needle_end, $start);
+        
+        if($pos === false) return $str;
+        
+        $end = $pos + strlen($needle_start);
+    
+        return substr_replace($str, $replacement, $start, $end - $start);
+    }
+    
     public function processFestivalAllowance($start, $fieldGross, $fieldIT = 'IT')
     {
         $i = $start;
@@ -415,7 +430,7 @@ class Extract
 
                 $pen = trim($cols[1]); //remove any hyphen 'revised'
                 $name = trim($cols[2]); //remove any hyphen 'revised'
-
+                $pen = trim($this->replace_text_between($pen, '(', ')', '')); //821472( 683/2017)
                 $tds = '0';
 
                 if ($this->has_it) {

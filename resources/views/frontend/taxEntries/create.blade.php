@@ -116,7 +116,7 @@
 @section('scripts')
 @parent
     
-    <script src="{{ asset('js/cdnjs/jquery.form.min.js') }}"></script>
+    <script src="{{ asset('js/cdnjs/jquery.form.min.js2') }}"></script>
     <script>
         $(function () {
             $(document).ready(function () {
