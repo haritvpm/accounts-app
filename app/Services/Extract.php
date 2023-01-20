@@ -188,7 +188,10 @@ class Extract
 
                 continue;
             }
-            if (strpos($l, 'PAY AND ALLOWANCE IN RESPECT') > 0) {
+            //for below, may be check next line's "Head Of Account : 2011-02-104-99-00-01-05-LH SALARIES DDO Code : 0109-67F-002",
+            //to confirm this is not pay
+            if (strpos($l, 'PAY AND ALLOWANCE IN RESPECT') > 0  &&
+                str_contains($this->innerlines[$i + 1], '99-00-01-05')) {
                 $type = self::UNIFORM_ALLOWANCE;
 
                 //.....\rPAY AND ALLOWANCE IN RESPECT OF MLA HOSTEL FOR September 2022",

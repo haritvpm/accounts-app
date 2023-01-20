@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Tabula\Tabula;
 use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
+use App\Services\Extract;
 
 class TaxEntryController extends Controller
 {
@@ -99,7 +100,7 @@ class TaxEntryController extends Controller
         return back();
     }
 
-    public function pdf2csv(Request $request)
+    public function pdf2txt(Request $request)
     {
         
         $time = time();
@@ -133,6 +134,62 @@ class TaxEntryController extends Controller
 
     }
 
+    public function pdf2csv(Request $request)
+    {
+        
+        $time = time();
+
+        $fileName1 = $time.'1.'.$request->file1->extension();
+        $request->file1->move(public_path('uploads'), $fileName1);
+        $fileName1 = public_path('uploads').'/'.$fileName1;
+
+        $tabula = new Tabula('/usr/bin/');
+
+        //Tabula PHP does not return a value. It was set to output to file using 'output' param
+        // So I edited vendor/initred/laravel-tabula/src/InitRed/Tabula/Tabula.php to  return $process->getOutput(); in function run()
+
+        $result1 = $tabula->setPdf($fileName1)
+            ->setOptions([
+                'format' => 'csv',
+                'pages' => 'all',
+                'lattice' => false,
+                'stream' => 1,
+            ])
+            ->convert();
+
+        File::delete($fileName1);
+       
+      
+        $extract = new Extract();
+        $data = $extract->processpdftext($result1, false,true);
+       // return response()->json($data);
+      // dd($data);
+
+            $headers = array(
+                "Content-type" => "text/csv",
+                "Content-Disposition" => "attachment; filename=file.csv",
+                "Pragma" => "no-cache",
+                "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+                "Expires" => "0"
+            );
+
+
+            //$columns = array('ReviewID', 'Provider', 'Title', 'Review', 'Location', 'Created', 'Anonymous', 'Escalate', 'Rating', 'Name');
+
+            $callback = function() use ($data)
+            {
+                $file = fopen('php://output', 'w');
+              //  fputcsv($file, $columns);
+
+                foreach($data as $review) {
+                    fputcsv($file, $review);
+                }
+                fclose($file);
+            };
+            return \Response::stream($callback, 200, $headers);
+
+
+    }
 
     /*     public function massDestroy(MassDestroyTaxEntryRequest $request)
     {

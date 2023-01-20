@@ -53,6 +53,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //pd2csv
     
+    Route::view('pdf2txt', 'admin.taxEntries.pdf2txt');
+    Route::post('pdf2txt', 'TaxEntryController@pdf2txt')->name('tax-entries.pdf2txt');
+
     Route::view('pdf2csv', 'admin.taxEntries.pdf2csv');
     Route::post('pdf2csv', 'TaxEntryController@pdf2csv')->name('tax-entries.pdf2csv');
 
