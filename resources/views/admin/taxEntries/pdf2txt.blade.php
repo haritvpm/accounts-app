@@ -11,7 +11,7 @@
                     {{ trans('global.create') }} {{ trans('cruds.taxEntry.title_singular') }}
                     </h5>
                   -->
-                    <form id="fileUploadForm" method="POST" action="{{ route( 'admin.tax-entries.pdf2csv') }}"
+                    <form id="fileUploadForm" method="POST" action="{{ route( 'admin.tax-entries.pdf2txt') }}"
                         enctype="multipart/form-data">
                         {{ method_field('POST') }}
                         {{csrf_field()}}

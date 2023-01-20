@@ -152,8 +152,8 @@ class TaxEntryController extends Controller
             ->setOptions([
                 'format' => 'csv',
                 'pages' => 'all',
-                'lattice' => false,
-                'stream' => 1,
+                'lattice' => true,
+                'stream' => 0,
             ])
             ->convert();
 
@@ -161,7 +161,7 @@ class TaxEntryController extends Controller
        
       
         $extract = new Extract();
-        $data = $extract->processpdftext($result1, false,true);
+        $data = $extract->pdftocsv($result1);
        // return response()->json($data);
       // dd($data);
 

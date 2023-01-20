@@ -47,6 +47,7 @@ class Extract
     public $tds_rows_only;
 
     public $has_it;
+    public $heading;
 
     public function __construct()
     {
@@ -55,6 +56,7 @@ class Extract
         $this->acquittance = '';
         $this->sparkcode = '';
         $this->innerlines = [];
+        $this->heading = '';
     }
 
     public static function getSparkCode($no_lattice, &$sparkcode)
@@ -267,6 +269,8 @@ class Extract
             $heading = str_replace("\r", '', $l);
             $heading = str_replace(" ", '', $heading);
 
+            $this->heading = $heading;
+
             $cols = str_getcsv($heading);
 
             for ($j = 0; $j < count($cols); $j++) {
@@ -431,6 +435,7 @@ class Extract
 
         return [];
     }
+  
     public function replace_text_between($str, $needle_start, $needle_end, $replacement) {
         $pos = strpos($str, $needle_start);
        
@@ -702,6 +707,91 @@ class Extract
             $data[] = $items;
         }
         //  dd($data);
+        return  $data;
+    }
+
+    //these functions are just for csv extraction from pdf. 
+    public function pdftocsv($inner)
+    {
+        // $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+
+        $this->innerlines = explode("\r\n", $inner);
+        
+        $start = 0;
+        $type = $this->getpdfType($start);
+
+        switch($type) {
+            case self::SALARYBILL:
+                return $this->extractSalaryBill($start);
+        }
+
+        return [];
+    }    
+
+    public function extractSalaryBill($start)
+    {
+       
+        $i = $start;
+        $i += 5;
+        
+        $grosscol=0;
+        $it_col=0;
+        $this->findColumnIndex($start, $grosscol, $it_col);
+        
+        $data = [];
+
+        $heading_cols = str_getcsv($this->heading);
+        $items = [
+            'slno' => 'Sl.',
+            'pen' => 'Pen',
+            'name' => 'Name',
+          
+        ];
+
+        for ($j = 2 ; $j < count($heading_cols); $j++){
+            $items[$j] = $heading_cols[$j];
+        }
+        $data[] = $items;
+
+
+        $slno = 1;
+       
+        for (; $i < count($this->innerlines); $i++) {
+            $l = $this->innerlines[$i];
+            $slnotxt = sprintf('%u,', $slno);
+            //  $out->writeln($slnotxt);
+
+            if (str_starts_with($l, $slnotxt)) {
+                $slno++;
+                $cols = str_getcsv($l);
+               // dd($cols);
+                //"821472 ( 683/2017 )NAVEENJAMES NORONA -Revised"
+                $penname = str_replace("\r", ' ', $cols[1]);
+
+                $pen = strstr($penname, ' ', true);
+
+                $name = Str::of($penname)->after(' ')->before('-')->after(')')->trim();
+
+               
+
+                $items = [
+                    'slno' => $slno - 1,
+                    'pen' => $pen,
+                    'name' => $name,
+                  
+                ];
+                for ($j =2 ; $j < count($cols); $j++){
+                    $items[$j] = $cols[$j];
+                }
+                
+             
+
+                $data[] = $items;
+            }
+        }
+
+       
+
         return  $data;
     }
 }
