@@ -15,6 +15,7 @@ class Extract
     const FESTIVALALLOWANCE = 'FESTIVALALLOWANCE';
 
     const OVERTIME_ALLOWANCE = 'OVERTIME_ALLOWANCE';
+    const UNIFORM_ALLOWANCE = 'UNIFORM_ALLOWANCE';
 
     const BONUS = 'BONUS';
 
@@ -29,6 +30,7 @@ class Extract
     const MR = 'MR';
 
     const SPARK_ID_PAY = 'SPARK_ID_PAY';
+    const SPARK_ID_FESTIVAL_ALLOWANCE = 'SPARK_ID_FESTIVAL_ALLOWANCE';
 
     const DECEASED = 'DECEASED';
 
@@ -65,6 +67,10 @@ class Extract
                 $sparkcode = substr($l, strlen('Spark Code :') + stripos($l, 'Spark Code :'));
 
                 $sparkcode = strtok($sparkcode, ',');
+
+                if (false !== stripos($sparkcode, 'Page')){
+                    $sparkcode = strstr( $sparkcode,"Page", true); //"Spark Code : 82378679779579887399Page: 1",
+                }
 
                 $sparkcode = trim($sparkcode, '\'" ,');
 
@@ -112,10 +118,11 @@ class Extract
         for ($i = 0; $i < count($this->innerlines); $i++) {
             $l = $this->innerlines[$i];
 
-            if (str_starts_with($l, 'Spark Code :')) {
+          
+            if ( false !== stripos($l, 'Spark Code :') ) {
                 $this->getSparkCode($l, $this->sparkcode);
             }
-
+         
             if ($type !== self::UNKNOWN && strlen($this->sparkcode)) {
                 break; //already found a type. no need to parse fully
             }
@@ -181,6 +188,16 @@ class Extract
 
                 continue;
             }
+            if (strpos($l, 'PAY AND ALLOWANCE IN RESPECT') > 0) {
+                $type = self::UNIFORM_ALLOWANCE;
+
+                //.....\rPAY AND ALLOWANCE IN RESPECT OF MLA HOSTEL FOR September 2022",
+
+                $start = $i;
+                $this->acquittance = $this->getTitle($l, 3);
+            
+                continue;
+            }
             if (str_starts_with($l, 'Due and drawn statement cum D.A. ARREAR')) {
                 $type = self::DA_ARREAR;
                 $this->acquittance = $this->getTitle($l);
@@ -210,6 +227,17 @@ class Extract
                 $this->acquittance = 'Pay and Allowance for Employees with SPARK ID';
                 $start = $i + 1;
             }
+
+          /*   if(str_contains($l,'SPARK ID' )  ){
+            dd($l);
+            } */
+            if (str_starts_with($l, 'NATURE OF CLAIM-,Festival Allowance for Employees with SPARK ID')) {
+                $type = self::SPARK_ID_FESTIVAL_ALLOWANCE;
+                $this->acquittance = 'Festival Allowance for Employees with SPARK ID';
+                $start = $i + 1;
+            }
+            
+
             if (str_starts_with($l, 'NATURE OF CLAIM-,Salary of deceased employees to Nominees')) {
                 $type = self::DECEASED;
                 $this->acquittance = 'Salary of deceased employees to Nominees';
@@ -224,11 +252,17 @@ class Extract
     {
         $grosscol = -1;
         $it_col = -1;
-        $ITColNames = ['IT', 'INCOME TAX DEDUCTION', 'Income tax to be deducted'];
+        // $ITColNames = ['IT', 'INCOME TAX DEDUCTION', 'Income tax to be deducted'];
+        $ITColNames = ['IT', 'INCOMETAXDEDUCTION', 'Incometaxtobededucted'];
+
+        $fieldGross = str_replace(" ", '', $fieldGross);
+        $fieldIT = str_replace(" ", '', $fieldIT);
 
         for ($i = $start + 1; $i < count($this->innerlines); $i++) {
             $l = $this->innerlines[$i];
-            $heading = str_replace("\r", ' ', $l);
+            //$heading = str_replace("\r", ' ', $l);
+            $heading = str_replace("\r", '', $l);
+            $heading = str_replace(" ", '', $heading);
 
             $cols = str_getcsv($heading);
 
@@ -255,7 +289,7 @@ class Extract
             }
         }
 
-        // dd($cols);
+  
         if (-1 == $grosscol) {
             $this->errors[] = 'Unable to determine column for '.$fieldGross;
 
@@ -362,7 +396,7 @@ class Extract
 
         $start = 0;
         $type = $this->getpdfType($start);
-
+// dd($type);
         switch($type) {
             case self::SALARYBILL:
             case self::ONAMADVANCE:
@@ -373,6 +407,9 @@ class Extract
                 return $this->processFestivalAllowance($start, 'Overtime Duty Allowance');
             case self::BONUS:
                 return $this->processFestivalAllowance($start, 'Bonus');
+            case self::UNIFORM_ALLOWANCE:
+                 return $this->processFestivalAllowance($start, 'Amount');
+                
             case self::DA_ARREAR:
             case self::PAY_ARREAR:
                 return $this->processDaArrear($start);
@@ -383,6 +420,7 @@ class Extract
             case self::MR:
                 return $this->processMedical($start, 'Amount `');
             case self::SPARK_ID_PAY:
+            case self::SPARK_ID_FESTIVAL_ALLOWANCE:
                 return $this->processMedical($start, 'Net Amount`', 'IT');
             case self::DECEASED:
                 return $this->processDeceased($start, 'Amount`');
@@ -408,6 +446,7 @@ class Extract
     
     public function processFestivalAllowance($start, $fieldGross, $fieldIT = 'IT')
     {
+    
         $i = $start;
         $i += 2;
 
