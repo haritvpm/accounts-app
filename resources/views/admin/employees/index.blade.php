@@ -73,12 +73,12 @@
                         </td>
                             <td>
                               
-                                    <a class="btn btn-sm btn-light" href="{{ route('admin.employees.show', $employee->id) }}">
-                                    <i class="fa fa-eye"></i>
+                                    <a class="btn btn-sm btn-dark" href="{{ route('admin.employees.show', $employee->id) }}">
+                                    View
                                     </a>
                             
-                                    <a class="btn btn-sm btn-light" href="{{ route('admin.employees.edit', $employee->id) }}">
-                                    <i class="fa fa-edit"></i>
+                                    <a class="btn btn-sm btn-dark" href="{{ route('admin.employees.edit', $employee->id) }}">
+                                   Edit
                                     </a>
                             
                                     <form action="{{ route('admin.employees.destroy', $employee->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">

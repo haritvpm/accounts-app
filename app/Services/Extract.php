@@ -48,6 +48,7 @@ class Extract
 
     public $has_it;
     public $heading;
+    public $excess_pay_col;
 
     public function __construct()
     {
@@ -57,6 +58,7 @@ class Extract
         $this->sparkcode = '';
         $this->innerlines = [];
         $this->heading = '';
+        $this->excess_pay_col = -1;
     }
 
     public static function getSparkCode($no_lattice, &$sparkcode)
@@ -280,6 +282,10 @@ class Extract
                 if (strcmp($cols[$j], $fieldIT) === 0) {
                     $it_col = $j;
                 }
+                //for salarybill, also check excesspay
+                if (strcmp($cols[$j], 'ExPay') === 0) {
+                    $this->excess_pay_col = $j;
+                }
             }
             if (! $this->has_it) {
                 for ($j = 0; $j < count($ITColNames); $j++) {
@@ -357,13 +363,24 @@ class Extract
                     }
                 }
 
+                $remarks = '';
+                
+                $gross = $cols[$grosscol];
+                if(-1 !== $this->excess_pay_col){
+                    $excess_pay = $cols[$this->excess_pay_col];
+                    if($excess_pay > 0){
+                        $gross -= $excess_pay;
+                        $remarks = 'ExPay:' . $excess_pay ;
+                    }
+
+                }
                 $items = [
                     'slno' => $slno - 1,
                     'pen' => $pen,
                     'name' => $name,
-                    'gross' => $cols[$grosscol],
+                    'gross' => $gross,
                     'tds' => $tds,
-
+                    'remarks' => $remarks,
                 ];
 
                 $this->pens[] = $pen;

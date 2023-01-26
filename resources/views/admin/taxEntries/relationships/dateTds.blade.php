@@ -46,6 +46,9 @@
                                         {{ trans('cruds.td.fields.date') }}
                                     </th>
                                     <th>
+                                        Remarks
+                                    </th>
+                                    <th>
                                         &nbsp;
                                     </th>
                                 </tr>
@@ -74,6 +77,9 @@
                                         </td>
                                         <td>
                                             {{ $td->date->date ?? '' }}
+                                        </td>
+                                        <td>
+                                            {{ $td-remarks ?? '' }}
                                         </td>
                                         <td>
                                           

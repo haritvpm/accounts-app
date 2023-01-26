@@ -26,6 +26,7 @@ class Td extends Model
         'date_id',
         'created_at',
         'slno',
+        'remarks',
         'updated_at',
         'deleted_at',
         'created_by_id',

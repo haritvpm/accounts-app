@@ -1,15 +1,7 @@
 @extends('layouts.frontend')
 @section('content')
 <div class="content">
-    <!-- @can('td_create')
-        <div style="margin-bottom: 10px;" class="row">
-            <div class="col-lg-12">
-                <a class="btn btn-success" href="{{ route('frontend.tds.create') }}">
-                    {{ trans('global.add') }} {{ trans('cruds.td.title_singular') }}
-                </a>
-            </div>
-        </div>
-    @endcan -->
+ 
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
@@ -46,6 +38,9 @@
                                         {{ trans('cruds.td.fields.date') }}
                                     </th>
                                     <th>
+                                        Remarks
+                                    </th>
+                                    <th>
                                         &nbsp;&nbsp;
                                     </th>
                                 </tr>
@@ -76,6 +71,9 @@
                                         </td>
                                         <td>
                                             {{ $td->date->date ?? '' }}
+                                        </td>
+                                        <td>
+                                            {{ $td->remarks ?? '' }}
                                         </td>
                                         <td>
                                            

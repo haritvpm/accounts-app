@@ -232,7 +232,7 @@ class TaxEntryController extends Controller
         });
 
         if (count($name_mismatches)) {
-            return response()->json(['warning' => 'Name Mismatches: '.implode(', ', $name_mismatches)]);
+            return response()->json(['error' => 'Name Mismatches: '.implode(', ', $name_mismatches)]);
         }
 
         $taxEntry = TaxEntry::where('sparkcode', $sparkcode)->first();

@@ -46,6 +46,9 @@
                                         {{ trans('cruds.td.fields.date') }}
                                     </th>
                                     <th>
+                                       Remarks
+                                    </th>
+                                    <th>
                                         &nbsp;
                                     </th>
                                 </tr>
@@ -75,6 +78,9 @@
                                         <td>
                                             {{ $td->date->date ?? '' }}
                                         </td>
+                                        <td>
+                                        {{ $td->remarks ?? '' }}
+                                        </td> 
                                         <td>
                                           
                                                 <!-- <a class="btn btn-sm btn-primary" href="{{ route('frontend.tds.show', $td->id) }}">
