@@ -79,7 +79,7 @@
                                             {{ $td->date->date ?? '' }}
                                         </td>
                                         <td>
-                                            {{ $td-remarks ?? '' }}
+                                            {{ $td->remarks ?? '' }}
                                         </td>
                                         <td>
                                           
