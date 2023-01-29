@@ -56,6 +56,9 @@
                                         Total TDS
                                     </th>
                                     <th>
+                                        Updated At
+                                    </th>
+                                    <th>
                                         &nbsp;&nbsp;
                                     </th>
                                 </tr>
@@ -84,6 +87,10 @@
                                         {{ number_format($taxEntry->date_tds_sum_tds)}}
                                         <!-- {{ App\Models\TaxEntry::STATUS_SELECT[$taxEntry->status] ?? '' }} -->
                                     </td>
+                                    <td>
+                                            {{ $taxEntry->updated_at->format('y-m-d H:i') }}
+                                                                                        
+                                         </td>
                                     <td>
 
                                         <a class="btn btn-sm btn-secondary"
@@ -137,7 +144,7 @@
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,
     lengthChange:false,
-    order: [[ 0, 'desc' ]],
+    order: [[ 7, 'desc' ]],
     pageLength: 10,
   
   });

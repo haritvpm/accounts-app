@@ -41,6 +41,12 @@
                                         {{ trans('cruds.td.fields.date') }}
                                     </th>
                                     <th>
+                                        LastUpdated
+                                    </th>
+                                    <th>
+                                        Sparkcode
+                                    </th>
+                                    <th>
                                         Remarks
                                     </th>
                                     <th>
@@ -77,8 +83,17 @@
                                             {{ $td->date->date ?? '' }}
                                         </td>
                                         <td>
+                                            {{ $td->updated_at->format('y-m-d H:i') }}
+                                                                                        
+                                         </td>
+                                         <td>
+                                         {{ $td->date->sparkcode ?? '' }}
+                                                                                        
+                                         </td>
+                                        <td>
                                             {{ $td->remarks ?? '' }}
                                         </td>
+
                                         <td>
                                         @if( empty($td->created_by_id))
                                                 <a class="btn btn-sm btn-light" href="{{ route('admin.tds.show', $td->id) }}">
@@ -153,7 +168,7 @@
 
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,
-    order: [[ 1, 'desc' ]],
+    order: [[ 8, 'desc' ]],
     pageLength: 25,
   });
 

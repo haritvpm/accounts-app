@@ -97,6 +97,9 @@
                                         Total TDS
                                     </th>
                                     <th>
+                                        Last Updated
+                                    </th>
+                                    <th>
                                         &nbsp;&nbsp;
                                     </th>
                                 </tr>
@@ -128,6 +131,11 @@
                                     <td>
                                         {{ number_format($taxEntry->date_tds_sum_tds)}}
                                         <!-- {{ App\Models\TaxEntry::STATUS_SELECT[$taxEntry->status] ?? '' }} -->
+                                    </td>
+                                    <td>
+                                    {{ $taxEntry->updated_at->format('y-m-d H:i') }}
+                                       
+                                       
                                     </td>
                                     <td>
 
@@ -179,7 +187,7 @@
 
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,
-    order: [[ 0, 'desc' ]],
+    order: [[ 8, 'desc' ]],
     pageLength: 25,
   });
   let table = $('.datatable-TaxEntry:not(.ajaxTable)').DataTable({ buttons: dtButtons, select: false })

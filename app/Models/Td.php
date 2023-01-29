@@ -11,6 +11,13 @@ class Td extends Model
 
     public $table = 'tds';
 
+    /**
+     * All of the relationships to be touched.
+     *
+     * @var array
+     */
+    protected $touches = ['date'];
+
     protected $dates = [
         'created_at',
         'updated_at',

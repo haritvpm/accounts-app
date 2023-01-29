@@ -46,6 +46,9 @@
                                         {{ trans('cruds.td.fields.date') }}
                                     </th>
                                     <th>
+                                        LastUpdated
+                                    </th>
+                                    <th>
                                         Remarks
                                     </th>
                                     <th>
@@ -78,6 +81,11 @@
                                         <td>
                                             {{ $td->date->date ?? '' }}
                                         </td>
+                                        <td>
+                                            {{ $td->updated_at->format('Y-m-d H:i') }}
+                                            
+                                            
+                                            </td>
                                         <td>
                                             {{ $td->remarks ?? '' }}
                                         </td>
@@ -155,7 +163,7 @@
 
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,
-    order: [[ 0, 'asc' ]],
+    order: [[ 8, 'desc' ]],
     pageLength: 25,
   });
 
