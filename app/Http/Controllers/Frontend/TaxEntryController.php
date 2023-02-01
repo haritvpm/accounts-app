@@ -91,8 +91,11 @@ class TaxEntryController extends Controller
         $date = Carbon::createFromFormat(config('panel.date_format'), $request->date)->format('Y-m-d');
 
         $month = Carbon::createFromFormat(config('panel.date_format'), $request->date)->format('F');
+        //$add_onam_advance = false;
+        $add_onam_advance = $request->add_onam_advance;
 
-        $extract = new Extract311();
+    
+        $extract = new Extract311($add_onam_advance);
         $acquittance = '';
         $sparkcode = '';
         $data = $extract->processpdftext($result1, $result2, $pens, $errors, $acquittance, $month, $sparkcode);

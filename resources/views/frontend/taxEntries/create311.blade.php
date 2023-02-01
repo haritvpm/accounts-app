@@ -66,6 +66,15 @@
                                 }}</span>
                         </div>
                         <div class="form-group">
+                            <div>
+                                <input type="hidden" name="add_onam_advance" value="0">
+                                <input type="checkbox" name="add_onam_advance" id="add_onam_advance" value="1" {{ old('add_onam_advance', 0) == 1 || old('add_onam_advance') === null ? 'checked' : '' }}>
+                                <label for="add_onam_advance">Add onam-advance-deduction to gross if it exists</label>
+                            </div>
+                
+                        </div>
+
+                        <div class="form-group">
                             <hr>
                         <a class="btn btn-secondary"  href="{{ route('frontend.tax-entries.index') }}">
                             Cancel
@@ -100,7 +109,7 @@
 @section('scripts')
 @parent
     
-    <script src="{{ asset('js/cdnjs/jquery.form.min.js') }}"></script>
+    <!-- <script src="{{ asset('js/cdnjs/jquery.form.min.js') }}"></script> -->
     <script>
         $(function () {
             $(document).ready(function () {

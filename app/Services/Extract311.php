@@ -4,8 +4,11 @@ namespace App\Services;
 
 class Extract311
 {
-    public function __construct()
+    private $add_onam_advance_deduction;
+
+    public function __construct($add_onam_advance_deduction)
     {
+        $this->add_onam_advance_deduction = $add_onam_advance_deduction;
     }
 
     public function processpdftext($inner, $ded, &$pens, &$errors, &$acquittance, $month, &$sparkcode)
@@ -61,10 +64,25 @@ class Extract311
 
             return $data;
         }
+    
 
+        $basicwith_OnamAdvance = -1;
+        $basicwithout_OnamAdvance = -1;
+        for ($j = 0; $j < count($cols); $j++) {
+            if (strpos($cols[$j], 'B Pay/L.Sal') !== false) {
+                $basicwith_OnamAdvance = $j;
+               
+            }
+            if (str_starts_with($cols[$j], 'Basic Less')) {
+                $basicwithout_OnamAdvance = $j;
+               
+            }
+        }
+      
         // $out->writeln($grosscol);
 
         $pentogross = [];
+        $pen_to_onam_advance = [];
         $slno = 1;
         for (; $i < count($innerlines); $i++) {
             $l = $innerlines[$i];
@@ -76,8 +94,12 @@ class Extract311
                 $cols = str_getcsv($l);
                 $pen = strstr($cols[1], ' ', true);
                 $pentogross[$pen] = $cols[$grosscol];
+              
+                $pen_to_onam_advance[$pen] = $cols[$basicwith_OnamAdvance]- $cols[$basicwithout_OnamAdvance];
             }
         }
+          
+
 
         //
         //DEDUCTION
@@ -138,16 +160,26 @@ class Extract311
                 $pan = str_replace(' ', '', $cols[3]); //some people have spaces in their PAN in pdf TDS.
 
                 //if pen has spaces, ignore it as we use it to cross match pdfs from spark. it is the same in both pdf
+                $gross = $pentogross[$cols[1]];
+                $remarks = '';
+                $onam_advance = $pen_to_onam_advance[$cols[1]];
+
+                //lets set add_onam_advance max as 8000, probly ok for next 10 years
+                if($this->add_onam_advance_deduction && $onam_advance > 0 && $onam_advance < 8000){
+                    $gross += $onam_advance;
+                    $remarks = 'OA:' . $onam_advance;
+                } 
 
                 $items = [
                     'slno' => $cols[0],
                     'pan' => $pan,
                     'pen' => $cols[1],
                     'name' => $cols[2],
-                    'gross' => $pentogross[$cols[1]],
                     'tds' => $cols[4],
-                    //  'date_id' => $taxentry_id,
                     'created_by_id' => auth()->id(),
+                    'gross' => $gross,
+                    'remarks' =>  $remarks ,
+                                     
                 ];
 
                 $pens[] = $cols[1];
