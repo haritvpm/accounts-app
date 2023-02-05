@@ -33,7 +33,7 @@
                             <button class="btn btn-primary" type="submit">
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none;" id="spinnerbtn" ></span>
 
-                                Submit
+                            Convert To CSV
                             </button>
                         </div>
                     </form>
@@ -79,7 +79,7 @@
                             <button class="btn btn-primary" type="submit">
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none;" id="spinnerbtn" ></span>
 
-                                Submit
+                                Convert To CSV
                             </button>
                         </div>
                     </form>
