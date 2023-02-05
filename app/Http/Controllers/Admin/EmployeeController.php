@@ -201,4 +201,112 @@ class EmployeeController extends Controller
             throw $ex;
         }
     }
+
+
+    //this is to convert pdf to excel and download
+    public function parseSparkDownload(Request $request)
+    {
+        //$file = $request->file('pdf_file');
+        // dd($request);
+        /* $request->validate([
+             'pdf_file' => 'mimes:pdf',
+         ]);*/
+        //
+        
+        $filename = time().'.pdf';
+        $request->pdf_file2->move(public_path('uploads'), $filename);
+        $fileName1 = public_path('uploads').'/'.$filename;
+
+        //in php.ini, set upload_max_filesize
+        //you need to edit both /etc/php/7.2/cli/php.ini and /etc/php/7.2/apache2/php.ini.
+        //Note: before editing the php.ini values, ensure that /etc/php/7.2/apache2/php.ini is the loaded php configuration file.
+        //The command is: php -i | grep php.ini
+
+        //$filen= $request->file('pdf_file')->storeAs('public', time());
+
+        $tabula = new Tabula('/usr/bin/');
+
+        //Tabula PHP does not return a value. It was set to output to file using 'output' param
+        // So I edited vendor/initred/laravel-tabula/src/InitRed/Tabula/Tabula.php to  return $process->getOutput(); in function run()
+
+        $result1 = $tabula->setPdf($fileName1)
+            ->setOptions([
+                'format' => 'csv',
+                'pages' => 'all',
+                'lattice' => true,
+                'stream' => false,
+            ])
+            ->convert();
+
+        File::delete($fileName1);
+
+        $innerlines = explode("\r\n", $result1);
+
+        $pen = $pan = $name =  $email = '';
+        $data = [];
+        $data[] = ['PEN', 'NAME', 'PAN', 'EMAIL'];
+
+        for ($i = 0; $i < count($innerlines); $i++) {
+            $l = $innerlines[$i];
+
+            if (0 === strncmp($l, 'PEN :', strlen('PEN :'))) {
+                $arr = explode(',', $l);
+                $pen = str_replace(' ', '', $arr[1]);
+                $name = $arr[3];
+            }
+
+            if (0 === strncmp($l, 'PAN Number :', strlen('PAN Number :'))) {
+                $arr = explode(',', $l);
+                $pan = str_replace(' ', '', $arr[1]);
+                //for some, this can be empty
+            }
+            
+            if (0 === strncmp($l, 'E-mail Address :', strlen('E-mail Address :'))) {
+                $arr = explode(',', $l);
+                $email = str_replace(' ', '', $arr[1]);
+                //for some, this can be empty
+            }
+
+            //add found items on start of next person or if it is the end
+            if ( FALSE !== strpos($l, 'Employee Data Sheet') || $i == count($innerlines)-1 ) {
+               
+                 if($name !=''){
+                     $data[] = array( $pen, 
+                                  $name, 
+                                  $pan, 
+                                 $email);
+                 }
+                
+                
+                $pan = $pen =  $email =  $name = '';
+            }
+           
+            
+
+        }
+        
+        $headers = array(
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=Employee_Data_Sheet.csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        );
+
+
+        //$columns = array('PEN', 'NAME', 'PAN', 'EMAIL');
+
+        $callback = function() use ($data)
+        {
+            $file = fopen('php://output', 'w');
+            //fputcsv($file, $columns);
+
+            foreach($data as $line) {
+                fputcsv($file, $line);
+            }
+            fclose($file);
+        };
+        return \Response::stream($callback, 200, $headers);
+    }
+
 }

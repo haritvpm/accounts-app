@@ -49,6 +49,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::post('employees/parse-spark-import', 'EmployeeController@parseSparkImport')->name('employees.parseSparkImport');
     Route::post('employees/process-spark-import', 'EmployeeController@processSparkImport')->name('employees.processSparkImport');
+    Route::post('employees/parse-spark-download', 'EmployeeController@parseSparkDownload')->name('employees.parseSparkDownload');
     Route::resource('employees', 'EmployeeController');
 
     //pd2csv
@@ -56,7 +57,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::view('pdf2txt', 'admin.taxEntries.pdf2txt');
     Route::post('pdf2txt', 'TaxEntryController@pdf2txt')->name('tax-entries.pdf2txt');
 
-    Route::view('pdf2csv', 'admin.taxEntries.pdf2csv');
+    Route::view('pdf2csv', 'admin.taxEntries.pdf2csv')->name('tools');;
     Route::post('pdf2csv', 'TaxEntryController@pdf2csv')->name('tax-entries.pdf2csv');
 
 });

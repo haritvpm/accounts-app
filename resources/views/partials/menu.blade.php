@@ -142,6 +142,17 @@
                             </p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route("admin.tools") }}" class="nav-link {{ request()->is("admin/pdf2csv") || request()->is("admin/pdf2csv/*") ? "active" : "" }}">
+                            <i class="fa-fw nav-icon fas fa-cogs">
+
+                            </i>
+                            <p>
+                             Tools 
+                            </p>
+                        </a>
+                    </li>
+                    
                 <li class="nav-item">
                     <a href="{{ route("admin.backups.index") }}"
                      class="nav-link {{ request()->is("*admin/backups") || request()->is("*admin/backups/*") ? "active" : "" }}">
