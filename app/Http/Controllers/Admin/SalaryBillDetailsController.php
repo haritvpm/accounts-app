@@ -17,7 +17,12 @@ class SalaryBillDetailsController extends Controller
     {
         abort_if(Gate::denies('salary_bill_detail_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $salaryBillDetails = SalaryBillDetail::with(['year', 'created_by'])->get();
+        $salaryBillDetails = SalaryBillDetail::with(['year', 'created_by'])
+        ->whereHas('created_by', function ($q) {
+            // Query the name field in status table
+            $q->where('ddo', auth()->user()->ddo); // '=' is optional
+        })
+        ->get();
 
         return view('admin.salaryBillDetails.index', compact('salaryBillDetails'));
     }

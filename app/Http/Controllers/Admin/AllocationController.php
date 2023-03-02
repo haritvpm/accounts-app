@@ -17,7 +17,12 @@ class AllocationController extends Controller
     {
         abort_if(Gate::denies('allocation_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $allocations = Allocation::with(['year'])->get();
+        $allocations = Allocation::with(['year', 'created_by'])
+        ->whereHas('created_by', function ($q) {
+            // Query the name field in status table
+            $q->where('ddo', auth()->user()->ddo); // '=' is optional
+        })
+        ->get();
 
         return view('admin.allocations.index', compact('allocations'));
     }

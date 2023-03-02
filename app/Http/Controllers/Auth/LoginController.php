@@ -51,6 +51,8 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
+        /* 
+        COMMENTED AS WE NEED TO SHOW WHICH DDO? IF BOTH, CAN DO LATER
         $years = Year::latest('financial_year')->where('active', 1);
         $curyear = $years->take(1)->value('financial_year');
         // $years = $years->pluck('financial_year', 'id');
@@ -75,9 +77,10 @@ class LoginController extends Controller
             $allocation[$field] = $allocations->sum($field);
             $total[$field] = $salaryBillDetails->sum($field);
             $balance[$field] = $allocation[$field] - $total[$field];
-        }
+        } */
 
-        return view('auth.login', compact('curyear', 'allocation', 'total', 'balance'));
+        //return view('auth.login', compact('curyear', 'allocation', 'total', 'balance'));
+        return view('auth.login');
     }
 
     public function username()

@@ -23,12 +23,20 @@ class HomeController
         }
         //  $lastyear= $years2->offsetGet(1)->value('financial_year');
 
-        $allocations = Allocation::with('year')
+        $allocations = Allocation::with(['year', 'created_by'])
+            ->whereHas('created_by', function ($q) {
+                // Query the name field in status table
+                $q->where('ddo', auth()->user()->ddo); // '=' is optional
+            })
            ->whereHas('year', function ($query) use ($curyear) {
                $query->where('financial_year', $curyear);
            });
 
         $salaryBillDetails = SalaryBillDetail::latest()->with(['year', 'created_by'])
+                            ->whereHas('created_by', function ($q) {
+                                // Query the name field in status table
+                                $q->where('ddo', auth()->user()->ddo); // '=' is optional
+                            })
                             ->whereBetween('created_at', [Carbon::now()->subMonths(14), Carbon::now()]
                             )->get();
 

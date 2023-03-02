@@ -22,7 +22,12 @@ class HomeController
         $salaryBillDetails = SalaryBillDetail::latest()->with(['year', 'created_by'])
                    ->whereHas('year', function ($query) use ($curyear) {
                        $query->where('financial_year', $curyear);
-                   })->get();
+                   })
+                   ->whereHas('created_by', function ($q) {
+                    // Query the name field in status table
+                    $q->where('ddo', auth()->user()->ddo);
+                   })
+                   ->get();
 
         $fields = ['pay', 'da', 'hra', 'other', 'ota'];
 

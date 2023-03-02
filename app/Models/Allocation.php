@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\MultiTenantModelTrait;
 
 class Allocation extends Model
 {
+    use MultiTenantModelTrait;
+
     public $table = 'allocations';
 
     protected $dates = [
@@ -24,10 +27,16 @@ class Allocation extends Model
         'created_at',
         'updated_at',
         'deleted_at',
+        'created_by_id',
+
     ];
 
     public function year()
     {
         return $this->belongsTo(Year::class, 'year_id');
+    }
+    public function created_by()
+    {
+        return $this->belongsTo(User::class, 'created_by_id');
     }
 }
