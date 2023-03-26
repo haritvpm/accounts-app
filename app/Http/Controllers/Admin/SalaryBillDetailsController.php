@@ -19,7 +19,6 @@ class SalaryBillDetailsController extends Controller
 
         $salaryBillDetails = SalaryBillDetail::with(['year', 'created_by'])
         ->whereHas('created_by', function ($q) {
-            // Query the name field in status table
             $q->where('ddo', auth()->user()->ddo); // '=' is optional
         })
         ->get();

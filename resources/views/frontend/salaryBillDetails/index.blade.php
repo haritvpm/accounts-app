@@ -196,7 +196,7 @@
 
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,
-    order: [[ 1, 'desc' ]],
+    order: [[ 4, 'desc' ]],
     pageLength: 100,
   });
   let table = $('.datatable-SalaryBillDetail:not(.ajaxTable)').DataTable({ buttons: dtButtons })

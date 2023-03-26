@@ -12,7 +12,6 @@
                             <div class="input-group">
 
                                 <div class="form-group {{ $errors->has('year') ? 'has-error' : '' }}" style="margin: 5px;" >
-                                    <!-- <label class="required" for="year">{{ trans('cruds.tdsReport.fields.year') }}</label> -->
                                     <input class="form-control" type="number" name="year" id="year" value="{{ old('year', now()->year ) }}" step="1" required >
                                     @if($errors->has('year'))
                                         <span class="help-block" role="alert">{{ $errors->first('year') }}</span>
@@ -21,7 +20,6 @@
                                 </div>
 
                                 <div class="form-group {{ $errors->has('period') ? 'has-error' : '' }}" style="margin: 5px;">
-                                    <!-- <label class="required">{{ trans('cruds.tdsReport.fields.period') }}</label> -->
                                     <select class="form-control" name="period" id="period" required>
                                       
                                         @foreach(App\Models\TdsReport::PERIOD_RADIO as $key => $label)
@@ -31,7 +29,6 @@
                                     @if($errors->has('period'))
                                         <span class="help-block" role="alert">{{ $errors->first('period') }}</span>
                                     @endif
-                                    <!-- <span class="help-block">{{ trans('cruds.tdsReport.fields.period_helper') }}</span> -->
                             </div>
                             
                                 <div class="form-group" style="margin: 5px;">

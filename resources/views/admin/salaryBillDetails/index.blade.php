@@ -29,10 +29,10 @@
                 <thead>
                     <tr>
                         <th width="10">
-
+                            ID
                         </th>
                         <th>
-                           Month
+                            {{ trans('cruds.salaryBillDetail.fields.year') }}
                         </th>
                         <th>
                                         Seat
@@ -52,8 +52,9 @@
                         <th>
                             {{ trans('cruds.salaryBillDetail.fields.ota') }}
                         </th>
+                      
                         <th>
-                            {{ trans('cruds.salaryBillDetail.fields.year') }}
+                           Created
                         </th>
                         <th>
                             &nbsp;
@@ -64,10 +65,11 @@
                     @foreach($salaryBillDetails as $key => $salaryBillDetail)
                         <tr data-entry-id="{{ $salaryBillDetail->id }}">
                             <td>
+                            {{ $salaryBillDetail->id ?? '' }}
 
                             </td>
                             <td>
-                                {{ $salaryBillDetail->created_at->format('Y F') ?? '' }}
+                                {{ $salaryBillDetail->year->financial_year ?? '' }}
                             </td>
                             <td  class="text-center">
                                             {{ $salaryBillDetail->created_by->name ?? '' }}
@@ -87,8 +89,9 @@
                             <td>
                                 {{ $salaryBillDetail->ota ?? '' }}
                             </td>
+                          
                             <td>
-                                {{ $salaryBillDetail->year->financial_year ?? '' }}
+                                {{ $salaryBillDetail->created_at->format('Y F') ?? '' }}
                             </td>
                             <td>
                                 @can('salary_bill_detail_show')
@@ -161,7 +164,7 @@
 
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,
-    order: [[ 1, 'desc' ]],
+    order: [[ 0, 'desc' ]],
     pageLength: 100,
   });
   let table = $('.datatable-SalaryBillDetail:not(.ajaxTable)').DataTable({ buttons: dtButtons })
