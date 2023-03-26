@@ -35,6 +35,7 @@ class Extract
     const DECEASED = 'DECEASED';
 
     public array $pens;
+    public array $pen_to_name;
 
     public array $errors;
 
@@ -53,6 +54,7 @@ class Extract
     public function __construct()
     {
         $this->pens = [];
+        $this->pen_to_name = [];
         $this->errors = [];
         $this->acquittance = '';
         $this->sparkcode = '';
@@ -384,6 +386,7 @@ class Extract
                 ];
 
                 $this->pens[] = $pen;
+                $this->pen_to_name[$pen] = $name;
 
                 $data[] = $items;
             }
@@ -482,7 +485,7 @@ class Extract
         $data = [];
 
         $slno = 1;
-        $tds_total = 0;
+       // $tds_total = 0;
         for (; $i < count($this->innerlines); $i++) {
             $l = $this->innerlines[$i];
             $slnotxt = sprintf('%u,', $slno);
@@ -499,7 +502,9 @@ class Extract
 
                 if ($this->has_it) {
                     $tds = $cols[$it_col];
-                    $tds_total += $cols[$it_col];
+                    // $tds = str_replace("\r", '', $tds);
+
+                   // $tds_total += $cols[$it_col];
 
                     if (intval($tds) == 0 && $this->tds_rows_only) {
                         continue;
@@ -516,6 +521,8 @@ class Extract
                 ];
 
                 $this->pens[] = $pen;
+                $this->pen_to_name[$pen] = $name;
+
 
                 $data[] = $items;
             }
@@ -605,6 +612,8 @@ class Extract
                         ];
 
                         $this->pens[] = $pen;
+                        $this->pen_to_name[$pen] = $name;
+
                         $data[] = $items;
                         $totalarrear += $gross;
 
@@ -631,7 +640,7 @@ class Extract
         $data = [];
 
         $slno = 1;
-        $tds_total = 0;
+       // $tds_total = 0;
         for (; $i < count($this->innerlines); $i++) {
             $l = $this->innerlines[$i];
             $slnotxt = sprintf('%u,', $slno);
@@ -648,7 +657,9 @@ class Extract
 
                 if ($this->has_it) {
                     $tds = $cols[$it_col];
-                    $tds_total += $cols[$it_col];
+                    $tds = str_replace("\r", '', $tds); //IT amount can be in two lines like 0 on next line.
+
+                 //   $tds_total += $cols[$it_col];
 
                     if (intval($tds) == 0 && $this->tds_rows_only) {
                         continue;
@@ -665,6 +676,8 @@ class Extract
                 ];
 
                 $this->pens[] = $pen;
+                $this->pen_to_name[$pen] = $name;
+
 
                 $data[] = $items;
             }
@@ -682,7 +695,7 @@ class Extract
         $data = [];
 
         $slno = 0;
-        $tds_total = 0;
+       // $tds_total = 0;
 
         $i = $start + 2; //next line after header
 
@@ -703,7 +716,7 @@ class Extract
 
             if ($this->has_it) {
                 $tds = $cols[$it_col];
-                $tds_total += $cols[$it_col];
+               // $tds_total += $cols[$it_col];
 
                 if (intval($tds) == 0 && $this->tds_rows_only) {
                     continue;
@@ -720,6 +733,8 @@ class Extract
             ];
 
             $this->pens[] = $account;
+            $this->pen_to_name[$account] = $name;
+
 
             $data[] = $items;
         }

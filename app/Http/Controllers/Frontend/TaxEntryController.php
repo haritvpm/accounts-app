@@ -213,7 +213,12 @@ class TaxEntryController extends Controller
         $penwithnoemp = array_diff($extract->pens, $empwithpen->toArray());
 
         if (count($penwithnoemp)) {
-            return response()->json(['error' => 'No Employee found for : '.implode(', ', $penwithnoemp)]);
+            $empnotfound = [];
+            foreach ($penwithnoemp as $p) {
+                $empnotfound[] = $p . ': '. $extract->pen_to_name[$p];
+            }
+            return response()->json(['error' => 'No Employee found for : '.implode(', ', $empnotfound)]);
+         
         }
 
         $pen_to_pan = Employee::wherein('pen', $extract->pens)->pluck('pan', 'pen');
