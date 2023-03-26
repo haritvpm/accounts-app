@@ -717,6 +717,7 @@ class Extract
             if ($this->has_it) {
                 $tds = $cols[$it_col];
                // $tds_total += $cols[$it_col];
+                $tds = str_replace("\r", '', $tds); //IT amount can be in two lines like 0 on next line.
 
                 if (intval($tds) == 0 && $this->tds_rows_only) {
                     continue;
