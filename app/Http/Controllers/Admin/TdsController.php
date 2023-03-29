@@ -51,7 +51,7 @@ class TdsController extends Controller
 
         $td = Td::create(array_merge($request->except(['date']), ['date_id' => $taxEntry->id]));
 
-        return redirect()->route('admin.taxEntries.index');
+        return redirect()->route('admin.tax-entries.index');
     }
 
     public function edit(Td $td)
@@ -112,6 +112,18 @@ class TdsController extends Controller
             ['7', '8', '9'],
             ['10', '11', '12'],
             ['1', '2', '3'],
+            ['1'],
+            ['2'],
+            ['3'],
+            ['4'],
+            ['5'],
+            ['6'],
+            ['7'],
+            ['8'],
+            ['9'],
+            ['10'],
+            ['11'],
+            ['12'],
         ];
 
         $period = (int) $request->period;
@@ -121,7 +133,7 @@ class TdsController extends Controller
         $adminEntries = [];
         $monthnames = [];
 
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < count($months[$period]); $i++) {
             $taxEntries[] = TaxEntry::with('dateTds', 'created_by')
             ->has('dateTds')
             ->where('created_by_id', '<>', auth()->id())

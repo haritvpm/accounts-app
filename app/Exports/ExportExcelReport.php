@@ -40,7 +40,7 @@ class ExportExcelReport implements WithMultipleSheets
             $monthnames[] = $monthname;
         }
 
-        for ($index = 0, $month = (int) ($this->months[0]); $month <= (int) ($this->months[2]); $month++, $index++) {
+        for ($index = 0;$index < count($this->months) ; $index++) {
             $taxentries = $this->data[$index];
             $adminEntries = $this->adminEntriesArray[$index];
             $sheets[] = new ReportPerMonthSheet($monthnames[$index], $taxentries, $adminEntries);

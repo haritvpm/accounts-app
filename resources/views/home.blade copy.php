@@ -109,7 +109,44 @@ setlocale(LC_MONETARY, 'en_IN');
                     </div>
 
 
-                
+                    <!-- data about pending -->
+                    <div >
+                        <table   class=" table table-bordered table-light">
+                            <thead>
+                                <tr>
+                                     <th>
+                                    
+                                    </th>
+                                   
+                                    <th>
+                                        SalaryBillEntered
+                                    </th>
+                                    <th>
+                                        TDSUploaded
+                                    </th>
+                                  
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($months as $key => $item)
+                                    <tr>
+                                         <td>
+                                         {{$key}}
+                                        </td>
+                                                                              
+                                        <td>
+                                            {{ $item }}
+                                        </td>
+                                        <td>
+                                            {{ $monthsTDS[$key] }}
+                                        </td>
+                                        
+                                        </tr>
+                                     @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
 
                 </div>
 

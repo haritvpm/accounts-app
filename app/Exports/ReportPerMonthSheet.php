@@ -53,6 +53,8 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
                         ->endOfMonth()
                         ->format(config('panel.date_format'));
                 array_push($items, $datebookadjustment);
+                array_push($items, $taxentry->sparkcode);
+                array_push($items, $taxentry->updated_at->format(config('panel.date_format')));
                 $tdscombined->push($items);
                 $tdstotal += $cols->tds;
             }
@@ -88,6 +90,8 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
                         ->endOfMonth()
                         ->format(config('panel.date_format'));
                 array_push($items, $datebookadjustment);
+                array_push($items, $taxentry->sparkcode);
+                array_push($items, $taxentry->updated_at->format(config('panel.date_format')));
 
                 $tdscombined->push($items);
                 $tdstotal += $cols->tds;
@@ -113,7 +117,7 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
     {
         return [
             'Sl.No', 'PAN of the deductee', 'PEN of the deductee',
-            'Name of the deductee', 'Amount paid/credited', 'TDS', 'Date of credit', 'Date of book adjustment',
+            'Name of the deductee', 'Amount paid/credited', 'TDS', 'Date of credit', 'Date of book adjustment','SparkCode', 'LastModified'
         ];
     }
 
