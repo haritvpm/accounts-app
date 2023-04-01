@@ -31,6 +31,7 @@ class Extract
 
     const SPARK_ID_PAY = 'SPARK_ID_PAY';
     const SPARK_ID_FESTIVAL_ALLOWANCE = 'SPARK_ID_FESTIVAL_ALLOWANCE';
+    const SPARK_ID_LEAVESURRENDER = 'SPARK_ID_SURRENDER';
 
     const DECEASED = 'DECEASED';
 
@@ -236,6 +237,12 @@ class Extract
                 $this->acquittance = 'Pay and Allowance for Employees with SPARK ID';
                 $start = $i + 1;
             }
+            if (str_starts_with($l, 'NATURE OF CLAIM-,Leave Surrender for Employees with SPARK ID')) {
+                $type = self::SPARK_ID_LEAVESURRENDER;
+                $this->acquittance = 'Leave Surrender for Employees with SPARK ID';
+                $start = $i + 1;
+            }
+            
 
           /*   if(str_contains($l,'SPARK ID' )  ){
             dd($l);
@@ -448,11 +455,12 @@ class Extract
                 return $this->processMedical($start, 'Amount `');
             case self::SPARK_ID_PAY:
             case self::SPARK_ID_FESTIVAL_ALLOWANCE:
+            case self::SPARK_ID_LEAVESURRENDER:
                 return $this->processMedical($start, 'Net Amount`', 'IT');
             case self::DECEASED:
                 return $this->processDeceased($start, 'Amount`');
         }
-
+dd($type);
         return [];
     }
   
