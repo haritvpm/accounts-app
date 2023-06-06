@@ -108,6 +108,64 @@
                     </li>
                 @endcan
 
+          
+                    <li class="nav-item">
+                        <a href="{{ route("admin.heads.index") }}" class="nav-link {{ request()->is("admin/heads") || request()->is("admin/heads/*") ? "active" : "" }}">
+                            <i class="fa-fw nav-icon fas fa-cogs">
+
+                            </i>
+                            <p>
+                                {{ trans('cruds.head.title') }}
+                            </p>
+                        </a>
+                    </li>
+            
+              
+                    <li class="nav-item">
+                        <a href="{{ route("admin.columns.index") }}" class="nav-link {{ request()->is("admin/columns") || request()->is("admin/columns/*") ? "active" : "" }}">
+                            <i class="fa-fw nav-icon fas fa-cogs">
+
+                            </i>
+                            <p>
+                                {{ trans('cruds.column.title') }}
+                            </p>
+                        </a>
+                    </li>
+            
+                    <li class="nav-item">
+                        <a href="{{ route("admin.spark-bills.index") }}" class="nav-link {{ request()->is("admin/spark-bills") || request()->is("admin/spark-bills/*") ? "active" : "" }}">
+                            <i class="fa-fw nav-icon fas fa-cogs">
+
+                            </i>
+                            <p>
+                                {{ trans('cruds.sparkBill.title') }}
+                            </p>
+                        </a>
+                    </li>
+          
+                    <li class="nav-item">
+                        <a href="{{ route("admin.spark-bill-datas.index") }}" class="nav-link {{ request()->is("admin/spark-bill-datas") || request()->is("admin/spark-bill-datas/*") ? "active" : "" }}">
+                            <i class="fa-fw nav-icon fas fa-cogs">
+
+                            </i>
+                            <p>
+                                {{ trans('cruds.sparkBillData.title') }}
+                            </p>
+                        </a>
+                    </li>
+             
+                    <li class="nav-item">
+                        <a href="{{ route("admin.allocation-nus.index") }}" class="nav-link {{ request()->is("admin/allocation-nus") || request()->is("admin/allocation-nus/*") ? "active" : "" }}">
+                            <i class="fa-fw nav-icon fas fa-cogs">
+
+                            </i>
+                            <p>
+                                {{ trans('cruds.allocationNu.title') }}
+                            </p>
+                        </a>
+                    </li>
+              
+
                 
                 <li class="nav-item">
                     <a href="{{ route("admin.tax-entries.index") }}"

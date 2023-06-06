@@ -1,14 +1,18 @@
 @extends('layouts.admin')
 @section('content')
-@can('head_create')
+
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <a class="btn btn-success" href="{{ route('admin.heads.create') }}">
                 {{ trans('global.add') }} {{ trans('cruds.head.title_singular') }}
             </a>
+            <button class="btn btn-warning" data-toggle="modal" data-target="#csvImportModal">
+                {{ trans('global.app_csvImport') }}
+            </button>
+            @include('csvImport.modal', ['model' => 'Head', 'route' => 'admin.heads.parseCsvImport'])
         </div>
     </div>
-@endcan
+
 <div class="card">
     <div class="card-header">
         {{ trans('cruds.head.title_singular') }} {{ trans('global.list') }}
@@ -26,7 +30,19 @@
                             {{ trans('cruds.head.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.head.fields.head') }}
+                            {{ trans('cruds.head.fields.object_head') }}
+                        </th>
+                        <th>
+                            {{ trans('cruds.head.fields.object_head_name') }}
+                        </th>
+                        <!-- <th>
+                            {{ trans('cruds.head.fields.user') }}
+                        </th> -->
+                        <th>
+                            {{ trans('cruds.user.fields.ddo') }}
+                        </th>
+                        <th>
+                            {{ trans('cruds.head.fields.detail_head') }}
                         </th>
                         <th>
                             &nbsp;
@@ -43,17 +59,29 @@
                                 {{ $head->id ?? '' }}
                             </td>
                             <td>
-                                {{ $head->head ?? '' }}
+                                {{ $head->object_head ?? '' }}
+                            </td>
+                            <td>
+                                {{ $head->object_head_name ?? '' }}
+                            </td>
+                            <!-- <td>
+                                {{ $head->user->ddo ?? '' }}
+                            </td> -->
+                            <td>
+                                {{ $head->user->ddo ?? '' }}
+                            </td>
+                            <td>
+                                {{ $head->detail_head ?? '' }}
                             </td>
                             <td>
                                 @can('head_show')
-                                    <a class="btn btn-sm btn-primary" href="{{ route('admin.heads.show', $head->id) }}">
+                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.heads.show', $head->id) }}">
                                         {{ trans('global.view') }}
                                     </a>
                                 @endcan
 
                                 @can('head_edit')
-                                    <a class="btn btn-sm btn-info" href="{{ route('admin.heads.edit', $head->id) }}">
+                                    <a class="btn btn-xs btn-info" href="{{ route('admin.heads.edit', $head->id) }}">
                                         {{ trans('global.edit') }}
                                     </a>
                                 @endcan
@@ -62,7 +90,7 @@
                                     <form action="{{ route('admin.heads.destroy', $head->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <input type="submit" class="btn btn-sm btn-danger" value="{{ trans('global.delete') }}">
+                                        <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                     </form>
                                 @endcan
 

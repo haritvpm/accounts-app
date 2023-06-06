@@ -28,10 +28,34 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        {{ trans('cruds.head.fields.head') }}
+                                        {{ trans('cruds.head.fields.object_head') }}
                                     </th>
                                     <td>
-                                        {{ $head->head }}
+                                        {{ $head->object_head }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.head.fields.object_head_name') }}
+                                    </th>
+                                    <td>
+                                        {{ $head->object_head_name }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.head.fields.user') }}
+                                    </th>
+                                    <td>
+                                        {{ $head->user->ddo ?? '' }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.head.fields.detail_head') }}
+                                    </th>
+                                    <td>
+                                        {{ $head->detail_head }}
                                     </td>
                                 </tr>
                             </tbody>

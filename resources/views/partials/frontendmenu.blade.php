@@ -73,6 +73,17 @@
                         </p>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                        <a href="{{ route("frontend.spark-bills.index") }}" class="nav-link {{ request()->is("frontend/spark-bills") || request()->is("frontend/spark-bills/*") ? "active" : "" }}">
+                            <i class="fa-fw nav-icon fas fa-cogs">
+
+                            </i>
+                            <p>
+                                {{ trans('cruds.sparkBill.title') }}
+                            </p>
+                        </a>
+                    </li>
                 @endcan
 
 

@@ -59,6 +59,30 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::view('pdf2csv', 'admin.taxEntries.pdf2csv')->name('tools');;
     Route::post('pdf2csv', 'TaxEntryController@pdf2csv')->name('tax-entries.pdf2csv');
+// Head
+    Route::delete('heads/destroy', 'HeadController@massDestroy')->name('heads.massDestroy');
+    Route::post('heads/parse-csv-import', 'HeadController@parseCsvImport')->name('heads.parseCsvImport');
+    Route::post('heads/process-csv-import', 'HeadController@processCsvImport')->name('heads.processCsvImport');
+    Route::resource('heads', 'HeadController');
+
+    // Spark Bill
+    Route::delete('spark-bills/destroy', 'SparkBillController@massDestroy')->name('spark-bills.massDestroy');
+    Route::resource('spark-bills', 'SparkBillController');
+
+    // Column
+    Route::post('columns/parse-csv-import', 'ColumnController@parseCsvImport')->name('columns.parseCsvImport');
+    Route::post('columns/process-csv-import', 'ColumnController@processCsvImport')->name('columns.processCsvImport');
+    Route::resource('columns', 'ColumnController', ['except' => ['show', 'destroy']]);
+
+    // Spark Bill Data
+    Route::delete('spark-bill-datas/destroy', 'SparkBillDataController@massDestroy')->name('spark-bill-datas.massDestroy');
+    Route::resource('spark-bill-datas', 'SparkBillDataController');
+
+    // Allocation Nu
+    Route::delete('allocation-nus/destroy', 'AllocationNuController@massDestroy')->name('allocation-nus.massDestroy');
+    Route::post('allocation-nus/parse-csv-import', 'AllocationNuController@parseCsvImport')->name('allocation-nus.parseCsvImport');
+    Route::post('allocation-nus/process-csv-import', 'AllocationNuController@processCsvImport')->name('allocation-nus.processCsvImport');
+    Route::resource('allocation-nus', 'AllocationNuController');
 
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
@@ -98,6 +122,24 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     Route::delete('employees/destroy', 'EmployeeController@massDestroy')->name('employees.massDestroy');
     Route::resource('employees', 'EmployeeController');
 
+    // Head
+    Route::delete('heads/destroy', 'HeadController@massDestroy')->name('heads.massDestroy');
+    Route::resource('heads', 'HeadController');
+
+    // Spark Bill
+    Route::delete('spark-bills/destroy', 'SparkBillController@massDestroy')->name('spark-bills.massDestroy');
+    Route::resource('spark-bills', 'SparkBillController');
+
+    // Column
+    Route::resource('columns', 'ColumnController', ['except' => ['show', 'destroy']]);
+
+    // Spark Bill Data
+    Route::delete('spark-bill-datas/destroy', 'SparkBillDataController@massDestroy')->name('spark-bill-datas.massDestroy');
+    Route::resource('spark-bill-datas', 'SparkBillDataController');
+
+    // Allocation Nu
+    Route::delete('allocation-nus/destroy', 'AllocationNuController@massDestroy')->name('allocation-nus.massDestroy');
+    Route::resource('allocation-nus', 'AllocationNuController');
     Route::get('frontend/profile', 'ProfileController@index')->name('profile.index');
     Route::post('frontend/profile', 'ProfileController@update')->name('profile.update');
     Route::post('frontend/profile/destroy', 'ProfileController@destroy')->name('profile.destroy');

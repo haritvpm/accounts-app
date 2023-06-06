@@ -13,10 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('allocations', function (Blueprint $table) {
-            $table->unsignedBigInteger('created_by_id')->nullable();
-            $table->foreign('created_by_id', 'created_by_fk_9706749')->references('id')->on('users');
-        });
+        if (!Schema::hasColumn('allocations', 'created_by_id')){
+                    
+            Schema::table('allocations', function (Blueprint $table) {
+                $table->unsignedBigInteger('created_by_id')->nullable();
+                $table->foreign('created_by_id', 'created_by_fk_9706749')->references('id')->on('users');
+            });
+
+        }
     }
 
     /**

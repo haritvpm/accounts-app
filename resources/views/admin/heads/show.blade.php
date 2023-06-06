@@ -25,10 +25,34 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.head.fields.head') }}
+                            {{ trans('cruds.head.fields.object_head') }}
                         </th>
                         <td>
-                            {{ $head->head }}
+                            {{ $head->object_head }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.head.fields.object_head_name') }}
+                        </th>
+                        <td>
+                            {{ $head->object_head_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.head.fields.user') }}
+                        </th>
+                        <td>
+                            {{ $head->user->ddo ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.head.fields.detail_head') }}
+                        </th>
+                        <td>
+                            {{ $head->detail_head }}
                         </td>
                     </tr>
                 </tbody>
@@ -42,22 +66,6 @@
     </div>
 </div>
 
-<div class="card">
-    <div class="card-header">
-        {{ trans('global.relatedData') }}
-    </div>
-    <ul class="nav nav-tabs" role="tablist" id="relationship-tabs">
-        <li class="nav-item">
-            <a class="nav-link" href="#head_allocations" role="tab" data-toggle="tab">
-                {{ trans('cruds.allocation.title') }}
-            </a>
-        </li>
-    </ul>
-    <div class="tab-content">
-        <div class="tab-pane" role="tabpanel" id="head_allocations">
-            @includeIf('admin.heads.relationships.headAllocations', ['allocations' => $head->headAllocations])
-        </div>
-    </div>
-</div>
+
 
 @endsection
