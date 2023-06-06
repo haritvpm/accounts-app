@@ -118,8 +118,8 @@ class TaxEntryController extends Controller
             ->setOptions([
                 'format' => 'csv',
                 'pages' => 'all',
-                'lattice' => false,
-                'stream' => 1,
+                'lattice' => true,
+                'stream' => 0,
             ])
             ->convert();
 
