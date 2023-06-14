@@ -463,7 +463,7 @@ class Extract
             case self::SPARK_ID_LEAVESURRENDER:
                 return $this->processMedical($start, 'Net Amount`', 'IT');
             case self::SPARK_ID_PAT:
-                return $this->processMedical($start, 'Gross Pay', 'IT');
+                return $this->processPAT($start, 'Gross Pay', 'IT');
             case self::DECEASED:
                 return $this->processDeceased($start, 'Amount`');
         }
@@ -486,6 +486,15 @@ dd($type);
     
         return substr_replace($str, $replacement, $start, $end - $start);
     }
+
+    public function get_text_between_parenthesis($text) {
+      
+        preg_match('#\((.*?)\)#', $text, $match);
+    
+        return $match[1] ?? '';
+    }
+
+
     
     public function processFestivalAllowance($start, $fieldGross, $fieldIT = 'IT')
     {
@@ -700,7 +709,68 @@ dd($type);
         // dd($data);
         return  $data;
     }
+    public function processPAT($start, $fieldGross, $fieldIT = 'IT')
+    {
+        $i = $start;
+        $i += 2;
 
+        if (! $this->findColumnIndex($start, $grosscol, $it_col, $fieldGross, $fieldIT)) {
+            return [];
+        }
+
+        $data = [];
+
+        $slno = 1;
+       // $tds_total = 0;
+        for (; $i < count($this->innerlines); $i++) {
+            $l = $this->innerlines[$i];
+            $slnotxt = sprintf('%u,', $slno);
+            //  $out->writeln($slnotxt);
+
+            if (str_starts_with($l, $slnotxt)) {
+                $slno++;
+                $cols = str_getcsv($l);
+
+                
+                $name = trim($cols[1]);
+                $name = trim($this->replace_text_between($name, '(', ')', '')); //821472( 683/2017)
+                $name = str_replace("\r", ' ', $name); //Name has pen within parenthesis
+                $pen = trim($cols[1]);
+                $pen = trim($this->get_text_between_parenthesis($pen));
+                $pen = str_replace("\r", '', $pen);
+
+                $tds = '0';
+
+                if ($this->has_it) {
+                    $tds = $cols[$it_col];
+                    $tds = str_replace("\r", '', $tds); //IT amount can be in two lines like 0 on next line.
+
+                 //   $tds_total += $cols[$it_col];
+
+                    if (intval($tds) == 0 && $this->tds_rows_only) {
+                        continue;
+                    }
+                }
+
+                $items = [
+                    'slno' => $slno - 1,
+                    'pen' => $pen,
+                    'name' => $name,
+                    'gross' => $cols[$grosscol],
+                    'tds' => $tds,
+
+                ];
+
+                $this->pens[] = $pen;
+                $this->pen_to_name[$pen] = $name;
+
+
+                $data[] = $items;
+            }
+        }
+        // dd($data);
+        return  $data;
+    }
     public function processDeceased($start, $fieldGross, $fieldIT = 'IT')
     {
         if (! $this->findColumnIndex($start, $grosscol, $it_col, $fieldGross, $fieldIT)) {

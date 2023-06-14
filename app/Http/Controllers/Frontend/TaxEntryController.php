@@ -212,6 +212,8 @@ class TaxEntryController extends Controller
         $empwithpen = Employee::wherein('pen', $extract->pens)->pluck('pen');
         $penwithnoemp = array_diff($extract->pens, $empwithpen->toArray());
 
+        //dd($extract->pens);
+
         if (count($penwithnoemp)) {
             $empnotfound = [];
             foreach ($penwithnoemp as $p) {
