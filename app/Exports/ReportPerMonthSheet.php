@@ -43,6 +43,7 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
             foreach ($tds as $cols) {
                 $items = [];
                 array_push($items, $slno++);
+                array_push($items, $taxentry->created_by?->name ?? '');
                 array_push($items, $cols->pan);
                 array_push($items, $cols->pen);
                 array_push($items, $cols->name);
@@ -79,6 +80,7 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
             foreach ($tds as $cols) {
                 $items = [];
                 array_push($items, $slno++);
+                array_push($items, 'Admin');
                 array_push($items, $cols->pan);
                 array_push($items, $cols->pen);
                 array_push($items, $cols->name);
@@ -116,7 +118,7 @@ class ReportPerMonthSheet implements FromCollection, WithTitle, WithHeadings, Wi
     public function headings(): array
     {
         return [
-            'Sl.No', 'PAN of the deductee', 'PEN of the deductee',
+            'Sl.No', 'Seat','PAN of the deductee', 'PEN of the deductee',
             'Name of the deductee', 'Amount paid/credited', 'TDS', 'Date of credit', 'Date of book adjustment','SparkCode', 'LastModified'
         ];
     }
