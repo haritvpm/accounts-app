@@ -28,6 +28,10 @@ class Extract
     const SURRENDER = 'SURRENDER';
 
     const MR = 'MR';
+    const TA = 'Travelling Allowance';
+    const PF_CLOSURE = 'PF_CLOSURE';
+    const TERMINAL_SURRENDER_EL = 'TS_EL';
+
 
     const SPARK_ID_PAY = 'SPARK_ID_PAY';
     const SPARK_ID_FESTIVAL_ALLOWANCE = 'SPARK_ID_FESTIVAL_ALLOWANCE';
@@ -230,6 +234,22 @@ class Extract
             if (str_starts_with($l, 'NATURE OF CLAIM-,Medical Reimbursement Bill')) {
                 $type = self::MR;
                 $this->acquittance = 'MEDICAL REIMBURSEMENT';
+                $start = $i + 1;
+            }
+
+            if (str_starts_with($l, 'NATURE OF CLAIM-,Terminal surrender of earned leave-Bill')) {
+                $type = self::TERMINAL_SURRENDER_EL;
+                $this->acquittance = 'Terminal surrender of EL';
+                $start = $i + 1;
+            }
+            if (str_starts_with($l, 'NATURE OF CLAIM-,Travelling Allowance - Final outer Bill')) {
+                $type = self::TA;
+                $this->acquittance = 'Travelling Allowance';
+                $start = $i + 1;
+            }
+            if (str_starts_with($l, 'NATURE OF CLAIM-,PF Closure / Residual PF')) {
+                $type = self::PF_CLOSURE;
+                $this->acquittance = 'PF Closure';
                 $start = $i + 1;
             }
 
@@ -457,7 +477,11 @@ class Extract
             case self::SURRENDER:
                 return $this->processFestivalAllowance($start, 'TOTAL', 'INCOME TAX DEDUCTION');
             case self::MR:
-                return $this->processMedical($start, 'Amount `');
+            case self::TA:
+            case self::PF_CLOSURE:
+                 return $this->processMedical($start, 'Amount `');
+            case self::TERMINAL_SURRENDER_EL:
+                return $this->processMedical($start, 'Amount`');
             case self::SPARK_ID_PAY:
             case self::SPARK_ID_FESTIVAL_ALLOWANCE:
             case self::SPARK_ID_LEAVESURRENDER:
