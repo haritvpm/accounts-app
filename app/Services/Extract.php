@@ -714,11 +714,16 @@ dd($type);
                     }
                 }
 
+                $gross = $cols[$grosscol];
+                $gross = str_replace("\r", '', $gross); // amount can be in two lines
+                $gross = str_replace(" ", '', $gross); // amount can be in two lines
+
+
                 $items = [
                     'slno' => $slno - 1,
                     'pen' => $pen,
                     'name' => $name,
-                    'gross' => $cols[$grosscol],
+                    'gross' => $gross,
                     'tds' => $tds,
 
                 ];

@@ -233,6 +233,9 @@ class TaxEntryController extends Controller
 
             $name1 = str_replace([' ', '.'], '', $item['name']);
             $name2 = str_replace([' ', '.'], '', $pen_to_name[$item['pen']]);
+            $name1 = str_replace("\r", '', $name1); //  can be in two lines
+            $name2 = str_replace("\r", '', $name2); //  can be in two lines
+
 
             if (strcasecmp($name1, $name2)) {
                 $name_mismatches[] = $item['pen'].': '.$item['name'].' <> '.$pen_to_name[$item['pen']];
