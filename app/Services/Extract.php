@@ -31,11 +31,12 @@ class Extract
     const TA = 'Travelling Allowance';
     const PF_CLOSURE = 'PF_CLOSURE';
     const TERMINAL_SURRENDER_EL = 'TS_EL';
-
+    const TERMINAL_SURRENDER_LEAVE = 'TS_LEAVESURRENDER';
 
     const SPARK_ID_PAY = 'SPARK_ID_PAY';
     const SPARK_ID_FESTIVAL_ALLOWANCE = 'SPARK_ID_FESTIVAL_ALLOWANCE';
     const SPARK_ID_LEAVESURRENDER = 'SPARK_ID_SURRENDER';
+    
     const SPARK_ID_PAT = 'SPARK_ID_PAT';
    
     const DECEASED = 'DECEASED';
@@ -240,6 +241,12 @@ class Extract
             if (str_starts_with($l, 'NATURE OF CLAIM-,Terminal surrender of earned leave-Bill')) {
                 $type = self::TERMINAL_SURRENDER_EL;
                 $this->acquittance = 'Terminal surrender of EL';
+                $start = $i + 1;
+            }
+            
+            if (str_starts_with($l, 'NATURE OF CLAIM-,Terminal Surr of Leave')) {
+                $type = self::TERMINAL_SURRENDER_LEAVE;
+                $this->acquittance = 'Terminal surrender of Leave';
                 $start = $i + 1;
             }
             if (str_starts_with($l, 'NATURE OF CLAIM-,Travelling Allowance - Final outer Bill')) {
@@ -481,7 +488,8 @@ class Extract
             case self::PF_CLOSURE:
                  return $this->processMedical($start, 'Amount `');
             case self::TERMINAL_SURRENDER_EL:
-                return $this->processMedical($start, 'Amount`');
+            case self::TERMINAL_SURRENDER_LEAVE:
+                 return $this->processMedical($start, 'Amount`');
             case self::SPARK_ID_PAY:
             case self::SPARK_ID_FESTIVAL_ALLOWANCE:
             case self::SPARK_ID_LEAVESURRENDER:
