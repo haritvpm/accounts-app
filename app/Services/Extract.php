@@ -254,6 +254,13 @@ class Extract
                 $this->acquittance = 'Travelling Allowance';
                 $start = $i + 1;
             }
+
+            if (str_starts_with($l, 'NATURE OF CLAIM-,TA Final Claim  (Tour)')) {
+                $type = self::TA;
+                $this->acquittance = 'Travelling Allowance';
+                $start = $i + 1;
+            }
+            
             if (str_starts_with($l, 'NATURE OF CLAIM-,PF Closure / Residual PF')) {
                 $type = self::PF_CLOSURE;
                 $this->acquittance = 'PF Closure';
