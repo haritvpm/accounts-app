@@ -261,7 +261,8 @@ class Extract
                 $start = $i + 1;
             }
             
-            if (str_starts_with($l, 'NATURE OF CLAIM-,PF Closure / Residual PF')) {
+            if (str_starts_with($l, 'NATURE OF CLAIM-,PF Closure / Residual PF') || 
+            str_starts_with($l, 'NATURE OF CLAIM-,PF Closure/ Residual PF')) {
                 $type = self::PF_CLOSURE;
                 $this->acquittance = 'PF Closure';
                 $start = $i + 1;
