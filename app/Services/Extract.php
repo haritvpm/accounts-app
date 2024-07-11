@@ -36,6 +36,7 @@ class Extract
     const SPARK_ID_PAY = 'SPARK_ID_PAY';
     const SPARK_ID_FESTIVAL_ALLOWANCE = 'SPARK_ID_FESTIVAL_ALLOWANCE';
     const SPARK_ID_LEAVESURRENDER = 'SPARK_ID_SURRENDER';
+    const SPARK_ID_OT = 'SPARK_ID_OT';
     
     const SPARK_ID_PAT = 'SPARK_ID_PAT';
    
@@ -214,6 +215,19 @@ class Extract
             
                 continue;
             }
+            //new has 'UNIFORM ALLOWANCE(13 ) IN RESPECT OF'
+            if (strpos($l, 'UNIFORM ALLOWANCE') > 0  &&
+                str_contains($this->innerlines[$i + 1], '99-00-01-05')) {
+                $type = self::UNIFORM_ALLOWANCE;
+
+                //.....\rPAY AND ALLOWANCE IN RESPECT OF MLA HOSTEL FOR September 2022",
+
+                $start = $i;
+                $this->acquittance = $this->getTitle($l, 3);
+            
+                continue;
+            }
+
             if (str_starts_with($l, 'Due and drawn statement cum D.A. ARREAR')) {
                 $type = self::DA_ARREAR;
                 $this->acquittance = $this->getTitle($l);
@@ -278,7 +292,11 @@ class Extract
                 $this->acquittance = 'Leave Surrender for Employees with SPARK ID';
                 $start = $i + 1;
             }
-            
+            if (str_starts_with($l, 'NATURE OF CLAIM-,Overtime Allowances for Employees with SPARK ID')) {
+                $type = self::SPARK_ID_OT;
+                $this->acquittance = 'Overtime Allowances for Employees with SPARK ID';
+                $start = $i + 1;
+            }
 
           /*   if(str_contains($l,'SPARK ID' )  ){
             dd($l);
@@ -501,7 +519,9 @@ class Extract
             case self::SPARK_ID_PAY:
             case self::SPARK_ID_FESTIVAL_ALLOWANCE:
             case self::SPARK_ID_LEAVESURRENDER:
+            case self::SPARK_ID_OT:
                 return $this->processMedical($start, 'Net Amount`', 'IT');
+
             case self::SPARK_ID_PAT:
                 return $this->processPAT($start, 'Gross Pay', 'IT');
             case self::DECEASED:
